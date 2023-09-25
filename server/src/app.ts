@@ -7,11 +7,12 @@ import logger from "morgan";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import envReader from "./helpers/envReader";
+require("./strategies/jwt.js");
 const indexRouter = require("./routes/index");
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
+export const io = new Server(httpServer, {
   cors: {
     origin: envReader("CORS_ORIGIN"),
   },
