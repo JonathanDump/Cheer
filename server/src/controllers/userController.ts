@@ -25,6 +25,7 @@ exports.signUp = asyncHandler(
         const user = new User({
           name: req.body.name,
           email: req.body.email,
+          userName: req.body.userName,
           password: hashedPassword,
           img: req.file
             ? `${envReader("SERVER_URL")}/avatars/${req.file.filename}`
@@ -46,13 +47,11 @@ exports.signUpGoogle = asyncHandler(
     const opts: SignOptions = {};
     opts.expiresIn = "100d";
     const secret: Secret = envReader("JWT_SECRET_KEY");
-
     const user = await User.findOne({ email: req.body.email }).exec();
+
     if (user) {
       const token = await jwt.sign({ user }, secret, opts);
-      res
-        .status(200)
-        .json({ token: `Bearer ${token}`, myId: user!._id, isSuccess: true });
+      res.status(200).json({ token: `Bearer ${token}`, isSuccess: true });
     } else {
       const user = new User({
         name: req.body.name,
@@ -62,13 +61,52 @@ exports.signUpGoogle = asyncHandler(
 
       await user.save();
 
+      // const token = await jwt.sign(
+      //   {
+      //     user: {
+      //       name: user!.name,
+      //       email: user!.email,
+      //       img: user!.img,
+      //       _id: user!._id,
+      //     },
+      //   },
+      //   secret,
+      //   opts
+      // );
+      // res.status(200).json({
+      //   token: `Bearer ${token}`,
+      //   user: { name: user.name, _id: user._id, img: user.img },
+      //   isSuccess: true,
+      // });
+      res.status(200).json({
+        userId: user._id,
+        isSuccess: true,
+      });
+    }
+  }
+);
+
+exports.setUserName = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findById(req.body.userId).exec();
+
+    if (!user) {
+      res.json({ isSuccess: false });
+    } else {
+      user.userName = req.body.userName;
+      await user!.save();
+
+      const opts: SignOptions = {};
+      opts.expiresIn = "100d";
+      const secret: Secret = envReader("JWT_SECRET_KEY");
       const token = await jwt.sign(
         {
           user: {
-            name: user!.name,
-            email: user!.email,
-            img: user!.img,
-            _id: user!._id,
+            name: user.name,
+            email: user.email,
+            userName: user.userName,
+            img: user.img,
+            _id: user._id,
           },
         },
         secret,
@@ -76,7 +114,12 @@ exports.signUpGoogle = asyncHandler(
       );
       res.status(200).json({
         token: `Bearer ${token}`,
-        user: { name: user.name, _id: user._id, img: user.img },
+        user: {
+          _id: user._id,
+          name: user.name,
+          userName: user.userName,
+          img: user.img,
+        },
         isSuccess: true,
       });
     }
@@ -146,6 +189,7 @@ exports.logInVerify = asyncHandler(
         user: {
           name: user!.name,
           email: user!.email,
+          userName: user!.userName,
           img: user!.img,
           _id: user!._id,
         },
@@ -154,10 +198,20 @@ exports.logInVerify = asyncHandler(
       opts
     );
 
-    const activeUser = findActiveUser(user._id);
+    // const activeUser = findActiveUser(user._id);
+    // io.to(activeUser.socketId).emit("receive jwt", token);
 
-    io.to(activeUser.socketId).emit("receive jwt", token);
+    res.redirect(envReader("CLIENT_SERVER_URL"));
+  }
+);
 
-    res.redirect("http://localhost:5173");
+exports.checkUserName = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findOne({ userName: req.body.userName }).exec();
+    if (user) {
+      res.json({ userNameExists: true });
+    } else {
+      res.json({ userNameExists: false });
+    }
   }
 );
