@@ -1,0 +1,15 @@
+.invalid {
+  border: 1px solid red;
+
+  &:focus-visible {
+    outline-color: red;
+  }
+}
+
+.valid {
+  border: 1px solid green;
+
+  &:focus-visible {
+    outline-color: green;
+  }
+}

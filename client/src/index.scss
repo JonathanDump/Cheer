@@ -1,1 +1,5 @@
 @import "./scss/normalize.css";
+
+button:disabled {
+  cursor: not-allowed;
+}

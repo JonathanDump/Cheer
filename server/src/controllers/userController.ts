@@ -25,7 +25,6 @@ exports.signUp = asyncHandler(
         const user = new User({
           name: req.body.name,
           email: req.body.email,
-          userName: req.body.userName,
           password: hashedPassword,
           img: req.file
             ? `${envReader("SERVER_URL")}/avatars/${req.file.filename}`
@@ -33,8 +32,12 @@ exports.signUp = asyncHandler(
         });
 
         await user.save();
+        // res.json({
+        //   user: { _id: user._id, name: user.name, img: user.img },
+        //   isSuccess: true,
+        // });
         res.json({
-          user: { _id: user._id, name: user.name, img: user.img },
+          userId: user._id,
           isSuccess: true,
         });
       });
@@ -88,7 +91,8 @@ exports.signUpGoogle = asyncHandler(
 
 exports.setUserName = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findById(req.body.userId).exec();
+    const { userId, userName } = req.body;
+    const user = await User.findById(userId).exec();
 
     if (!user) {
       res.json({ isSuccess: false });
@@ -104,7 +108,7 @@ exports.setUserName = asyncHandler(
           user: {
             name: user.name,
             email: user.email,
-            userName: user.userName,
+            userName: userName,
             img: user.img,
             _id: user._id,
           },
@@ -208,6 +212,8 @@ exports.logInVerify = asyncHandler(
 exports.checkUserName = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findOne({ userName: req.body.userName }).exec();
+    console.log("check user name");
+
     if (user) {
       res.json({ userNameExists: true });
     } else {

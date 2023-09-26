@@ -21,8 +21,10 @@ export const upload = multer({ storage: storage });
 router.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
+router.post("/check-user-name", userController.checkUserName);
 
 router.post("/sign-up", upload.single("avatar"), userController.signUp);
+router.post("/sign-up/set-user-name", userController.setUserName);
 router.post("/sign-up/google", userController.signUpGoogle);
 
 router.post("/log-in", userController.logIn);
