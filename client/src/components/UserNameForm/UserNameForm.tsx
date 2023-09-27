@@ -26,7 +26,7 @@ export default function UserNameForm() {
   const inputClass =
     !!errors.userName?.message && getValues("userName").length
       ? cl.invalid
-      : !!!errors.userName?.message && getValues("userName").length
+      : !errors.userName?.message && getValues("userName").length
       ? cl.valid
       : "";
 
@@ -49,7 +49,7 @@ export default function UserNameForm() {
       console.log("result", result);
 
       localStorage.setItem("token", result.token);
-      localStorage.setItem("user", result.user);
+      localStorage.setItem("user", JSON.stringify(result.user));
     },
   });
 

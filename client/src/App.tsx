@@ -10,7 +10,7 @@ function App() {
       <div className={cl.app}>
         <div>App</div>
         <Outlet />
-        <UserNameForm />
+        {/* <UserNameForm /> */}
       </div>
     </QueryClientProvider>
   );
