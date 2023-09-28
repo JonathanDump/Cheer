@@ -1,4 +1,4 @@
-import { ControllerProps, RegisterOptions } from "react-hook-form";
+import { ControllerProps } from "react-hook-form";
 
 export interface IDecodedJwt {
   aud: string;
@@ -26,18 +26,16 @@ export interface ISignUpFormValues {
   avatar: ControllerProps | null;
 }
 
-// export type AvatarInputProps = Partial<RegisterOptions> & {
-//   avatarImageRef: React.MutableRefObject<HTMLImageElement | null>;
-// };
-
-// export interface IAvatarInputProps {
-//   avatarImageRef: React.MutableRefObject<HTMLImageElement | null>;
-//   register: RegisterOptions;
-//   handleAvatarChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-// }
+export interface ISignUpFormData extends Omit<ISignUpFormValues, "avatar"> {
+  avatar: Blob;
+}
 
 export interface IAvatarInputProps extends ControllerProps {
   avatarImageRef: React.MutableRefObject<HTMLImageElement | null>;
-  value: Blob;
-  onChange: (Blob) => void;
+  onChange: (avatar: Blob) => void;
 }
+
+export interface IOutletContext {
+  setIsUserNameFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export interface IUserFormNameParams extends IOutletContext {}

@@ -3,11 +3,13 @@ import { IDecodedJwt } from "../../interfaces/interfaces";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { SERVER_URL } from "../../config/config";
+import useSetIsUserNameFormVisible from "../../hooks/useSetIsUserNameFormVisible";
 
 export default function GoogleButton() {
   const navigate = useNavigate();
+  const { setIsUserNameFormVisible } = useSetIsUserNameFormVisible();
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <GoogleLogin
         onSuccess={async (credentialResponse) => {
           const decoded: IDecodedJwt = jwtDecode(
@@ -28,13 +30,10 @@ export default function GoogleButton() {
           });
           const result = await response.json();
 
-          if (!result.token) {
-            localStorage.setItem("userId", result.userId);
-            ////
-          } else {
-            localStorage.setItem("token", result.token);
-            result.isSuccess ? navigate("/") : new Error("Sign up failed");
-          }
+          localStorage.setItem("token", result.token);
+          localStorage.setItem("user", JSON.stringify(result.user));
+
+          result.isNewUser ? setIsUserNameFormVisible(true) : navigate("/home");
         }}
         onError={() => {}}
       />

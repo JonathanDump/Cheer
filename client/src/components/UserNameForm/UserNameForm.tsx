@@ -4,24 +4,30 @@ import { SERVER_URL } from "../../config/config";
 import { ErrorMessage } from "@hookform/error-message";
 import { useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
-
+import { useNavigate } from "react-router-dom";
+import { IUserFormNameParams } from "../../interfaces/interfaces";
 interface formValues {
   userName: string;
 }
 
-export default function UserNameForm() {
+export default function UserNameForm({
+  setIsUserNameFormVisible,
+}: IUserFormNameParams) {
+  const defaultUserName = JSON.parse(localStorage.getItem("user")!).userName;
+
   const {
     register,
     getValues,
     formState: { errors, isSubmitSuccessful },
     handleSubmit,
-    reset,
   } = useForm<formValues>({
-    defaultValues: { userName: "" },
+    defaultValues: { userName: defaultUserName },
     mode: "all",
     criteriaMode: "all",
   });
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const navigate = useNavigate();
 
   const inputClass =
     !!errors.userName?.message && getValues("userName").length
@@ -47,31 +53,27 @@ export default function UserNameForm() {
     onSuccess: async (data) => {
       const result = await data.json();
       console.log("result", result);
-
-      localStorage.setItem("token", result.token);
       localStorage.setItem("user", JSON.stringify(result.user));
+      setIsUserNameFormVisible(false);
+      navigate("/home");
     },
   });
 
   useEffect(() => {
-    console.log(
-      "button",
-      !!errors.userName?.message,
-      getValues("userName").length === 0
-    );
-
     buttonRef.current!.disabled =
       !!errors.userName?.message || getValues("userName").length === 0;
-  }, [errors.userName, isSubmitSuccessful]);
-
-  useEffect(() => {
-    reset({
-      userName: "",
-    });
-  }, [isSubmitSuccessful]);
+  }, [errors.userName?.message, isSubmitSuccessful]);
 
   const onSubmit = (data: formValues) => {
+    if (isDefaultUserName()) {
+      setIsUserNameFormVisible(false);
+      return navigate("home");
+    }
     setUserNameMutation.mutate(data.userName);
+  };
+
+  const isDefaultUserName = () => {
+    return defaultUserName === getValues("userName");
   };
 
   return (
@@ -95,6 +97,9 @@ export default function UserNameForm() {
             },
             validate: {
               isExist: async () => {
+                if (isDefaultUserName()) {
+                  return;
+                }
                 const response = await fetch(`${SERVER_URL}/check-user-name`, {
                   method: "POST",
                   headers: {

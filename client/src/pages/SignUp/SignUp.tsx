@@ -3,6 +3,10 @@ import cl from "./SignUp.module.scss";
 import { ISignUpFormValues } from "../../interfaces/interfaces";
 import { useEffect, useRef } from "react";
 import AvatarInput from "../../components/AvatarInput/AvatarInput.tsx";
+import useSetIsUserNameFormVisible from "../../hooks/useSetIsUserNameFormVisible";
+import { useMutation } from "@tanstack/react-query";
+import { SERVER_URL } from "../../config/config";
+import GoogleButton from "../../components/GoogleButton/GoogleButton";
 
 export default function SignUp() {
   const {
@@ -22,24 +26,42 @@ export default function SignUp() {
     },
     mode: "onChange",
   });
-
+  const { setIsUserNameFormVisible } = useSetIsUserNameFormVisible();
   const avatarImageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     reset();
   }, [isSubmitted, reset]);
 
-  // const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(e.target.files![0]);
-
-  //   reader.addEventListener("load", () => {
-  //     avatarImageRef.current!.src = reader.result as string;
-  //   });
-  // };
+  const signUpMutation = useMutation({
+    mutationFn: async (data: FormData) => {
+      return fetch(`${SERVER_URL}/sign-up`, {
+        method: "POST",
+        body: data,
+      });
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+    onSuccess: async (data: Response) => {
+      const result = await data.json();
+      console.log("mutation result", result);
+      localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("token", result.token);
+      setIsUserNameFormVisible(true);
+    },
+  });
 
   const onSubmit = (data: ISignUpFormValues) => {
     console.log(data);
+
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(data)) {
+      console.log("key, value", key, value);
+      formData.append(key, value);
+    }
+
+    signUpMutation.mutate(formData);
   };
 
   return (
@@ -109,19 +131,7 @@ export default function SignUp() {
             />
             {isSubmitted && <div>{errors.confirmPassword?.message}</div>}
           </div>
-          {/* <div className={cl.inputContainer}>
-            <input
-              id="avatar"
-              type="file"
-              // style={{ display: "none" }}
-              {...register("avatar", {
-                onChange: handleAvatarChange,
-              })}
-            />
-            <div className={cl.imageContainer}>
-              <img src="" alt="" ref={avatarImageRef} />
-            </div>
-          </div> */}
+
           <Controller
             control={control}
             name="avatar"
@@ -138,6 +148,8 @@ export default function SignUp() {
 
           <button>Sign up</button>
         </form>
+        <div>or</div>
+        <GoogleButton />
       </div>
     </div>
   );
