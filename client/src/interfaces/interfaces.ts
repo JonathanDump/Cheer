@@ -26,6 +26,15 @@ export interface ISignUpFormValues {
   avatar: ControllerProps | null;
 }
 
+export interface IUserNameFormValues {
+  userName: string;
+}
+
+export interface ILogInFormValues {
+  email: string;
+  password: string;
+}
+
 export interface ISignUpFormData extends Omit<ISignUpFormValues, "avatar"> {
   avatar: Blob;
 }
@@ -38,4 +47,17 @@ export interface IAvatarInputProps extends ControllerProps {
 export interface IOutletContext {
   setIsUserNameFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export interface IUserFormNameParams extends IOutletContext {}
+export interface IUserNameFormParams extends IOutletContext {}
+
+export interface IUserPayload {
+  name: string;
+  email: string;
+  userName: string;
+  img: string;
+  _id: string;
+}
+
+export interface ILogInData {
+  token: string;
+  userPayload: IUserPayload;
+}

@@ -5,14 +5,14 @@ import { ErrorMessage } from "@hookform/error-message";
 import { useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { IUserFormNameParams } from "../../interfaces/interfaces";
-interface formValues {
-  userName: string;
-}
+import {
+  IUserNameFormParams,
+  IUserNameFormValues,
+} from "../../interfaces/interfaces";
 
 export default function UserNameForm({
   setIsUserNameFormVisible,
-}: IUserFormNameParams) {
+}: IUserNameFormParams) {
   const defaultUserName = JSON.parse(localStorage.getItem("user")!).userName;
 
   const {
@@ -20,7 +20,7 @@ export default function UserNameForm({
     getValues,
     formState: { errors, isSubmitSuccessful },
     handleSubmit,
-  } = useForm<formValues>({
+  } = useForm<IUserNameFormValues>({
     defaultValues: { userName: defaultUserName },
     mode: "all",
     criteriaMode: "all",
@@ -37,7 +37,7 @@ export default function UserNameForm({
       : "";
 
   const setUserNameMutation = useMutation({
-    mutationFn: async (userName: string) => {
+    mutationFn: (userName: string) => {
       return fetch(`${SERVER_URL}/sign-up/set-user-name`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -64,10 +64,10 @@ export default function UserNameForm({
       !!errors.userName?.message || getValues("userName").length === 0;
   }, [errors.userName?.message, isSubmitSuccessful]);
 
-  const onSubmit = (data: formValues) => {
+  const onSubmit = (data: IUserNameFormValues) => {
     if (isDefaultUserName()) {
       setIsUserNameFormVisible(false);
-      return navigate("home");
+      return navigate("/home");
     }
     setUserNameMutation.mutate(data.userName);
   };

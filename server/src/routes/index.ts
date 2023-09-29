@@ -24,10 +24,14 @@ router.get("/", (req: Request, res: Response) => {
 router.post("/check-user-name", userController.checkUserName);
 
 router.post("/sign-up", upload.single("avatar"), userController.signUp);
-router.post("/sign-up/set-user-name", userController.setUserName);
-router.post("/sign-up/google", userController.signUpGoogle);
+router.post(
+  "/sign-up/set-user-name",
+  upload.none(),
+  userController.setUserName
+);
+router.post("/sign-up/google", upload.none(), userController.signUpGoogle);
 
-router.post("/log-in", userController.logIn);
+router.post("/log-in", upload.none(), userController.logIn);
 router.get(
   "/log-in/verify",
   checkIfMagicLinkIsUsed(),

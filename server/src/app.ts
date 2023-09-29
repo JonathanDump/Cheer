@@ -7,6 +7,7 @@ import logger from "morgan";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import envReader from "./helpers/envReader";
+import socketHandlerUser from "./socket/socketHandlerUser";
 require("./strategies/jwt.js");
 const indexRouter = require("./routes/index");
 
@@ -36,6 +37,8 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb" }));
 
 app.use("/", indexRouter);
+
+socketHandlerUser(io);
 
 httpServer.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

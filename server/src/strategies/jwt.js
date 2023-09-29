@@ -9,12 +9,11 @@ const opts = {
     ExtractJwt.fromUrlQueryParameter("token"),
   ]),
   secretOrKey: process.env.JWT_SECRET_KEY,
-  passReqToCallback: true,
 };
 
 passport.use(
-  new JwtStrategy(opts, async (req, jwt_payload, done) => {
-    console.log("jwt_payload", jwt_payload);
+  new JwtStrategy(opts, async (jwt_payload, done) => {
+    console.log("jwt_payload", jwt_payload.user);
     const user = await User.findById(jwt_payload.user._id);
 
     if (user) {

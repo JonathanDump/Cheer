@@ -5,12 +5,13 @@ import User from "../models/user";
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
 import envReader from "../helpers/envReader";
 import sendMagicLink from "../helpers/sendMagicLink";
-import { IUser } from "../interfaces/intefaces";
+import { IDecodedJwt, IUser } from "../interfaces/intefaces";
 import { io } from "../app";
 import findActiveUser from "../helpers/findActiveUser";
 import { error } from "console";
 import createRandomUserName from "../helpers/createRandomUserName";
 import generateJwtToken from "../helpers/generateJwtToken";
+import jwtDecode from "jwt-decode";
 export let isMagicLinkUsed = false;
 
 exports.signUp = asyncHandler(
@@ -130,50 +131,78 @@ exports.setUserName = asyncHandler(
 
 exports.logIn = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("req body", req.body);
+
     const { email, password } = req.body;
+    console.log("email", email);
 
     const user = await User.findOne({ email }).exec();
-
+    console.log("user", user);
     if (!user) {
       res.json({ invalid: { email: true, password: false } });
-      next();
+      return next();
     }
 
     const match = await bcrypt.compare(password, user!.password!);
 
     if (!match) {
       res.json({ invalid: { password: true, email: false } });
-      next();
+      return next();
     }
-    const opts: SignOptions = {};
-    opts.expiresIn = "15m";
-    const secret: Secret = envReader("JWT_SECRET_KEY");
-    const token = await jwt.sign(
-      {
-        user: {
-          _id: user!._id,
-        },
-      },
-      secret,
-      opts
-    );
 
-    const isMagicLinkSent = await sendMagicLink({ email: user!.email, token });
+    const userPayload = {
+      name: user!.name,
+      email: user!.email,
+      userName: user!.userName,
+      img: user!.img,
+      _id: user!._id,
+    };
+
+    const token = await generateJwtToken(
+      {
+        user: userPayload,
+      },
+      "15m"
+    );
+    // const opts: SignOptions = {};
+    // opts.expiresIn = "15m";
+    // const secret: Secret = envReader("JWT_SECRET_KEY");
+    // const token = await jwt.sign(
+    //   {
+    //     user: {
+    //       _id: user!._id,
+    //     },
+    //   },
+    //   secret,
+    //   opts
+    // );
+
+    const isMagicLinkSent = await sendMagicLink({
+      email: user!.email,
+      token,
+    });
+
+    console.log("isMagicLinkSent", isMagicLinkSent);
+
     isMagicLinkUsed = false;
 
     if (!isMagicLinkSent) {
       res.status(400).json({ isSuccess: false });
-      next();
+      return next();
     }
-    res.status(200).json({ isSuccess: true });
+    res.status(200).json({ user: { _id: user._id }, isSuccess: true });
   }
 );
 
 exports.logInVerify = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("logInVerify");
+    console.log("logInVerify params token", req.query.token);
     isMagicLinkUsed = true;
-    const user = req.user as IUser;
+
+    const decodedJwt = jwtDecode(req.query.token as string) as IDecodedJwt;
+    console.log("decodedJwt", decodedJwt);
+
+    const user = decodedJwt.user;
 
     if (!user) {
       res.send(
@@ -183,25 +212,15 @@ exports.logInVerify = asyncHandler(
       next(new Error("Invalid jwt or user is not found"));
     }
 
-    const opts: SignOptions = {};
-    opts.expiresIn = "100d";
-    const secret: Secret = envReader("JWT_SECRET_KEY");
-    const token = await jwt.sign(
-      {
-        user: {
-          name: user!.name,
-          email: user!.email,
-          userName: user!.userName,
-          img: user!.img,
-          _id: user!._id,
-        },
-      },
-      secret,
-      opts
-    );
+    const token = await generateJwtToken({ user });
 
-    // const activeUser = findActiveUser(user._id);
-    // io.to(activeUser.socketId).emit("receive jwt", token);
+    const activeUser = findActiveUser(user._id);
+    console.log("log in verify active user", activeUser);
+
+    io.to(activeUser.socketId).emit("receive log in data", {
+      token,
+      userPayload: user,
+    });
 
     res.redirect(envReader("CLIENT_SERVER_URL"));
   }
