@@ -2,16 +2,16 @@ import asyncHandler from "express-async-handler";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import User from "../models/user";
-import jwt, { Secret, SignOptions } from "jsonwebtoken";
+
 import envReader from "../helpers/envReader";
 import sendMagicLink from "../helpers/sendMagicLink";
-import { IDecodedJwt, IUser } from "../interfaces/intefaces";
+import { IUser } from "../interfaces/intefaces";
 import { io } from "../app";
 import findActiveUser from "../helpers/findActiveUser";
-import { error } from "console";
+
 import createRandomUserName from "../helpers/createRandomUserName";
 import generateJwtToken from "../helpers/generateJwtToken";
-import jwtDecode from "jwt-decode";
+
 export let isMagicLinkUsed = false;
 
 exports.signUp = asyncHandler(
@@ -55,11 +55,6 @@ exports.signUp = asyncHandler(
           token: `Bearer ${jwtToken}`,
           isSuccess: true,
         });
-
-        // res.json({
-        //   userId: user._id,
-        //   isSuccess: true,
-        // });
       });
     }
   }
@@ -98,10 +93,6 @@ exports.signUpGoogle = asyncHandler(
       user: userPayload,
       isNewUser,
     });
-    // res.status(200).json({
-    //   userId: user._id,
-    //   isSuccess: true,
-    // });
   }
 );
 
@@ -164,18 +155,6 @@ exports.logIn = asyncHandler(
       },
       "15m"
     );
-    // const opts: SignOptions = {};
-    // opts.expiresIn = "15m";
-    // const secret: Secret = envReader("JWT_SECRET_KEY");
-    // const token = await jwt.sign(
-    //   {
-    //     user: {
-    //       _id: user!._id,
-    //     },
-    //   },
-    //   secret,
-    //   opts
-    // );
 
     const isMagicLinkSent = await sendMagicLink({
       email: user!.email,
@@ -199,10 +178,8 @@ exports.logInVerify = asyncHandler(
     console.log("logInVerify params token", req.query.token);
     isMagicLinkUsed = true;
 
-    const decodedJwt = jwtDecode(req.query.token as string) as IDecodedJwt;
-    console.log("decodedJwt", decodedJwt);
-
-    const user = decodedJwt.user;
+    const user = req.user as IUser;
+    console.log("verify user", user);
 
     if (!user) {
       res.send(
@@ -222,7 +199,7 @@ exports.logInVerify = asyncHandler(
       userPayload: user,
     });
 
-    res.redirect(envReader("CLIENT_SERVER_URL"));
+    res.send("Log In is successful. Please go back to the site");
   }
 );
 

@@ -1,6 +1,6 @@
 import { ControllerProps } from "react-hook-form";
 
-export interface IDecodedJwt {
+export interface IDecodedJwtGoogle {
   aud: string;
   azp: string;
   email: string;
@@ -60,4 +60,18 @@ export interface IUserPayload {
 export interface ILogInData {
   token: string;
   userPayload: IUserPayload;
+}
+
+export interface IUser {
+  _id: string;
+  name: string;
+  userName: string;
+  email: string;
+  image: string;
+}
+
+export interface IDecodedJwt {
+  iat: number;
+  exp: number;
+  user: IUser;
 }

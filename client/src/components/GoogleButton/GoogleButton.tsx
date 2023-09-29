@@ -1,5 +1,5 @@
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { IDecodedJwt } from "../../interfaces/interfaces";
+import { IDecodedJwtGoogle } from "../../interfaces/interfaces";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { SERVER_URL } from "../../config/config";
@@ -12,7 +12,7 @@ export default function GoogleButton() {
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <GoogleLogin
         onSuccess={async (credentialResponse) => {
-          const decoded: IDecodedJwt = jwtDecode(
+          const decoded: IDecodedJwtGoogle = jwtDecode(
             credentialResponse.credential!
           );
           const { name, email, picture } = decoded;

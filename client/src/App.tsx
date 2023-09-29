@@ -17,7 +17,6 @@ export default function App() {
         {isUserNameFormVisible && (
           <UserNameForm setIsUserNameFormVisible={setIsUserNameFormVisible} />
         )}
-        {/* <UserNameForm setIsUserNameFormVisible={setIsUserNameFormVisible} /> */}
       </div>
     </QueryClientProvider>
   );

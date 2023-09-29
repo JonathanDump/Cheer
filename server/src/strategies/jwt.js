@@ -5,23 +5,28 @@ const User = require("../models/user");
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromExtractors([
-    ExtractJwt.fromAuthHeaderAsBearerToken(),
     ExtractJwt.fromUrlQueryParameter("token"),
+    ExtractJwt.fromAuthHeaderAsBearerToken(),
   ]),
   secretOrKey: process.env.JWT_SECRET_KEY,
 };
 
 passport.use(
   new JwtStrategy(opts, async (jwt_payload, done) => {
-    console.log("jwt_payload", jwt_payload.user);
-    const user = await User.findById(jwt_payload.user._id);
+    try {
+      console.log("jwt_payload", jwt_payload.user);
+      const user = await User.findById(jwt_payload.user._id);
 
-    if (user) {
-      console.log("user", user);
-      return done(null, user);
+      if (user) {
+        console.log("user", jwt_payload.user);
+        return done(null, jwt_payload.user);
+      }
+      console.log("jwt no user");
+      return done(null, false);
+    } catch (err) {
+      console.log(err);
+      return done(err, false);
     }
-    console.log("jwt no user");
-    return done(null, false);
   })
 );
 

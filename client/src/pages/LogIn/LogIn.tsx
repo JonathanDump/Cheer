@@ -6,6 +6,7 @@ import { SERVER_URL, socket } from "../../config/config";
 import getFormDataFromInputs from "../../helpers/getFormDataFromInputs";
 import { ILogInData, ILogInFormValues } from "../../interfaces/interfaces";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LogIn() {
   const {
@@ -16,7 +17,7 @@ export default function LogIn() {
     formState: { errors },
   } = useForm<ILogInFormValues>({ defaultValues: { email: "", password: "" } });
   const [isMagicLinkSent, setIsMagicLinkSet] = useState(false);
-
+  const navigate = useNavigate();
   const logInMutation = useMutation({
     mutationFn: (data: FormData) => {
       return fetch(`${SERVER_URL}/log-in`, {
@@ -46,14 +47,16 @@ export default function LogIn() {
         });
 
         socket.emit("user id", result.user._id);
+        setIsMagicLinkSet(true);
 
         socket.on(
           "receive log in data",
           ({ token, userPayload }: ILogInData) => {
+            console.log("received log in data", token, userPayload);
+
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(userPayload));
-
-            setIsMagicLinkSet(true);
+            navigate("/home");
           }
         );
       }
