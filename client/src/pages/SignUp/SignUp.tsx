@@ -7,6 +7,7 @@ import useSetIsUserNameFormVisible from "../../hooks/useSetIsUserNameFormVisible
 import { useMutation } from "@tanstack/react-query";
 import { SERVER_URL } from "../../config/config";
 import GoogleButton from "../../components/GoogleButton/GoogleButton";
+import getFormDataFromInputs from "../../helpers/getFormDataFromInputs";
 
 export default function SignUp() {
   const {
@@ -55,11 +56,7 @@ export default function SignUp() {
   const onSubmit = (data: ISignUpFormValues) => {
     console.log(data);
 
-    const formData = new FormData();
-    for (const [key, value] of Object.entries(data)) {
-      console.log("key, value", key, value);
-      formData.append(key, value);
-    }
+    const formData = getFormDataFromInputs(data);
 
     signUpMutation.mutate(formData);
   };

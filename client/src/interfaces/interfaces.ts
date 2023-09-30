@@ -75,3 +75,28 @@ export interface IDecodedJwt {
   exp: number;
   user: IUser;
 }
+
+export interface IAuthProviderProps {
+  children: React.ReactNode;
+}
+
+export interface IImage {
+  blob: Blob;
+  url: string;
+}
+export interface ICreatePostFormValues {
+  text: string;
+  images: Blob[];
+}
+
+export interface IImagePostFormParams {
+  image: IImage;
+  dispatch: React.Dispatch<ICreatePostFormReducerAction>;
+}
+
+export interface ICreatePostFormReducerAction {
+  type: string;
+  text?: string;
+  imageBlob?: Blob;
+  imageObj?: IImage;
+}

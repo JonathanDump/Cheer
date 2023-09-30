@@ -7,7 +7,7 @@ import Users from "./pages/Users/Users";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import PostPage from "./pages/PostPage/PostPage";
 import FollowersList from "./pages/FollowersList/FollowersList";
-import AuthProvider from "./components/AuthProvider/AuthProvider";
+import Cheer from "./pages/Cheer/Cheer";
 
 export const Router = () => {
   const router = createBrowserRouter([
@@ -19,7 +19,7 @@ export const Router = () => {
         { path: "/sign-up", element: <SignUp /> },
         {
           path: "/",
-          element: <AuthProvider />,
+          element: <Cheer />,
           children: [
             { path: "/home", element: <Home /> },
             { path: "/users", element: <Users /> },

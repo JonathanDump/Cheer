@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { IDecodedJwt } from "../../interfaces/interfaces";
-import { Outlet, useNavigate } from "react-router-dom";
+import { IDecodedJwt, IAuthProviderProps } from "../../interfaces/interfaces";
+import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { SERVER_URL } from "../../config/config";
 
-export default function AuthProvider() {
+export default function AuthProvider({ children }: IAuthProviderProps) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -48,5 +48,5 @@ export default function AuthProvider() {
     return <div>Loading...</div>;
   }
 
-  return <Outlet />;
+  return children;
 }
