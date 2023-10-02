@@ -101,3 +101,16 @@ export interface ICreatePostFormReducerAction {
   imageObj?: IImage;
   initialValue?: ICreatePostFormValues;
 }
+
+export interface IPost {
+  text: string;
+  images: string[];
+  date: Date;
+  likes: string[];
+  comments: string[];
+  createdBy: IUser;
+}
+
+export interface IPostCardProps {
+  post: IPost;
+}
