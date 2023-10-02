@@ -5,7 +5,7 @@ import User from "../models/user";
 
 import envReader from "../helpers/envReader";
 import sendMagicLink from "../helpers/sendMagicLink";
-import { IUser } from "../interfaces/intefaces";
+import { IUser } from "../interfaces/interfaces";
 import { io } from "../app";
 import findActiveUser from "../helpers/findActiveUser";
 

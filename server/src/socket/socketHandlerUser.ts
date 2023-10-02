@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { IActiveUser, IDecodedJwt } from "../interfaces/intefaces";
+import { IActiveUser, IDecodedJwt } from "../interfaces/interfaces";
 import { disconnect } from "process";
 
 export let activeUsers: IActiveUser[] = [];

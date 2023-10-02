@@ -3,19 +3,11 @@ const router = express.Router();
 import multer from "multer";
 import passport from "passport";
 import checkIfMagicLinkIsUsed from "../helpers/checkIfMagicLinkIsUsed";
+import createMulterStorage from "../helpers/createMulterStorage";
 
 const userController = require("../controllers/userController");
 
-const storage = multer.diskStorage({
-  destination: "public/avatars",
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const filename =
-      file.fieldname + "-" + uniqueSuffix + "." + file.mimetype.split("/")[1];
-
-    cb(null, filename);
-  },
-});
+const storage = createMulterStorage("public/avatars");
 export const upload = multer({ storage: storage });
 
 router.get("/", (req: Request, res: Response) => {
@@ -38,5 +30,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   userController.logInVerify
 );
+
+router.use("/cheer", require("./cheer"));
 
 module.exports = router;

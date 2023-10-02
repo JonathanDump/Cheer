@@ -13,8 +13,12 @@ export default function getFormDataFromInputs(
 
   for (const [key, value] of Object.entries(data)) {
     console.log("key value", key, value);
-
-    formData.append(key, value);
+    if (Array.isArray(value)) {
+      value.forEach((item) => formData.append(key, item));
+      formData.append;
+    } else {
+      formData.append(key, value);
+    }
   }
   console.log("form data", formData);
 

@@ -18,7 +18,6 @@ passport.use(
       const user = await User.findById(jwt_payload.user._id);
 
       if (user) {
-        console.log("user", jwt_payload.user);
         return done(null, jwt_payload.user);
       }
       console.log("jwt no user");

@@ -1,7 +1,8 @@
+import { postInitialValue } from "../../components/CreatePostForm/CreatePostForm";
 import {
   ICreatePostFormReducerAction,
   ICreatePostFormValues,
-} from "../interfaces/interfaces";
+} from "../../interfaces/interfaces";
 
 const reducer = (
   draft: ICreatePostFormValues,
@@ -16,6 +17,8 @@ const reducer = (
       return void (draft.images = draft.images.filter(
         (image) => image !== action.imageObj!.blob
       ));
+    case "reset":
+      return postInitialValue;
     default:
       return draft;
   }

@@ -99,4 +99,5 @@ export interface ICreatePostFormReducerAction {
   text?: string;
   imageBlob?: Blob;
   imageObj?: IImage;
+  initialValue?: ICreatePostFormValues;
 }

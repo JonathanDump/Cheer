@@ -4,7 +4,7 @@ import { Schema } from "mongoose";
 const PostSchema = new Schema(
   {
     text: String,
-    img: String,
+    images: [{ type: String, default: [] }],
     date: { type: Date, default: new Date() },
     likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment", default: [] }],
