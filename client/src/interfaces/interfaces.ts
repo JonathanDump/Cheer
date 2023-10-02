@@ -103,9 +103,10 @@ export interface ICreatePostFormReducerAction {
 }
 
 export interface IPost {
+  _id: string;
   text: string;
   images: string[];
-  date: Date;
+  date: string;
   likes: string[];
   comments: string[];
   createdBy: IUser;

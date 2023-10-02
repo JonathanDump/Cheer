@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import cl from "./CreatePostForm.module.scss";
-import { fetcher } from "../../fetcher/fetcher";
+import { fetcher } from "../../helpers/fetcher/fetcher";
 import { FormEvent, useEffect, useRef } from "react";
 import { useImmerReducer, useImmer } from "use-immer";
 import { ICreatePostFormValues, IImage } from "../../interfaces/interfaces";

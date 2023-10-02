@@ -24,4 +24,6 @@ router.post(
   postController.createPost
 );
 
+router.get("/get-posts", postController.getPosts);
+
 module.exports = router;

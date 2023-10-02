@@ -27,3 +27,28 @@ exports.createPost = asyncHandler(
     res.json(post);
   }
 );
+
+exports.getPosts = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const cursor = parseInt(req.query.cursor as string) || 0;
+    const pageSize = 4;
+
+    console.log("cursor", req.query.cursor);
+
+    const posts = await Post.find()
+      .skip(cursor * pageSize)
+      .limit(pageSize)
+      .sort({ date: -1 })
+      .populate({
+        path: "createdBy",
+        select: ["name", "userName", "image"],
+      })
+      .exec();
+    console.log("posts", posts);
+
+    const currentPage = cursor;
+    const lastPage = Math.ceil((await Post.countDocuments()) / pageSize) - 1;
+
+    res.json({ posts, currentPage, lastPage });
+  }
+);

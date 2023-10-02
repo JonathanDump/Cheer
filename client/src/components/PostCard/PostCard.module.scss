@@ -1,0 +1,10 @@
+.postCard {
+  max-width: 300px;
+  border: 1px solid darkcyan;
+  .content {
+    .text {
+      white-space: pre-line;
+      word-break: break-all;
+    }
+  }
+}

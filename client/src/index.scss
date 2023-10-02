@@ -4,6 +4,25 @@ button:disabled {
   cursor: not-allowed;
 }
 
-body {
-  background-color: rgb(189, 189, 189);
+html {
+  overflow: hidden;
+  body {
+    overflow: hidden;
+    width: 100vw;
+    height: 100dvh;
+    background-color: rgb(189, 189, 189);
+  }
+  #root {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  &:visited {
+    color: black;
+  }
 }
