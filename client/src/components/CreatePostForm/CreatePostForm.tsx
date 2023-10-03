@@ -9,6 +9,8 @@ import reducer from "../../helpers/reducers/createPostFormReducer";
 import createImageInstance from "../../helpers/functions/createImageInstace";
 import ImagePostForm from "../ImagePostForm/ImagePostForm";
 import { postInitialValue, queryClient } from "../../config/config";
+import { useParams } from "react-router-dom";
+import getObjectCopy from "../../helpers/functions/getObjectCopy";
 
 export default function CreatePostForm() {
   const [formValues, dispatch] = useImmerReducer(reducer, postInitialValue);
@@ -18,6 +20,9 @@ export default function CreatePostForm() {
 
   const token = localStorage.getItem("token")!;
   const user = JSON.parse(localStorage.getItem("user") as string);
+
+  const { userName } = useParams();
+
   useEffect(() => {
     console.log("formValues", formValues);
   }, [formValues]);
@@ -52,9 +57,10 @@ export default function CreatePostForm() {
       result.createdBy = user;
       console.log("result ", result);
 
-      queryClient.setQueriesData(["home posts"], (oldData: unknown) => {
+      const key = userName ? "user posts" : "home posts";
+      queryClient.setQueriesData([key], (oldData: unknown) => {
         if (oldData) {
-          const copyOldData = JSON.parse(JSON.stringify(oldData));
+          const copyOldData = getObjectCopy(oldData);
           copyOldData.pages[0].posts.unshift(result);
           return copyOldData;
         }

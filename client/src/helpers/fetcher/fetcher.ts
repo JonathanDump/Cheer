@@ -1,21 +1,6 @@
 import { SERVER_URL } from "../../config/config";
 
-const createPost = async ({
-  formData,
-  token,
-}: {
-  formData: FormData;
-  token: string;
-}) => {
-  return fetch(`${SERVER_URL}/cheer/create-post`, {
-    method: "POST",
-    headers: {
-      Authorization: token,
-    },
-    body: formData,
-  });
-};
-
+//GET
 const getPosts = async ({
   pageParam = 0,
   token,
@@ -39,11 +24,48 @@ const getPosts = async ({
 
   return response.json();
 };
+
+//POST
+const createPost = async ({
+  formData,
+  token,
+}: {
+  formData: FormData;
+  token: string;
+}) => {
+  return fetch(`${SERVER_URL}/cheer/create-post`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: formData,
+  });
+};
+
+const logIn = (data: FormData) => {
+  return fetch(`${SERVER_URL}/log-in`, {
+    method: "POST",
+    body: data,
+  });
+};
+
+//DELETE
+const deletePost = ({ postId, token }: { postId: string; token: string }) => {
+  return fetch(`${SERVER_URL}/cheer/${postId}/delete-post`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
 export const fetcher = {
   get: {
     getPosts,
   },
   post: {
     createPost,
+    logIn,
   },
+  delete: { deletePost },
 };

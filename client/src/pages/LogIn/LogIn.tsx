@@ -7,6 +7,7 @@ import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs
 import { ILogInData, ILogInFormValues } from "../../interfaces/interfaces";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { fetcher } from "../../helpers/fetcher/fetcher";
 
 export default function LogIn() {
   const {
@@ -20,12 +21,7 @@ export default function LogIn() {
   const navigate = useNavigate();
 
   const logInMutation = useMutation({
-    mutationFn: (data: FormData) => {
-      return fetch(`${SERVER_URL}/log-in`, {
-        method: "POST",
-        body: data,
-      });
-    },
+    mutationFn: fetcher.post.logIn,
     onSuccess: async (data) => {
       const result = await data.json();
       const invalid = result.invalid as Record<"email" | "password", boolean>;

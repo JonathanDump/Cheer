@@ -74,6 +74,7 @@ export interface IUser {
   userName: string;
   email: string;
   image: string;
+  isAdmin?: boolean;
 }
 
 export interface IDecodedJwt {
@@ -126,4 +127,10 @@ export interface ICreatePostFormParams {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchPageFilters<TPageData>) | undefined
   ) => Promise<QueryObserverResult<InfiniteData<any>, unknown>>; // eslint-disable-line  @typescript-eslint/no-explicit-any
+}
+
+export interface IDecodedJwt {
+  exp: number;
+  iat: number;
+  user: IUser;
 }

@@ -11,6 +11,7 @@ import findActiveUser from "../helpers/findActiveUser";
 
 import createRandomUserName from "../helpers/createRandomUserName";
 import generateJwtToken from "../helpers/generateJwtToken";
+import getUserPayload from "../helpers/getUserPayload";
 
 export let isMagicLinkUsed = false;
 
@@ -42,12 +43,7 @@ exports.signUp = asyncHandler(
         });
 
         await user.save();
-        const userPayload = {
-          _id: user._id,
-          name: user.name,
-          img: user.img,
-          userName,
-        };
+        const userPayload = getUserPayload(user.toObject());
 
         const jwtToken = await generateJwtToken({ user: userPayload });
         res.json({
@@ -65,6 +61,8 @@ exports.signUpGoogle = asyncHandler(
     const { name, email, img } = req.body;
 
     let user = await User.findOne({ email }).exec();
+
+    console.log("ust type", typeof user);
     let isNewUser = false;
 
     if (!user) {
@@ -79,12 +77,8 @@ exports.signUpGoogle = asyncHandler(
       isNewUser = true;
     }
 
-    const userPayload = {
-      _id: user._id,
-      name: user.name,
-      img: user.img,
-      userName: user.userName,
-    };
+    const userPayload = getUserPayload(user.toObject());
+    console.log("payload", userPayload);
 
     const jwtToken = await generateJwtToken({ user: userPayload });
 
@@ -122,10 +116,7 @@ exports.setUserName = asyncHandler(
 
 exports.logIn = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("req body", req.body);
-
     const { email, password } = req.body;
-    console.log("email", email);
 
     const user = await User.findOne({ email }).exec();
     console.log("user", user);
@@ -141,13 +132,7 @@ exports.logIn = asyncHandler(
       return next();
     }
 
-    const userPayload = {
-      name: user!.name,
-      email: user!.email,
-      userName: user!.userName,
-      img: user!.img,
-      _id: user!._id,
-    };
+    const userPayload = getUserPayload(user.toObject());
 
     if (email === "test@test.com") {
       const token = await generateJwtToken({ user: userPayload });

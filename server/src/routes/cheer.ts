@@ -26,4 +26,6 @@ router.post(
 
 router.get("/get-posts", postController.getPosts);
 
+router.delete("/:postId/delete-post", postController.deletePost);
+
 module.exports = router;

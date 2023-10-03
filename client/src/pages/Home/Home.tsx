@@ -47,7 +47,7 @@ export default function Home() {
             <Fragment key={i}>
               {page.posts.map((post: IPost) => (
                 <NavLink
-                  to={`/${post.createdBy._id}/${post._id}`}
+                  to={`/${post.createdBy.userName}/${post._id}`}
                   key={post._id}
                 >
                   <PostCard post={post} />

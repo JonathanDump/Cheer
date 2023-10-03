@@ -24,12 +24,12 @@ export const Router = () => {
             { path: "/home", element: <Home /> },
             { path: "/users", element: <Users /> },
             {
-              path: "/:userId",
+              path: "/:userName",
               element: <UserProfile />,
               children: [
-                { path: "/:userId/:postId", element: <PostPage /> },
-                { path: "/:userId/:following", element: <FollowersList /> },
-                { path: "/:userId/:followers", element: <FollowersList /> },
+                { path: "/:userName/:postId", element: <PostPage /> },
+                { path: "/:userName/:following", element: <FollowersList /> },
+                { path: "/:userName/:followers", element: <FollowersList /> },
               ],
             },
           ],

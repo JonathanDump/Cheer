@@ -2,9 +2,26 @@
   max-width: 300px;
   border: 1px solid darkcyan;
   .content {
+    .meta {
+      .settings {
+        .dropDown {
+          animation: dropDownAnimation 0.15s ease;
+        }
+      }
+    }
     .text {
       white-space: pre-line;
       word-break: break-all;
     }
+  }
+}
+
+@keyframes dropDownAnimation {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }

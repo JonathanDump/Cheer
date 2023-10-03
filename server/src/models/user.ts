@@ -12,6 +12,7 @@ const UserSchema = new Schema(
     isVerified: { type: Boolean, default: false },
     following: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     followers: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+    isAdmin: { type: Boolean, default: false },
   },
   { collection: "users" }
 );

@@ -11,6 +11,7 @@ export interface IUser {
   img?: string | undefined;
   googleId?: string | undefined;
   password?: string | undefined;
+  isAdmin?: boolean;
 }
 
 export interface IActiveUser {

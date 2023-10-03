@@ -32,7 +32,7 @@ exports.createPost = asyncHandler(
 exports.getPosts = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const cursor = parseInt(req.query.cursor as string) || 0;
-    const pageSize = 4;
+    const pageSize = 5;
 
     console.log("cursor", req.query.cursor);
 
@@ -51,5 +51,15 @@ exports.getPosts = asyncHandler(
     const lastPage = Math.ceil((await Post.countDocuments()) / pageSize) - 1;
 
     res.json({ posts, currentPage, lastPage });
+  }
+);
+
+exports.deletePost = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.params;
+
+    await Post.deleteOne({ _id: postId });
+
+    res.json({ isSuccess: true });
   }
 );
