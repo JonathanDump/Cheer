@@ -17,7 +17,7 @@ export default function CreatePostForm() {
   const postButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const token = localStorage.getItem("token")!;
-
+  const user = JSON.parse(localStorage.getItem("user") as string);
   useEffect(() => {
     console.log("formValues", formValues);
   }, [formValues]);
@@ -49,6 +49,7 @@ export default function CreatePostForm() {
     },
     onSuccess: async (data) => {
       const result: IPost = await data.json();
+      result.createdBy = user;
       console.log("result ", result);
 
       queryClient.setQueriesData(["home posts"], (oldData: unknown) => {

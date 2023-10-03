@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { SERVER_URL } from "../../config/config";
 import GoogleButton from "../../components/GoogleButton/GoogleButton";
 import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
+import { Link } from "react-router-dom";
 
 export default function SignUp() {
   const {
@@ -147,6 +148,12 @@ export default function SignUp() {
         </form>
         <div>or</div>
         <GoogleButton />
+      </div>
+      <div className={cl.text}>
+        Already have an account?{" "}
+        <Link to={"/log-in"} className={cl.link}>
+          Log In
+        </Link>
       </div>
     </div>
   );

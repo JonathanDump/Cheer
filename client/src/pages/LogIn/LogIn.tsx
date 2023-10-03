@@ -6,7 +6,7 @@ import { SERVER_URL, socket } from "../../config/config";
 import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
 import { ILogInData, ILogInFormValues } from "../../interfaces/interfaces";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LogIn() {
   const {
@@ -18,6 +18,7 @@ export default function LogIn() {
   } = useForm<ILogInFormValues>({ defaultValues: { email: "", password: "" } });
   const [isMagicLinkSent, setIsMagicLinkSet] = useState(false);
   const navigate = useNavigate();
+
   const logInMutation = useMutation({
     mutationFn: (data: FormData) => {
       return fetch(`${SERVER_URL}/log-in`, {
@@ -28,6 +29,7 @@ export default function LogIn() {
     onSuccess: async (data) => {
       const result = await data.json();
       const invalid = result.invalid as Record<"email" | "password", boolean>;
+      const { isTestUser, token, user } = result;
       if (invalid) {
         for (const [key, value] of Object.entries(invalid)) {
           if (value) {
@@ -37,6 +39,10 @@ export default function LogIn() {
             });
           }
         }
+      } else if (isTestUser) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        navigate("/home");
       } else {
         console.log("log in result", result);
 
@@ -67,6 +73,13 @@ export default function LogIn() {
     console.log("input values", data);
 
     const formData = getFormDataFromInputs(data);
+    logInMutation.mutate(formData);
+  };
+
+  const handleLogInWithTestAccount = () => {
+    const formData = new FormData();
+    formData.append("email", "test@test.com");
+    formData.append("password", "testpassword123");
     logInMutation.mutate(formData);
   };
 
@@ -113,6 +126,15 @@ export default function LogIn() {
 
         <div>Or</div>
         <GoogleButton />
+        <button type="button" onClick={handleLogInWithTestAccount}>
+          Log In With Test Account
+        </button>
+      </div>
+      <div className={cl.text}>
+        Don't have an account?{" "}
+        <Link to={"/sign-up"} className={cl.link}>
+          Sign Up
+        </Link>
       </div>
     </div>
   );

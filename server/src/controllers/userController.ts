@@ -149,6 +149,16 @@ exports.logIn = asyncHandler(
       _id: user!._id,
     };
 
+    if (email === "test@test.com") {
+      const token = await generateJwtToken({ user: userPayload });
+      res.json({
+        token: `Bearer ${token}`,
+        user: userPayload,
+        isTestUser: true,
+      });
+      return next();
+    }
+
     const token = await generateJwtToken(
       {
         user: userPayload,

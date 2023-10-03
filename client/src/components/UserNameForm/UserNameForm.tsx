@@ -54,6 +54,7 @@ export default function UserNameForm({
       const result = await data.json();
       console.log("result", result);
       localStorage.setItem("user", JSON.stringify(result.user));
+
       setIsUserNameFormVisible(false);
       navigate("/home");
     },
