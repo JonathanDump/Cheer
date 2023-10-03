@@ -23,9 +23,6 @@ const getPosts = async ({
   pageParam: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
   token: string;
 }) => {
-  console.log("pageParam", pageParam);
-  console.log("token", token);
-
   const response = await fetch(
     `${SERVER_URL}/cheer/get-posts?cursor=${pageParam}`,
     {
@@ -38,6 +35,8 @@ const getPosts = async ({
   if (!response.ok) {
     throw new Error("Couldn't get posts");
   }
+  console.log("fetch");
+
   return response.json();
 };
 export const fetcher = {

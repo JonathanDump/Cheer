@@ -7,7 +7,7 @@ import useSetIsUserNameFormVisible from "../../hooks/useSetIsUserNameFormVisible
 import { useMutation } from "@tanstack/react-query";
 import { SERVER_URL } from "../../config/config";
 import GoogleButton from "../../components/GoogleButton/GoogleButton";
-import getFormDataFromInputs from "../../helpers/getFormDataFromInputs";
+import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
 
 export default function SignUp() {
   const {

@@ -19,6 +19,7 @@ exports.createPost = asyncHandler(
       text,
       createdBy: user._id,
       images: images || [],
+      date: new Date(),
     });
     console.log("post", post);
 

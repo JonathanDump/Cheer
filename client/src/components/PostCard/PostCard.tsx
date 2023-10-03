@@ -10,9 +10,6 @@ export default function PostCard({ post }: IPostCardProps) {
       parseISO(date),
       `${isThisYear(parseISO(date)) ? "dd MMM" : "dd MMM yyyy"} `
     );
-  console.log("post", post);
-
-  console.log("images len", images);
 
   return (
     <div className={cl.postCard}>

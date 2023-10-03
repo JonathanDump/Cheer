@@ -1,4 +1,4 @@
-import { postInitialValue } from "../../components/CreatePostForm/CreatePostForm";
+import { postInitialValue } from "../../config/config";
 import {
   ICreatePostFormReducerAction,
   ICreatePostFormValues,

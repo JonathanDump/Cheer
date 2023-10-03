@@ -9,23 +9,18 @@ import { NavLink } from "react-router-dom";
 export default function Home() {
   const token = localStorage.getItem("token")!;
   const homeRef = useRef<HTMLDivElement | null>(null);
-  const {
-    data,
 
-    fetchNextPage,
-    hasNextPage,
-
-    isFetchingNextPage,
-    isLoading,
-  } = useInfiniteQuery({
-    queryKey: ["posts"],
-    queryFn: ({ pageParam = 0 }) => fetcher.get.getPosts({ pageParam, token }),
-    getNextPageParam: (page) => {
-      return page.currentPage === page.lastPage
-        ? undefined
-        : page.currentPage + 1;
-    },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["home posts"],
+      queryFn: ({ pageParam = 0 }) =>
+        fetcher.get.getPosts({ pageParam, token }),
+      getNextPageParam: (page) => {
+        return page.currentPage === page.lastPage
+          ? undefined
+          : page.currentPage + 1;
+      },
+    });
   const loadPostsOnScroll = () => {
     const { scrollHeight, scrollTop, clientHeight } = homeRef.current!;
     const pxToEnd = scrollHeight - scrollTop - clientHeight;
@@ -48,11 +43,14 @@ export default function Home() {
       <CreatePostForm />
       <div className={cl.postsList}>
         {data?.pages.length &&
-          data?.pages.map((page, i) => (
+          data.pages.map((page, i) => (
             <Fragment key={i}>
               {page.posts.map((post: IPost) => (
-                <NavLink to={`/${post.createdBy._id}/${post._id}`}>
-                  <PostCard key={post._id} post={post} />
+                <NavLink
+                  to={`/${post.createdBy._id}/${post._id}`}
+                  key={post._id}
+                >
+                  <PostCard post={post} />
                 </NavLink>
               ))}
             </Fragment>

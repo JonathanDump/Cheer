@@ -3,22 +3,20 @@ import cl from "./CreatePostForm.module.scss";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import { FormEvent, useEffect, useRef } from "react";
 import { useImmerReducer, useImmer } from "use-immer";
-import { ICreatePostFormValues, IImage } from "../../interfaces/interfaces";
-import getFormDataFromInputs from "../../helpers/getFormDataFromInputs";
+import { IImage, IPost } from "../../interfaces/interfaces";
+import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
 import reducer from "../../helpers/reducers/createPostFormReducer";
-import createImageInstance from "../../helpers/createImageInstace";
+import createImageInstance from "../../helpers/functions/createImageInstace";
 import ImagePostForm from "../ImagePostForm/ImagePostForm";
-
-export const postInitialValue: ICreatePostFormValues = {
-  text: "",
-  images: [],
-};
+import { postInitialValue, queryClient } from "../../config/config";
 
 export default function CreatePostForm() {
   const [formValues, dispatch] = useImmerReducer(reducer, postInitialValue);
   const [images, setImages] = useImmer<IImage[]>([]);
 
   const postButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const token = localStorage.getItem("token")!;
 
   useEffect(() => {
     console.log("formValues", formValues);
@@ -49,14 +47,26 @@ export default function CreatePostForm() {
     onError: (err) => {
       console.log(err);
     },
-    onSuccess: () => {},
+    onSuccess: async (data) => {
+      const result: IPost = await data.json();
+      console.log("result ", result);
+
+      queryClient.setQueriesData(["home posts"], (oldData: unknown) => {
+        if (oldData) {
+          const copyOldData = JSON.parse(JSON.stringify(oldData));
+          copyOldData.pages[0].posts.unshift(result);
+          return copyOldData;
+        }
+        return oldData;
+      });
+    },
   });
 
   const handleCreatePostSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = getFormDataFromInputs(formValues);
-    const token = localStorage.getItem("token")!;
+
     createPostMutation.mutate({ formData, token });
 
     dispatch({ type: "reset" });

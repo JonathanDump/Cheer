@@ -1,3 +1,9 @@
+import {
+  InfiniteData,
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchPageFilters,
+} from "@tanstack/react-query";
 import { ControllerProps } from "react-hook-form";
 
 export interface IDecodedJwtGoogle {
@@ -114,4 +120,10 @@ export interface IPost {
 
 export interface IPostCardProps {
   post: IPost;
+}
+
+export interface ICreatePostFormParams {
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchPageFilters<TPageData>) | undefined
+  ) => Promise<QueryObserverResult<InfiniteData<any>, unknown>>; // eslint-disable-line  @typescript-eslint/no-explicit-any
 }

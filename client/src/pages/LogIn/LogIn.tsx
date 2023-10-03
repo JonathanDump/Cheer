@@ -3,7 +3,7 @@ import cl from "./LogIn.module.scss";
 import GoogleButton from "../../components/GoogleButton/GoogleButton";
 import { useMutation } from "@tanstack/react-query";
 import { SERVER_URL, socket } from "../../config/config";
-import getFormDataFromInputs from "../../helpers/getFormDataFromInputs";
+import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
 import { ILogInData, ILogInFormValues } from "../../interfaces/interfaces";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

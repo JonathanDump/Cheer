@@ -2,7 +2,7 @@ import {
   ICreatePostFormValues,
   ILogInFormValues,
   IUserNameFormValues,
-} from "../interfaces/interfaces";
+} from "../../interfaces/interfaces";
 
 export default function getFormDataFromInputs(
   data: IUserNameFormValues | ILogInFormValues | ICreatePostFormValues
