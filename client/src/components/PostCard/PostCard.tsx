@@ -16,6 +16,8 @@ import getObjectCopy from "../../helpers/functions/getObjectCopy";
 
 export default function PostCard({ post }: IPostCardProps) {
   const { _id, text, images, date, likes, comments, createdBy } = post;
+  console.log("createdBy", createdBy);
+
   const token = getItemFromLocalStorage("token") as string;
   const formattedDate =
     date &&

@@ -75,6 +75,9 @@ export interface IUser {
   email: string;
   image: string;
   isAdmin?: boolean;
+  bio?: string;
+  followers?: string[];
+  following?: string[];
 }
 
 export interface IDecodedJwt {
@@ -133,4 +136,14 @@ export interface IDecodedJwt {
   exp: number;
   iat: number;
   user: IUser;
+}
+
+export interface IUserCardProps {
+  user: IUser;
+}
+
+export interface IFollowToggle {
+  userId: string;
+  token: string;
+  followAction: string;
 }

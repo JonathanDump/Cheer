@@ -6,6 +6,7 @@ import { fetcher } from "../../helpers/fetcher/fetcher";
 import PostCard from "../../components/PostCard/PostCard";
 import { Fragment, useRef } from "react";
 import { NavLink } from "react-router-dom";
+
 export default function Home() {
   const token = localStorage.getItem("token")!;
   const homeRef = useRef<HTMLDivElement | null>(null);
@@ -49,6 +50,7 @@ export default function Home() {
                 <NavLink
                   to={`/${post.createdBy.userName}/${post._id}`}
                   key={post._id}
+                  className={cl.link}
                 >
                   <PostCard post={post} />
                 </NavLink>

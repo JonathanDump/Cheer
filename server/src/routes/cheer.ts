@@ -5,14 +5,12 @@ import passport from "passport";
 import createMulterStorage from "../helpers/createMulterStorage";
 
 const postController = require("../controllers/postController");
+const userController = require("../controllers/userController");
 const storage = createMulterStorage("public/images");
-console.log("storage", storage);
 
 export const upload = multer({ storage: storage });
 
 router.use("/", passport.authenticate("jwt", { session: false }));
-
-// router.post("/home", postController.getAllPosts);
 
 router.post(
   "/create-post",
@@ -27,5 +25,12 @@ router.post(
 router.get("/get-posts", postController.getPosts);
 
 router.delete("/:postId/delete-post", postController.deletePost);
+
+router.get("/get-users", userController.getUsers);
+
+router.put("/follow", userController.follow);
+router.put("/unfollow", userController.unfollow);
+
+// router.put("/toggle-follow", userController.toggleFollow);
 
 module.exports = router;

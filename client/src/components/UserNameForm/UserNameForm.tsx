@@ -9,6 +9,7 @@ import {
   IUserNameFormParams,
   IUserNameFormValues,
 } from "../../interfaces/interfaces";
+import { fetcher } from "../../helpers/fetcher/fetcher";
 
 export default function UserNameForm({
   setIsUserNameFormVisible,
@@ -37,22 +38,14 @@ export default function UserNameForm({
       : "";
 
   const setUserNameMutation = useMutation({
-    mutationFn: (userName: string) => {
-      return fetch(`${SERVER_URL}/sign-up/set-user-name`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userName,
-          userId: localStorage.getItem("userId"),
-        }),
-      });
-    },
+    mutationFn: fetcher.post.setUserName,
     onError: (error) => {
       console.log("error", error);
     },
     onSuccess: async (data) => {
       const result = await data.json();
       console.log("result", result);
+      localStorage.setItem("token", result.token);
       localStorage.setItem("user", JSON.stringify(result.user));
 
       setIsUserNameFormVisible(false);
@@ -63,7 +56,7 @@ export default function UserNameForm({
   useEffect(() => {
     buttonRef.current!.disabled =
       !!errors.userName?.message || getValues("userName").length === 0;
-  }, [errors.userName?.message, isSubmitSuccessful]);
+  }, [errors.userName?.message, isSubmitSuccessful, getValues]);
 
   const onSubmit = (data: IUserNameFormValues) => {
     if (isDefaultUserName()) {

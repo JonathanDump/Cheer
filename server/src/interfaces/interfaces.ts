@@ -8,10 +8,11 @@ export interface IUser {
   isVerified: boolean;
   following: Types.ObjectId[];
   followers: Types.ObjectId[];
-  img?: string | undefined;
+  image?: string | undefined;
   googleId?: string | undefined;
   password?: string | undefined;
   isAdmin?: boolean;
+  bio?: string;
 }
 
 export interface IActiveUser {

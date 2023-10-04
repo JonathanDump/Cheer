@@ -98,17 +98,16 @@ exports.setUserName = asyncHandler(
     if (!user) {
       res.json({ isSuccess: false });
     } else {
-      user.userName = req.body.userName;
+      user.userName = userName;
       await user!.save();
 
+      const userPayload = getUserPayload(user.toObject());
+      const token = await generateJwtToken({ user: userPayload });
+      console.log("set user name token", token);
+
       res.status(200).json({
-        user: {
-          _id: user._id,
-          name: user.name,
-          userName: user.userName,
-          img: user.img,
-        },
-        isSuccess: true,
+        token: `Bearer ${token}`,
+        user: userPayload,
       });
     }
   }
@@ -210,3 +209,91 @@ exports.checkUserName = asyncHandler(
     }
   }
 );
+
+exports.getUsers = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.user as IUser;
+    const cursor = parseInt(req.query.cursor as string) || 0;
+    const pageSize = 30;
+    const users = await User.find({
+      _id: { $ne: _id },
+    })
+
+      .skip(cursor * pageSize)
+      .limit(pageSize)
+      .select("name userName bio followers image")
+      .populate({ path: "followers", match: { _id: _id }, select: "_id" })
+      .exec();
+
+    const currentPage = cursor;
+    const lastPage = Math.ceil((await User.countDocuments()) / pageSize) - 1;
+
+    res.json({ users, currentPage, lastPage });
+  }
+);
+
+exports.unfollow = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.query;
+    const { _id } = req.user as IUser;
+
+    await User.findByIdAndUpdate(_id, {
+      $pull: {
+        following: userId,
+      },
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: {
+        followers: _id,
+      },
+    });
+
+    res.json({ isSuccess: true });
+  }
+);
+
+exports.follow = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.query;
+    console.log("userID", userId);
+
+    const { _id } = req.user as IUser;
+    console.log("follow");
+
+    await User.findByIdAndUpdate(_id, {
+      $push: {
+        following: userId,
+      },
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      $push: {
+        followers: _id,
+      },
+    });
+    res.json({ isSuccess: true });
+  }
+);
+
+// exports.toggleFollow = asyncHandler(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { userId } = req.query;
+//     const { _id } = req.user as IUser;
+
+//     const user = await User.findById(userId).populate({
+//       path: "followers",
+//       match: { _id: _id },
+//       select: "_id",
+//     });
+//     console.log("user", user);
+
+//     if (user?.followers.length) {
+//       user.followers = [];
+//       await user.save();
+//       res.json({ success: true });
+//       return next();
+//     }
+//     res.json({ success: false });
+//   }
+// );

@@ -6,13 +6,14 @@ const UserSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true },
     userName: String,
-    password: { type: String },
-    img: String,
+    password: String,
+    image: String,
     googleId: String,
     isVerified: { type: Boolean, default: false },
     following: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     followers: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     isAdmin: { type: Boolean, default: false },
+    bio: { type: String, default: "" },
   },
   { collection: "users" }
 );

@@ -1,11 +1,16 @@
 import {
   ICreatePostFormValues,
+  IFollowToggle,
   ILogInFormValues,
   IUserNameFormValues,
 } from "../../interfaces/interfaces";
 
 export default function getFormDataFromInputs(
-  data: IUserNameFormValues | ILogInFormValues | ICreatePostFormValues
+  data:
+    | IUserNameFormValues
+    | ILogInFormValues
+    | ICreatePostFormValues
+    | IFollowToggle
 ) {
   console.log("data", data);
 
