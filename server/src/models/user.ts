@@ -15,6 +15,7 @@ const UserSchema = new Schema(
     isAdmin: { type: Boolean, default: false },
     bio: { type: String, default: "" },
     posts: [{ type: Schema.Types.ObjectId, ref: "Post", default: [] }],
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment", default: [] }],
   },
   { collection: "users" }
 );

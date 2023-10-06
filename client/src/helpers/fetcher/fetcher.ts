@@ -103,6 +103,29 @@ const getUser = async ({
   return response.json();
 };
 
+const getPost = async ({
+  postId,
+  token,
+}: {
+  postId: string;
+  token: string;
+}) => {
+  const response = await fetch(
+    `${SERVER_URL}/cheer/get-post?postId=${postId}`,
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Couldn't get posts");
+  }
+
+  return response.json();
+};
+
 //POST
 const createPost = async ({
   formData,
@@ -139,6 +162,22 @@ const setUserName = (userName: string) => {
   });
 };
 
+const createComment = async ({
+  formData,
+  token,
+}: {
+  formData: FormData;
+  token: string;
+}) => {
+  return fetch(`${SERVER_URL}/cheer/create-comment`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: formData,
+  });
+};
+
 //DELETE
 const deletePost = ({ postId, token }: { postId: string; token: string }) => {
   return fetch(`${SERVER_URL}/cheer/${postId}/delete-post`, {
@@ -149,6 +188,7 @@ const deletePost = ({ postId, token }: { postId: string; token: string }) => {
   });
 };
 
+//PUT
 const toggleFollow = ({
   userId,
   token,
@@ -177,11 +217,13 @@ export const fetcher = {
     getUsers,
     getUser,
     getUserPosts,
+    getPost,
   },
   post: {
     createPost,
     logIn,
     setUserName,
+    createComment,
   },
   delete: { deletePost },
   put: { toggleFollow },

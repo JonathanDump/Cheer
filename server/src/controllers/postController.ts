@@ -5,10 +5,11 @@ import { IUser } from "../interfaces/interfaces";
 import envReader from "../helpers/envReader";
 import mongoose from "mongoose";
 import User from "../models/user";
+import setCount from "../helpers/setCount";
 
 exports.createPost = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { text }: { text: string; userId: string } = req.body;
+    const { text }: { text: string } = req.body;
     const files = req.files as Express.Multer.File[];
     console.log("files", files);
 
@@ -42,7 +43,7 @@ exports.getPosts = asyncHandler(
 
     console.log("cursor", req.query.cursor);
 
-    const posts = await Post.find()
+    const postsDb = await Post.find()
       .skip(cursor * pageSize)
       .limit(pageSize)
       .sort({ date: -1 })
@@ -51,11 +52,16 @@ exports.getPosts = asyncHandler(
         select: ["name", "userName", "image"],
       })
       .exec();
-    console.log("posts", posts);
 
     const currentPage = cursor;
     let lastPage = Math.ceil((await Post.countDocuments()) / pageSize) - 1;
     lastPage = lastPage < 0 ? 0 : lastPage;
+
+    const posts = postsDb.map((post) =>
+      setCount(post.toObject(), ["comments", "likes"])
+    );
+    console.log("posts", posts);
+
     res.json({ posts, currentPage, lastPage });
   }
 );
@@ -70,7 +76,7 @@ exports.getUserPosts = asyncHandler(
 
     console.log("cursor", req.query.cursor);
 
-    const posts = await Post.find({ createdBy: userId })
+    const postsDb = await Post.find({ createdBy: userId })
       .skip(cursor * pageSize)
       .limit(pageSize)
       .sort({ date: -1 })
@@ -79,7 +85,6 @@ exports.getUserPosts = asyncHandler(
         select: ["name", "userName", "image"],
       })
       .exec();
-    console.log("posts", posts);
 
     const currentPage = cursor;
     console.log("count", await Post.countDocuments({ createdBy: userId }));
@@ -91,6 +96,9 @@ exports.getUserPosts = asyncHandler(
     lastPage = lastPage < 0 ? 0 : lastPage;
     console.log("lastPage", lastPage);
 
+    const posts = postsDb.map((post) =>
+      setCount(post.toObject(), ["comments", "likes"])
+    );
     res.json({ posts, currentPage, lastPage });
   }
 );
@@ -102,5 +110,20 @@ exports.deletePost = asyncHandler(
     await Post.deleteOne({ _id: postId });
 
     res.json({ isSuccess: true });
+  }
+);
+
+exports.getPost = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.query;
+    const postDb = await Post.findById(postId).exec();
+
+    if (!postDb) {
+      res.status(400);
+      return next();
+    }
+
+    const post = setCount(postDb.toObject(), ["comments", "likes"]);
+    res.json(post);
   }
 );

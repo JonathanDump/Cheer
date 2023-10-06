@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 
 export interface IUser {
   _id: string;
@@ -13,7 +13,8 @@ export interface IUser {
   password?: string | undefined;
   isAdmin?: boolean;
   bio?: string;
-  posts?: string[];
+  posts?: Types.ObjectId[];
+  comments?: Types.ObjectId;
 }
 
 export interface IActiveUser {
@@ -25,4 +26,14 @@ export interface IDecodedJwt {
   iat: number;
   exp: number;
   user: IUser;
+}
+
+export interface IPost {
+  _id: ObjectId;
+  date: Date;
+  images: string[];
+  likes: Types.ObjectId[];
+  comments: Types.ObjectId[];
+  createdBy: Types.ObjectId;
+  text?: string | undefined;
 }

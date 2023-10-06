@@ -47,7 +47,7 @@ export default function UserProfile() {
     return outlet;
   }
 
-  if (userQuery.isLoading) {
+  if (userQuery.isFetching) {
     return <div className={cl.userProfile}>Loading...</div>;
   }
 

@@ -7,6 +7,7 @@ const CommentSchema = new Schema({
   createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
   date: { type: Date, default: new Date() },
   likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+  images: [{ type: String, default: [] }],
 });
 
 export default mongoose.model("Comment", CommentSchema);

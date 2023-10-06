@@ -11,12 +11,14 @@ import ImagePostForm from "../ImagePostForm/ImagePostForm";
 import { postInitialValue, queryClient } from "../../config/config";
 import { useParams } from "react-router-dom";
 import getObjectCopy from "../../helpers/functions/getObjectCopy";
+import { ReactComponent as AttachmentsIcon } from "/src/Icons/attachmentsImg.svg";
 
 export default function CreatePostForm() {
   const [formValues, dispatch] = useImmerReducer(reducer, postInitialValue);
   const [images, setImages] = useImmer<IImage[]>([]);
 
   const postButtonRef = useRef<HTMLButtonElement | null>(null);
+  const inputFileRef = useRef<HTMLInputElement | null>(null);
 
   const token = localStorage.getItem("token")!;
   const user = JSON.parse(localStorage.getItem("user") as string);
@@ -90,6 +92,10 @@ export default function CreatePostForm() {
       postButtonRef.current!.click();
     }
   };
+
+  const handleAttachmentsIconClick = () => {
+    inputFileRef.current?.click();
+  };
   return (
     <div className={cl.createPostForm}>
       <form onSubmit={handleCreatePostSubmit}>
@@ -104,12 +110,18 @@ export default function CreatePostForm() {
           }}
           onKeyDown={handleCtrlEnterKeyDown}
         ></textarea>
-        <input
-          type="file"
-          onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-            dispatch({ type: "add image", imageBlob: e.target.files![0] });
-          }}
-        />
+        <div className={cl.attachments} onClick={handleAttachmentsIconClick}>
+          <input
+            ref={inputFileRef}
+            style={{ display: "none" }}
+            type="file"
+            accept="image/png, image/gif, image/jpeg"
+            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+              dispatch({ type: "add image", imageBlob: e.target.files![0] });
+            }}
+          />
+          <AttachmentsIcon />
+        </div>
         <div className={cl.imageContainer}>
           {images.map((image, i) => {
             return <ImagePostForm key={i} image={image} dispatch={dispatch} />;

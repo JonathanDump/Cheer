@@ -12,6 +12,7 @@ import findActiveUser from "../helpers/findActiveUser";
 import createRandomUserName from "../helpers/createRandomUserName";
 import generateJwtToken from "../helpers/generateJwtToken";
 import getUserPayload from "../helpers/getUserPayload";
+import setCount from "../helpers/setCount";
 
 export let isMagicLinkUsed = false;
 
@@ -279,28 +280,16 @@ exports.follow = asyncHandler(
 exports.getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userName } = req.query;
-    let user = await User.findOne({ userName: userName })
-      .select("-following -followers -posts")
+    const userDb = await User.findOne({ userName: userName })
+      .select("-posts")
       .exec();
-    const following = await User.aggregate([
-      { $match: { userName: userName } },
-      { $project: { following: { $size: "$following" } } },
-    ]);
-    const followers = await User.aggregate([
-      { $match: { userName: userName } },
-      { $project: { followers: { $size: "$followers" } } },
-    ]);
-    if (!user) {
+    console.log("userDb", userDb);
+
+    if (!userDb) {
       res.status(400);
     } else {
-      user = user.toObject();
-      // user.following = following[0].following;
-      // user.followers = followers[0].followers;
-      res.json({
-        ...user,
-        following: following[0].following,
-        followers: followers[0].followers,
-      });
+      const user = setCount(userDb.toObject(), ["following", "followers"]);
+      res.json(user);
     }
   }
 );

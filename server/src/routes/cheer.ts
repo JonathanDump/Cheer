@@ -6,6 +6,7 @@ import createMulterStorage from "../helpers/createMulterStorage";
 
 const postController = require("../controllers/postController");
 const userController = require("../controllers/userController");
+const commentController = require("../controllers/commentsController");
 const storage = createMulterStorage("public/images");
 
 export const upload = multer({ storage: storage });
@@ -21,16 +22,18 @@ router.post(
   upload.array("images"),
   postController.createPost
 );
+router.post("/create-comment", upload.none(), commentController.createComment);
 
+router.get("/get-post", postController.getPost);
 router.get("/get-posts", postController.getPosts);
 router.get("/get-user-posts", postController.getUserPosts);
-
-router.delete("/:postId/delete-post", postController.deletePost);
 
 router.get("/get-users", userController.getUsers);
 router.get("/get-user", userController.getUser);
 
 router.put("/follow", userController.follow);
 router.put("/unfollow", userController.unfollow);
+
+router.delete("/:postId/delete-post", postController.deletePost);
 
 module.exports = router;

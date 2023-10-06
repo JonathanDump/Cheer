@@ -8,12 +8,14 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import PostPage from "./pages/PostPage/PostPage";
 import FollowersList from "./pages/FollowersList/FollowersList";
 import Cheer from "./pages/Cheer/Cheer";
+import Error from "./pages/Error/Error";
 
 export const Router = () => {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <App />,
+      errorElement: <Error />,
       children: [
         { path: "/log-in", element: <LogIn /> },
         { path: "/sign-up", element: <SignUp /> },
