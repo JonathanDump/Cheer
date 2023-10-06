@@ -23,7 +23,6 @@ export default function UserCard({ user }: IUserCardProps) {
         queryClient.setQueriesData(["all users"], (oldData: unknown) => {
           if (oldData) {
             const copyOldData = getObjectCopy(oldData);
-
             copyOldData.pages.some(
               (page: {
                 users: IUser[];
@@ -37,7 +36,6 @@ export default function UserCard({ user }: IUserCardProps) {
                   variables.followAction === "Follow"
                     ? oldUser.followers?.push(_id)
                     : oldUser.followers?.pop();
-
                   return true;
                 }
                 return false;

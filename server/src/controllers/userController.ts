@@ -276,24 +276,31 @@ exports.follow = asyncHandler(
   }
 );
 
-// exports.toggleFollow = asyncHandler(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { userId } = req.query;
-//     const { _id } = req.user as IUser;
-
-//     const user = await User.findById(userId).populate({
-//       path: "followers",
-//       match: { _id: _id },
-//       select: "_id",
-//     });
-//     console.log("user", user);
-
-//     if (user?.followers.length) {
-//       user.followers = [];
-//       await user.save();
-//       res.json({ success: true });
-//       return next();
-//     }
-//     res.json({ success: false });
-//   }
-// );
+exports.getUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userName } = req.query;
+    let user = await User.findOne({ userName: userName })
+      .select("-following -followers -posts")
+      .exec();
+    const following = await User.aggregate([
+      { $match: { userName: userName } },
+      { $project: { following: { $size: "$following" } } },
+    ]);
+    const followers = await User.aggregate([
+      { $match: { userName: userName } },
+      { $project: { followers: { $size: "$followers" } } },
+    ]);
+    if (!user) {
+      res.status(400);
+    } else {
+      user = user.toObject();
+      // user.following = following[0].following;
+      // user.followers = followers[0].followers;
+      res.json({
+        ...user,
+        following: following[0].following,
+        followers: followers[0].followers,
+      });
+    }
+  }
+);

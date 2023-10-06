@@ -28,8 +28,8 @@ export const Router = () => {
               element: <UserProfile />,
               children: [
                 { path: "/:userName/:postId", element: <PostPage /> },
-                { path: "/:userName/:following", element: <FollowersList /> },
-                { path: "/:userName/:followers", element: <FollowersList /> },
+                { path: "/:userName/following", element: <FollowersList /> },
+                { path: "/:userName/followers", element: <FollowersList /> },
               ],
             },
           ],

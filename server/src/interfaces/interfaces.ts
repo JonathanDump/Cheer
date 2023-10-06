@@ -13,6 +13,7 @@ export interface IUser {
   password?: string | undefined;
   isAdmin?: boolean;
   bio?: string;
+  posts?: string[];
 }
 
 export interface IActiveUser {

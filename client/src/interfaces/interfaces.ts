@@ -1,5 +1,7 @@
 import {
+  FetchNextPageOptions,
   InfiniteData,
+  InfiniteQueryObserverResult,
   QueryObserverResult,
   RefetchOptions,
   RefetchPageFilters,
@@ -76,8 +78,9 @@ export interface IUser {
   image: string;
   isAdmin?: boolean;
   bio?: string;
-  followers?: string[];
-  following?: string[];
+  followers?: string[] | number;
+  following?: string[] | number;
+  posts?: string[];
 }
 
 export interface IDecodedJwt {
@@ -146,4 +149,24 @@ export interface IFollowToggle {
   userId: string;
   token: string;
   followAction: string;
+}
+
+export interface ILoadPostOnScroll {
+  divRef: React.MutableRefObject<HTMLDivElement | null>;
+  isFetchingNextPage: boolean;
+  hasNextPage: boolean | undefined;
+  fetchNextPage: (
+    options?: FetchNextPageOptions | undefined
+  ) => Promise<InfiniteQueryObserverResult<any, unknown>>; //eslint-disable-line
+}
+
+export interface IPostsListParams {
+  data: InfiniteData<any> | undefined;
+  isFetchingNextPage: boolean;
+}
+
+export interface IPostsPage {
+  posts: IPost[];
+  currentPage: number;
+  lastPage: number;
 }

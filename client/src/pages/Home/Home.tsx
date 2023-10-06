@@ -1,11 +1,11 @@
 import CreatePostForm from "../../components/CreatePostForm/CreatePostForm";
 import cl from "./Home.module.scss";
-import { IPost } from "../../interfaces/interfaces";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
-import PostCard from "../../components/PostCard/PostCard";
-import { Fragment, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { useRef } from "react";
+import loadPostsOnScroll from "../../helpers/functions/loadPostsOnScroll";
+import getNextPageParam from "../../helpers/functions/getNextPageParam";
+import PostsList from "../../components/PostsList/PostsList";
 
 export default function Home() {
   const token = localStorage.getItem("token")!;
@@ -14,22 +14,11 @@ export default function Home() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
       queryKey: ["home posts"],
-      queryFn: ({ pageParam = 0 }) =>
-        fetcher.get.getPosts({ pageParam, token }),
-      getNextPageParam: (page) => {
-        return page.currentPage === page.lastPage
-          ? undefined
-          : page.currentPage + 1;
-      },
+      queryFn: async ({ pageParam = 0 }) =>
+        await fetcher.get.getPosts({ pageParam, token }),
+      getNextPageParam: getNextPageParam,
     });
-  const loadPostsOnScroll = () => {
-    const { scrollHeight, scrollTop, clientHeight } = homeRef.current!;
-    const pxToEnd = scrollHeight - scrollTop - clientHeight;
-
-    if (pxToEnd <= 50 && !isFetchingNextPage && hasNextPage) {
-      fetchNextPage();
-    }
-  };
+  console.log("isLoading", isLoading);
 
   if (isLoading) {
     return (
@@ -40,26 +29,20 @@ export default function Home() {
   }
 
   return (
-    <div className={cl.home} onScroll={loadPostsOnScroll} ref={homeRef}>
+    <div
+      className={cl.home}
+      onScroll={() =>
+        loadPostsOnScroll(
+          homeRef,
+          isFetchingNextPage,
+          hasNextPage,
+          fetchNextPage
+        )
+      }
+      ref={homeRef}
+    >
       <CreatePostForm />
-      <div className={cl.postsList}>
-        {data?.pages.length &&
-          data.pages.map((page, i) => (
-            <Fragment key={i}>
-              {page.posts.map((post: IPost) => (
-                <NavLink
-                  to={`/${post.createdBy.userName}/${post._id}`}
-                  key={post._id}
-                  className={cl.link}
-                >
-                  <PostCard post={post} />
-                </NavLink>
-              ))}
-            </Fragment>
-          ))}
-
-        <div>{isFetchingNextPage ? "Loading more..." : null}</div>
-      </div>
+      <PostsList data={data} isFetchingNextPage={isFetchingNextPage} />
     </div>
   );
 }

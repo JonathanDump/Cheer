@@ -61,6 +61,9 @@ export default function CreatePostForm() {
       queryClient.setQueriesData([key], (oldData: unknown) => {
         if (oldData) {
           const copyOldData = getObjectCopy(oldData);
+          if (!copyOldData.pages[0]) {
+            copyOldData.pages[0] = { posts: [result] };
+          }
           copyOldData.pages[0].posts.unshift(result);
           return copyOldData;
         }

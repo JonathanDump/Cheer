@@ -1,5 +1,5 @@
 import { SERVER_URL } from "../../config/config";
-import { IUser } from "../../interfaces/interfaces";
+import { IPostsPage, IUser } from "../../interfaces/interfaces";
 import getItemFromLocalStorage from "../functions/getItemFromLocalStorage";
 
 //GET
@@ -9,9 +9,61 @@ const getPosts = async ({
 }: {
   pageParam: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
   token: string;
-}) => {
+}): Promise<IPostsPage> => {
   const response = await fetch(
     `${SERVER_URL}/cheer/get-posts?cursor=${pageParam}`,
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Couldn't get posts");
+  }
+
+  return response.json();
+};
+
+const getUserPosts = async ({
+  pageParam,
+  token,
+  userId,
+}: {
+  pageParam: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
+  token: string;
+  userId: string;
+}): Promise<IPostsPage> => {
+  console.log("pageParam", pageParam);
+  console.log("token", token);
+  console.log("userId", userId);
+
+  const response = await fetch(
+    `${SERVER_URL}/cheer/get-user-posts?cursor=${pageParam}&userId=${userId}`,
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Couldn't get posts");
+  }
+
+  return response.json();
+};
+
+const getUsers = async ({
+  pageParam,
+  token,
+}: {
+  pageParam: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
+  token: string;
+}) => {
+  const response = await fetch(
+    `${SERVER_URL}/cheer/get-users?cursor=${pageParam}`,
     {
       headers: {
         Authorization: token,
@@ -27,15 +79,15 @@ const getPosts = async ({
   return response.json();
 };
 
-const getUsers = async ({
-  pageParam,
+const getUser = async ({
+  userName,
   token,
 }: {
-  pageParam: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
+  userName: string;
   token: string;
-}) => {
+}): Promise<IUser> => {
   const response = await fetch(
-    `${SERVER_URL}/cheer/get-users?cursor=${pageParam}`,
+    `${SERVER_URL}/cheer/get-user?userName=${userName}`,
     {
       headers: {
         Authorization: token,
@@ -123,6 +175,8 @@ export const fetcher = {
   get: {
     getPosts,
     getUsers,
+    getUser,
+    getUserPosts,
   },
   post: {
     createPost,

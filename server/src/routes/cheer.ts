@@ -23,14 +23,14 @@ router.post(
 );
 
 router.get("/get-posts", postController.getPosts);
+router.get("/get-user-posts", postController.getUserPosts);
 
 router.delete("/:postId/delete-post", postController.deletePost);
 
 router.get("/get-users", userController.getUsers);
+router.get("/get-user", userController.getUser);
 
 router.put("/follow", userController.follow);
 router.put("/unfollow", userController.unfollow);
-
-// router.put("/toggle-follow", userController.toggleFollow);
 
 module.exports = router;
