@@ -292,13 +292,13 @@ exports.follow = asyncHandler(
     console.log("follow");
 
     await User.findByIdAndUpdate(_id, {
-      $push: {
+      $addToSet: {
         following: userId,
       },
     });
 
     await User.findByIdAndUpdate(userId, {
-      $push: {
+      $addToSet: {
         followers: _id,
       },
     });

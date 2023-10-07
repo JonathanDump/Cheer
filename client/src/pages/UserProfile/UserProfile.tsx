@@ -1,4 +1,4 @@
-import { NavLink, useOutlet, useParams } from "react-router-dom";
+import { useOutlet, useParams } from "react-router-dom";
 import cl from "./UserProfile.module.scss";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { IUser } from "../../interfaces/interfaces";
@@ -9,6 +9,7 @@ import { useRef } from "react";
 import loadPostsOnScroll from "../../helpers/functions/loadPostsOnScroll";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
 import List from "../../components/List/List";
+import UserInfo from "../../components/UserInfo/UserInfo";
 
 export default function UserProfile() {
   const outlet = useOutlet();
@@ -35,9 +36,6 @@ export default function UserProfile() {
       enabled: !!userId,
     });
 
-  console.log("isLoading", isLoading);
-  console.log("pr data", data);
-
   const isMyProfile = () => {
     return userName === userFromStorage.userName;
   };
@@ -46,8 +44,12 @@ export default function UserProfile() {
     return outlet;
   }
 
-  if (userQuery.isFetching) {
+  if (userQuery.isLoading) {
     return <div className={cl.userProfile}>Loading...</div>;
+  }
+
+  if (userQuery.isError) {
+    return <div className={cl.userProfile}>Something went wrong...</div>;
   }
 
   return (
@@ -63,7 +65,7 @@ export default function UserProfile() {
         )
       }
     >
-      {userQuery.data && (
+      {/* {userQuery.data && (
         <div className={cl.userInfo}>
           <div className={cl.imageButton}>
             <img src={userQuery.data.image} />
@@ -87,7 +89,8 @@ export default function UserProfile() {
             </NavLink>
           </div>
         </div>
-      )}
+      )} */}
+      <UserInfo user={userQuery.data} isMyProfile={isMyProfile()} />
       <div className={cl.posts}>
         {isMyProfile() && <CreatePostOrCommentForm type={"post"} />}
         {isLoading ? (

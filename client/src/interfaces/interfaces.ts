@@ -173,3 +173,8 @@ export interface IPostsPage {
   currentPage: number;
   lastPage: number;
 }
+
+export interface IUserInfoParams {
+  user: IUser;
+  isMyProfile: boolean;
+}

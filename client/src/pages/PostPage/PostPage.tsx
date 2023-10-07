@@ -4,7 +4,6 @@ import { fetcher } from "../../helpers/fetcher/fetcher";
 import { useParams } from "react-router-dom";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import CreatePostOrCommentForm from "../../components/CreatePostForm/CreatePostOrCommentForm";
-import { IPost } from "../../interfaces/interfaces";
 import PostOrCommentCard from "../../components/PostOrCommentCard/PostOrCommentCard";
 import List from "../../components/List/List";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
@@ -17,7 +16,7 @@ export default function PostPage() {
 
   const postPageRef = useRef<HTMLDivElement | null>(null);
 
-  const postQuery = useQuery<IPost>({
+  const postQuery = useQuery({
     queryKey: ["post"],
     queryFn: async () => await fetcher.get.getPost({ postId, token }),
   });

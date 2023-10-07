@@ -1,5 +1,5 @@
 import { SERVER_URL } from "../../config/config";
-import { IPostsPage, IUser } from "../../interfaces/interfaces";
+import { IPost, IPostsPage, IUser } from "../../interfaces/interfaces";
 import getItemFromLocalStorage from "../functions/getItemFromLocalStorage";
 
 //GET
@@ -109,7 +109,7 @@ const getPost = async ({
 }: {
   postId: string;
   token: string;
-}) => {
+}): Promise<IPost> => {
   const response = await fetch(
     `${SERVER_URL}/cheer/get-post?postId=${postId}`,
     {
@@ -134,7 +134,7 @@ const getComments = async ({
   postId: string;
   token: string;
   pageParam: string;
-}) => {
+}): Promise<IPost[]> => {
   const response = await fetch(
     `${SERVER_URL}/cheer/get-comments?cursor=${pageParam}&postId=${postId}`,
     {

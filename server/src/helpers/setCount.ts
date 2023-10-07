@@ -19,17 +19,9 @@
 // }
 
 export default function setCount(object: any, keys: string[]) {
-  console.log("object", object);
-  console.log("keys", keys);
-
-  console.log(keys[0], object[keys[0]].length);
-
   keys.forEach((key) => {
-    console.log("key", key);
-    console.log(key, object[key].length);
     object[key] = object[key].length;
   });
-  console.log("updated obj", object);
 
   return object;
 }

@@ -7,7 +7,7 @@ export interface IUser {
   userName?: string;
   isVerified: boolean;
   following: Types.ObjectId[];
-  followers: string[];
+  followers: Types.ObjectId[];
   image?: string | undefined;
   googleId?: string | undefined;
   password?: string | undefined;
