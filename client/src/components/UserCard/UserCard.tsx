@@ -5,47 +5,50 @@ import { fetcher } from "../../helpers/fetcher/fetcher";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { queryClient } from "../../config/config";
 import getObjectCopy from "../../helpers/functions/getObjectCopy";
+import { useState } from "react";
 
 export default function UserCard({ user }: IUserCardProps) {
   const { _id, image, name, userName, bio, followers } = user;
+  const [isFollowed, setIsFollowed] = useState(!!followers);
   const token = getItemFromLocalStorage("token") as string;
-  const followAction = followers?.length ? "Unfollow" : "Follow";
-  // console.log("user", user);
+  const followAction = isFollowed ? "Unfollow" : "Follow";
+  console.log("user", user);
 
   const followMutation = useMutation({
     mutationFn: fetcher.put.toggleFollow,
-    onSuccess(data, variables) {
+    onSuccess(data) {
       if (!data.ok) {
         throw new Error(`Something went wrong during ${followAction}`);
       }
 
-      if (data.status == 200) {
-        queryClient.setQueriesData(["all users"], (oldData: unknown) => {
-          if (oldData) {
-            const copyOldData = getObjectCopy(oldData);
-            copyOldData.pages.some(
-              (page: {
-                users: IUser[];
-                currentPage: number;
-                lastPage: number;
-              }) => {
-                const oldUser = page.users.find(
-                  (user) => user._id === variables.userId
-                );
-                if (oldUser) {
-                  variables.followAction === "Follow"
-                    ? oldUser.followers?.push(_id)
-                    : oldUser.followers?.pop();
-                  return true;
-                }
-                return false;
-              }
-            );
-            return copyOldData;
-          }
-          return oldData;
-        });
-      }
+      // if (data.status == 200) {
+      //   queryClient.setQueriesData(["all users"], (oldData: unknown) => {
+      //     if (oldData) {
+      //       const copyOldData = getObjectCopy(oldData);
+      //       copyOldData.pages.some(
+      //         (page: {
+      //           users: IUser[];
+      //           currentPage: number;
+      //           lastPage: number;
+      //         }) => {
+      //           const oldUser = page.users.find(
+      //             (user) => user._id === variables.userId
+      //           );
+      //           if (oldUser) {
+      //             variables.followAction === "Follow"
+      //               ? oldUser.followers?.push(_id)
+      //               : oldUser.followers?.pop();
+      //             return true;
+      //           }
+      //           return false;
+      //         }
+      //       );
+      //       return copyOldData;
+      //     }
+      //     return oldData;
+      //   });
+      // }
+      setIsFollowed(!isFollowed);
     },
     onError: (err) => {
       console.log(err);

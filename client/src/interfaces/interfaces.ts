@@ -78,9 +78,10 @@ export interface IUser {
   image: string;
   isAdmin?: boolean;
   bio?: string;
-  followers?: string[] | number;
-  following?: string[] | number;
+  followers?: number;
+  following?: number;
   posts?: string[];
+  isFollowed?: boolean;
 }
 
 export interface IDecodedJwt {

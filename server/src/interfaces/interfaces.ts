@@ -7,7 +7,7 @@ export interface IUser {
   userName?: string;
   isVerified: boolean;
   following: Types.ObjectId[];
-  followers: Types.ObjectId[];
+  followers: string[];
   image?: string | undefined;
   googleId?: string | undefined;
   password?: string | undefined;
@@ -15,6 +15,7 @@ export interface IUser {
   bio?: string;
   posts?: Types.ObjectId[];
   comments?: Types.ObjectId;
+  isFollowed?: boolean;
 }
 
 export interface IActiveUser {

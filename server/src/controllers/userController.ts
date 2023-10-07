@@ -13,6 +13,7 @@ import createRandomUserName from "../helpers/createRandomUserName";
 import generateJwtToken from "../helpers/generateJwtToken";
 import getUserPayload from "../helpers/getUserPayload";
 import setCount from "../helpers/setCount";
+import setIsFollowed from "../helpers/setIsFollowed";
 
 export let isMagicLinkUsed = false;
 
@@ -216,7 +217,7 @@ exports.getUsers = asyncHandler(
     const { _id } = req.user as IUser;
     const cursor = parseInt(req.query.cursor as string) || 0;
     const pageSize = 30;
-    const users = await User.find({
+    const usersDb = await User.find({
       _id: { $ne: _id },
     })
 
@@ -226,6 +227,9 @@ exports.getUsers = asyncHandler(
       .populate({ path: "followers", match: { _id: _id }, select: "_id" })
       .exec();
 
+    const users = usersDb.map((user) =>
+      setCount(user.toObject(), ["followers"])
+    );
     const currentPage = cursor;
     const lastPage = Math.ceil((await User.countDocuments()) / pageSize) - 1;
 
@@ -236,16 +240,23 @@ exports.getUsers = asyncHandler(
 exports.getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userName } = req.query;
+    const { _id } = req.user as IUser;
 
     const userDb = await User.findOne({ userName: userName })
-      .select("-posts")
+      .select("-posts -password")
       .exec();
     console.log("userDb", userDb);
 
     if (!userDb) {
       res.status(400);
     } else {
-      const user = setCount(userDb.toObject(), ["following", "followers"]);
+      const user = setCount(setIsFollowed(userDb.toObject(), _id), [
+        "following",
+        "followers",
+      ]);
+
+      console.log("user", user);
+
       res.json(user);
     }
   }
