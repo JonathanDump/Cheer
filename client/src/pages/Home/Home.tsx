@@ -1,4 +1,4 @@
-import CreatePostForm from "../../components/CreatePostForm/CreatePostForm";
+import CreatePostOrCommentForm from "../../components/CreatePostForm/CreatePostOrCommentForm";
 import cl from "./Home.module.scss";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
@@ -41,7 +41,7 @@ export default function Home() {
       }
       ref={homeRef}
     >
-      <CreatePostForm />
+      <CreatePostOrCommentForm type={"post"} />
       <PostsList data={data} isFetchingNextPage={isFetchingNextPage} />
     </div>
   );

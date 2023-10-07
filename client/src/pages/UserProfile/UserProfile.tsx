@@ -2,7 +2,7 @@ import { NavLink, useOutlet, useParams } from "react-router-dom";
 import cl from "./UserProfile.module.scss";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { IUser } from "../../interfaces/interfaces";
-import CreatePostForm from "../../components/CreatePostForm/CreatePostForm";
+import CreatePostOrCommentForm from "../../components/CreatePostForm/CreatePostOrCommentForm";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import { useRef } from "react";
@@ -90,7 +90,7 @@ export default function UserProfile() {
         </div>
       )}
       <div className={cl.posts}>
-        {isMyProfile() && <CreatePostForm />}
+        {isMyProfile() && <CreatePostOrCommentForm type={"post"} />}
         {isLoading ? (
           <div>Loading posts</div>
         ) : (

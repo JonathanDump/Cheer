@@ -233,6 +233,24 @@ exports.getUsers = asyncHandler(
   }
 );
 
+exports.getUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userName } = req.query;
+
+    const userDb = await User.findOne({ userName: userName })
+      .select("-posts")
+      .exec();
+    console.log("userDb", userDb);
+
+    if (!userDb) {
+      res.status(400);
+    } else {
+      const user = setCount(userDb.toObject(), ["following", "followers"]);
+      res.json(user);
+    }
+  }
+);
+
 exports.unfollow = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.query;
@@ -274,22 +292,5 @@ exports.follow = asyncHandler(
       },
     });
     res.json({ isSuccess: true });
-  }
-);
-
-exports.getUser = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { userName } = req.query;
-    const userDb = await User.findOne({ userName: userName })
-      .select("-posts")
-      .exec();
-    console.log("userDb", userDb);
-
-    if (!userDb) {
-      res.status(400);
-    } else {
-      const user = setCount(userDb.toObject(), ["following", "followers"]);
-      res.json(user);
-    }
   }
 );

@@ -109,6 +109,15 @@ exports.deletePost = asyncHandler(
 
     await Post.deleteOne({ _id: postId });
 
+    await User.findOneAndUpdate(
+      { posts: postId },
+      {
+        $pull: {
+          posts: postId,
+        },
+      }
+    );
+
     res.json({ isSuccess: true });
   }
 );

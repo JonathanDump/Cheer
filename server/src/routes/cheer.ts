@@ -35,5 +35,6 @@ router.put("/follow", userController.follow);
 router.put("/unfollow", userController.unfollow);
 
 router.delete("/:postId/delete-post", postController.deletePost);
+router.delete("/:commentId/delete-comment", commentController.deleteComment);
 
 module.exports = router;

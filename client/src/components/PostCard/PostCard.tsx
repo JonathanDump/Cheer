@@ -27,7 +27,7 @@ export default function PostCard({ post }: IPostCardProps) {
     );
   const { user } = jwtDecode(token) as IDecodedJwt;
 
-  const [isDropDownVisible, setIsDropDawnVisible] = useState(false);
+  const [isDropDownVisible, setIsDropDownVisible] = useState(false);
 
   const { userName } = useParams();
 
@@ -56,7 +56,7 @@ export default function PostCard({ post }: IPostCardProps) {
 
   const handleSettingsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIsDropDawnVisible(!isDropDownVisible);
+    setIsDropDownVisible(!isDropDownVisible);
   };
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {

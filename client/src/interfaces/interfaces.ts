@@ -120,8 +120,8 @@ export interface IPost {
   text: string;
   images: string[];
   date: string;
-  likes: string[] | number;
-  comments: string[] | number;
+  likes: number;
+  comments: number;
   createdBy: IUser;
 }
 

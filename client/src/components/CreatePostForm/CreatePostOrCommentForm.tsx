@@ -1,19 +1,23 @@
 import { useMutation } from "@tanstack/react-query";
-import cl from "./CreatePostForm.module.scss";
+import cl from "./CreatePostOrCommentForm.module.scss";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import { FormEvent, useEffect, useRef } from "react";
 import { useImmerReducer, useImmer } from "use-immer";
-import { IImage, IPost } from "../../interfaces/interfaces";
+import { IImage, IUser } from "../../interfaces/interfaces";
 import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
 import reducer from "../../helpers/reducers/createPostFormReducer";
 import createImageInstance from "../../helpers/functions/createImageInstace";
 import ImagePostForm from "../ImagePostForm/ImagePostForm";
-import { postInitialValue, queryClient } from "../../config/config";
+import { postInitialValue } from "../../config/config";
 import { useParams } from "react-router-dom";
-import getObjectCopy from "../../helpers/functions/getObjectCopy";
-import { ReactComponent as AttachmentsIcon } from "/src/Icons/attachmentsImg.svg";
 
-export default function CreatePostForm() {
+import { ReactComponent as AttachmentsIcon } from "/src/Icons/attachmentsImg.svg";
+import { onSuccess } from "../../helpers/functions/onSuccess/onSuccess";
+
+export default function CreatePostOrCommentForm({ type }: { type: string }) {
+  const isPost = () => type === "post";
+  const createType = isPost() ? "createPost" : "createComment";
+
   const [formValues, dispatch] = useImmerReducer(reducer, postInitialValue);
   const [images, setImages] = useImmer<IImage[]>([]);
 
@@ -21,9 +25,9 @@ export default function CreatePostForm() {
   const inputFileRef = useRef<HTMLInputElement | null>(null);
 
   const token = localStorage.getItem("token")!;
-  const user = JSON.parse(localStorage.getItem("user") as string);
+  const user = JSON.parse(localStorage.getItem("user") as string) as IUser;
 
-  const { userName } = useParams();
+  const { userName, postId } = useParams();
 
   useEffect(() => {
     console.log("formValues", formValues);
@@ -50,34 +54,40 @@ export default function CreatePostForm() {
   }, [formValues.images, setImages]);
 
   const createPostMutation = useMutation({
-    mutationFn: fetcher.post.createPost,
+    mutationFn: fetcher.post[createType],
     onError: (err) => {
       console.log(err);
     },
-    onSuccess: async (data) => {
-      const result: IPost = await data.json();
-      result.createdBy = user;
-      console.log("result ", result);
+    // onSuccess: async (data) => {
+    //   const result: IPost = await data.json();
+    //   result.createdBy = user;
+    //   console.log("result ", result);
 
-      const key = userName ? "user posts" : "home posts";
-      queryClient.setQueriesData([key], (oldData: unknown) => {
-        if (oldData) {
-          const copyOldData = getObjectCopy(oldData);
-          if (!copyOldData.pages[0]) {
-            copyOldData.pages[0] = { posts: [result] };
-          }
-          copyOldData.pages[0].posts.unshift(result);
-          return copyOldData;
-        }
-        return oldData;
-      });
-    },
+    //   const key = userName ? "user posts" : "home posts";
+    //   queryClient.setQueriesData([key], (oldData: unknown) => {
+    //     if (oldData) {
+    //       const copyOldData = getObjectCopy(oldData);
+    //       if (!copyOldData.pages[0]) {
+    //         copyOldData.pages[0] = { posts: [result] };
+    //       }
+    //       copyOldData.pages[0].posts.unshift(result);
+    //       return copyOldData;
+    //     }
+    //     return oldData;
+    //   });
+    // },
+    onSuccess: async (data) =>
+      isPost()
+        ? await onSuccess.post({ data, userName, user })
+        : await onSuccess.comment({ data, user }),
   });
 
   const handleCreatePostSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = getFormDataFromInputs(formValues);
+
+    !isPost() && postId && formData.append("postId", postId);
 
     createPostMutation.mutate({ formData, token });
 

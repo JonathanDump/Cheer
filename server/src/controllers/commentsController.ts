@@ -41,3 +41,22 @@ exports.createComment = asyncHandler(
     res.json(comment);
   }
 );
+
+exports.deleteComment = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { commentId } = req.params;
+
+    await Comment.deleteOne({ _id: commentId });
+
+    await Post.findOneAndUpdate(
+      { comments: commentId },
+      {
+        $pull: {
+          comments: commentId,
+        },
+      }
+    );
+
+    res.json({ isSuccess: true });
+  }
+);
