@@ -1,22 +1,22 @@
 import { format, isThisYear, parseISO } from "date-fns";
 import {
   IDecodedJwt,
-  IPost,
-  IPostCardProps,
+  IPostOrCommentCardProps,
 } from "../../interfaces/interfaces";
-import cl from "./PostCard.module.scss";
+import cl from "./PostOrCard.module.scss";
 import { useState } from "react";
 import jwtDecode from "jwt-decode";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { useMutation } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { queryClient } from "../../config/config";
-import getObjectCopy from "../../helpers/functions/getObjectCopy";
+import { useNavigate, useParams } from "react-router-dom";
+import { onSuccess } from "../../helpers/functions/onSuccess/onSuccess";
 
-export default function PostCard({ post }: IPostCardProps) {
-  const { _id, text, images, date, likes, comments, createdBy } = post;
-  console.log("post", post);
+export default function PostOrCommentCard({
+  data,
+  type,
+}: IPostOrCommentCardProps) {
+  const { _id, text, images, date, likes, comments, createdBy } = data;
 
   const token = getItemFromLocalStorage("token") as string;
   const formattedDate =
@@ -33,24 +33,20 @@ export default function PostCard({ post }: IPostCardProps) {
 
   const navigate = useNavigate();
 
+  const isPost = () => type === "post";
+
   const deletePostMutation = useMutation({
-    mutationFn: fetcher.delete.deletePost,
-    onSuccess: (response) => {
-      console.log("response", response);
+    mutationFn: isPost()
+      ? fetcher.delete.deletePost
+      : fetcher.delete.deleteComment,
+    onSuccess: (response, variables) => {
+      if (!response.ok) {
+        throw new Error(`Something went wrong during ${type} deleting`);
+      }
 
-      const key = userName ? "user posts" : "home posts";
-      console.log("key", key);
-
-      queryClient.setQueriesData([key], (oldData: unknown) => {
-        if (oldData) {
-          const copyOldData = getObjectCopy(oldData);
-          copyOldData.pages[0].posts = copyOldData.pages[0].posts.filter(
-            (post: IPost) => post._id !== _id
-          );
-          return copyOldData;
-        }
-        return oldData;
-      });
+      isPost()
+        ? onSuccess.deletePost(variables, userName)
+        : onSuccess.deleteComment(variables);
     },
   });
 
@@ -61,7 +57,7 @@ export default function PostCard({ post }: IPostCardProps) {
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    deletePostMutation.mutate({ postId: _id, token });
+    deletePostMutation.mutate({ _id, token });
   };
 
   const handleNavLinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -77,10 +73,13 @@ export default function PostCard({ post }: IPostCardProps) {
 
       <div className={cl.content}>
         <div className={cl.meta}>
-          <NavLink to={`/${createdBy.userName}`}>
-            <div className={cl.name}>{createdBy.name}</div>
-            <div className={cl.userName}>@{createdBy.userName}</div>
-          </NavLink>
+          <div className={cl.name} onClick={handleNavLinkClick}>
+            {createdBy.name}
+          </div>
+          <div className={cl.userName} onClick={handleNavLinkClick}>
+            @{createdBy.userName}
+          </div>
+
           <div className={cl.date}>{formattedDate}</div>
 
           {(user.isAdmin || user._id === createdBy._id) && (
@@ -108,7 +107,9 @@ export default function PostCard({ post }: IPostCardProps) {
         </div>
         <div className={cl.actions}>
           <button className={cl.like}>Likes {likes}</button>
-          <button className={cl.comment}>Comments {comments}</button>
+          {isPost() && (
+            <button className={cl.comment}>Comments {comments}</button>
+          )}
         </div>
       </div>
     </div>

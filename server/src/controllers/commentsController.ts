@@ -6,6 +6,7 @@ import Comment from "../models/comment";
 import mongoose from "mongoose";
 import { IUser } from "../interfaces/interfaces";
 import envReader from "../helpers/envReader";
+import setCount from "../helpers/setCount";
 
 exports.createComment = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -58,5 +59,41 @@ exports.deleteComment = asyncHandler(
     );
 
     res.json({ isSuccess: true });
+  }
+);
+
+exports.getComments = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const cursor = parseInt(req.query.cursor as string) || 0;
+    const { postId } = req.query;
+    const pageSize = 20;
+
+    const commentsDb = await Comment.find({ post: postId })
+      .skip(cursor * pageSize)
+      .limit(pageSize)
+      .sort({ date: 1 })
+      .populate({
+        path: "createdBy",
+        select: ["name", "userName", "image"],
+      })
+      .exec();
+
+    if (!commentsDb) {
+      res.status(400);
+      next();
+    }
+
+    const comments = commentsDb.map((comment) =>
+      setCount(comment.toObject(), ["likes"])
+    );
+
+    const currentPage = cursor;
+
+    let lastPage = Math.ceil(
+      (await Comment.countDocuments({ post: postId })) / pageSize - 1
+    );
+
+    lastPage = lastPage < 0 ? 0 : lastPage;
+    res.json({ comments, currentPage, lastPage });
   }
 );

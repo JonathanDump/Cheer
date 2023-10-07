@@ -3,7 +3,7 @@ import {
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
 
-const loadPostsOnScroll = (
+const loadDataOnScroll = (
   divRef: React.MutableRefObject<HTMLDivElement | null>,
   isFetchingNextPage: boolean,
   hasNextPage: boolean | undefined,
@@ -19,4 +19,4 @@ const loadPostsOnScroll = (
   }
 };
 
-export default loadPostsOnScroll;
+export default loadDataOnScroll;

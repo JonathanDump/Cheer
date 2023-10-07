@@ -2,7 +2,7 @@ import { queryClient } from "../../../config/config";
 import { IPost, IUser } from "../../../interfaces/interfaces";
 import getObjectCopy from "../getObjectCopy";
 
-const post = async ({
+const postCreate = async ({
   data,
   userName,
   user,
@@ -29,7 +29,13 @@ const post = async ({
   });
 };
 
-const comment = async ({ data, user }: { data: Response; user: IUser }) => {
+const commentCreate = async ({
+  data,
+  user,
+}: {
+  data: Response;
+  user: IUser;
+}) => {
   const result: IPost = await data.json();
   result.createdBy = user;
   console.log("result ", result);
@@ -55,7 +61,40 @@ const comment = async ({ data, user }: { data: Response; user: IUser }) => {
   });
 };
 
+const deletePost = (
+  variables: { _id: string; token: string },
+  userName: string | undefined
+) => {
+  const key = userName ? "user posts" : "home posts";
+  console.log("key", key);
+
+  queryClient.setQueriesData([key], (oldData: unknown) => {
+    if (oldData) {
+      const copyOldData = getObjectCopy(oldData);
+      copyOldData.pages[0].posts = copyOldData.pages[0].posts.filter(
+        (post: IPost) => post._id !== variables._id
+      );
+      return copyOldData;
+    }
+    return oldData;
+  });
+};
+const deleteComment = (variables: { _id: string; token: string }) => {
+  queryClient.setQueriesData(["comments"], (oldData: unknown) => {
+    if (oldData) {
+      const copyOldData = getObjectCopy(oldData);
+      copyOldData.pages[0].comments = copyOldData.pages[0].comments.filter(
+        (comment: IPost) => comment._id !== variables._id
+      );
+      return copyOldData;
+    }
+    return oldData;
+  });
+};
+
 export const onSuccess = {
-  post,
-  comment,
+  postCreate,
+  commentCreate,
+  deletePost,
+  deleteComment,
 };

@@ -126,6 +126,30 @@ const getPost = async ({
   return response.json();
 };
 
+const getComments = async ({
+  postId,
+  token,
+  pageParam,
+}: {
+  postId: string;
+  token: string;
+  pageParam: string;
+}) => {
+  const response = await fetch(
+    `${SERVER_URL}/cheer/get-comments?cursor=${pageParam}&postId=${postId}`,
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Couldn't get comments");
+  }
+
+  return response.json();
+};
+
 //POST
 const createPost = async ({
   formData,
@@ -179,8 +203,17 @@ const createComment = async ({
 };
 
 //DELETE
-const deletePost = ({ postId, token }: { postId: string; token: string }) => {
-  return fetch(`${SERVER_URL}/cheer/${postId}/delete-post`, {
+const deletePost = ({ _id, token }: { _id: string; token: string }) => {
+  return fetch(`${SERVER_URL}/cheer/${_id}/delete-post`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+const deleteComment = ({ _id, token }: { _id: string; token: string }) => {
+  return fetch(`${SERVER_URL}/cheer/${_id}/delete-comment`, {
     method: "DELETE",
     headers: {
       Authorization: token,
@@ -218,6 +251,7 @@ export const fetcher = {
     getUser,
     getUserPosts,
     getPost,
+    getComments,
   },
   post: {
     createPost,
@@ -225,6 +259,6 @@ export const fetcher = {
     setUserName,
     createComment,
   },
-  delete: { deletePost },
+  delete: { deletePost, deleteComment },
   put: { toggleFollow },
 };

@@ -6,6 +6,7 @@ import { Fragment, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { IUser } from "../../interfaces/interfaces";
 import UserCard from "../../components/UserCard/UserCard";
+import List from "../../components/List/List";
 
 export default function Users() {
   const token = getItemFromLocalStorage("token") as string;
@@ -56,6 +57,7 @@ export default function Users() {
           </Fragment>
         ))}
       <div>{isFetchingNextPage ? "Loading more..." : null}</div>
+      <List isFetchingNextPage={isFetchingNextPage} data={data} type="users" />
     </div>
   );
 }

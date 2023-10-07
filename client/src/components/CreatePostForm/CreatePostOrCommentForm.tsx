@@ -78,8 +78,8 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
     // },
     onSuccess: async (data) =>
       isPost()
-        ? await onSuccess.post({ data, userName, user })
-        : await onSuccess.comment({ data, user }),
+        ? await onSuccess.postCreate({ data, userName, user })
+        : await onSuccess.commentCreate({ data, user }),
   });
 
   const handleCreatePostSubmit = (e: FormEvent<HTMLFormElement>) => {

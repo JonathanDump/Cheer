@@ -6,6 +6,7 @@ import envReader from "../helpers/envReader";
 import mongoose from "mongoose";
 import User from "../models/user";
 import setCount from "../helpers/setCount";
+import Comment from "../models/comment";
 
 exports.createPost = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -108,7 +109,7 @@ exports.deletePost = asyncHandler(
     const { postId } = req.params;
 
     await Post.deleteOne({ _id: postId });
-
+    await Comment.deleteMany({ post: postId });
     await User.findOneAndUpdate(
       { posts: postId },
       {

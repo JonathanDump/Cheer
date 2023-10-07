@@ -8,8 +8,7 @@ import { fetcher } from "../../helpers/fetcher/fetcher";
 import { useRef } from "react";
 import loadPostsOnScroll from "../../helpers/functions/loadPostsOnScroll";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
-
-import PostsList from "../../components/PostsList/PostsList";
+import List from "../../components/List/List";
 
 export default function UserProfile() {
   const outlet = useOutlet();
@@ -94,7 +93,11 @@ export default function UserProfile() {
         {isLoading ? (
           <div>Loading posts</div>
         ) : (
-          <PostsList data={data} isFetchingNextPage={isFetchingNextPage} />
+          <List
+            data={data}
+            isFetchingNextPage={isFetchingNextPage}
+            type="posts"
+          />
         )}
       </div>
     </div>

@@ -121,12 +121,13 @@ export interface IPost {
   images: string[];
   date: string;
   likes: number;
-  comments: number;
+  comments?: number;
   createdBy: IUser;
 }
 
-export interface IPostCardProps {
-  post: IPost;
+export interface IPostOrCommentCardProps {
+  data: IPost;
+  type: "comment" | "post";
 }
 
 export interface ICreatePostFormParams {
@@ -160,9 +161,10 @@ export interface ILoadPostOnScroll {
   ) => Promise<InfiniteQueryObserverResult<any, unknown>>; //eslint-disable-line
 }
 
-export interface IPostsListParams {
+export interface IListParams {
   data: InfiniteData<any> | undefined;
   isFetchingNextPage: boolean;
+  type: "comments" | "posts" | "users";
 }
 
 export interface IPostsPage {

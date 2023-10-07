@@ -28,6 +28,8 @@ router.get("/get-post", postController.getPost);
 router.get("/get-posts", postController.getPosts);
 router.get("/get-user-posts", postController.getUserPosts);
 
+router.get("/get-comments", commentController.getComments);
+
 router.get("/get-users", userController.getUsers);
 router.get("/get-user", userController.getUser);
 
