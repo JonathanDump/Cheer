@@ -1,10 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { IUser, IUserCardProps } from "../../interfaces/interfaces";
+import { IUserCardProps } from "../../interfaces/interfaces";
 import cl from "./UserCard.module.scss";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
-import { queryClient } from "../../config/config";
-import getObjectCopy from "../../helpers/functions/getObjectCopy";
+
 import { useState } from "react";
 
 export default function UserCard({ user }: IUserCardProps) {

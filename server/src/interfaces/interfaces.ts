@@ -37,4 +37,5 @@ export interface IPost {
   comments: Types.ObjectId[];
   createdBy: Types.ObjectId;
   text?: string | undefined;
+  isLiked?: boolean;
 }

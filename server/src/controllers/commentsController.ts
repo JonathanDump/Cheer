@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import { IUser } from "../interfaces/interfaces";
 import envReader from "../helpers/envReader";
 import setCount from "../helpers/setCount";
+import setIsLiked from "../helpers/setIsLiked";
 
 exports.createComment = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -66,6 +67,7 @@ exports.getComments = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const cursor = parseInt(req.query.cursor as string) || 0;
     const { postId } = req.query;
+    const { _id } = req.user as IUser;
     const pageSize = 20;
 
     const commentsDb = await Comment.find({ post: postId })
@@ -84,7 +86,7 @@ exports.getComments = asyncHandler(
     }
 
     const comments = commentsDb.map((comment) =>
-      setCount(comment.toObject(), ["likes"])
+      setCount(setIsLiked(comment.toObject(), _id), ["likes"])
     );
 
     const currentPage = cursor;
@@ -95,5 +97,35 @@ exports.getComments = asyncHandler(
 
     lastPage = lastPage < 0 ? 0 : lastPage;
     res.json({ comments, currentPage, lastPage });
+  }
+);
+
+exports.setLike = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { commentId } = req.query;
+    const { _id } = req.user as IUser;
+
+    await Comment.findByIdAndUpdate(commentId, {
+      $addToSet: {
+        likes: _id,
+      },
+    });
+
+    res.json({ isSuccess: true });
+  }
+);
+
+exports.removeLike = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { commentId } = req.query;
+    const { _id } = req.user as IUser;
+
+    await Comment.findByIdAndUpdate(commentId, {
+      $pull: {
+        likes: _id,
+      },
+    });
+
+    res.json({ isSuccess: true });
   }
 );

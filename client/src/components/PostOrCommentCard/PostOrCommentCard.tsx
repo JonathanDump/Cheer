@@ -9,14 +9,21 @@ import jwtDecode from "jwt-decode";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { useMutation } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { onSuccess } from "../../helpers/functions/onSuccess/onSuccess";
+import { queryClient } from "../../config/config";
+import { commentKeys, postKeys } from "../../config/queryKeys";
 
 export default function PostOrCommentCard({
   data,
   type,
 }: IPostOrCommentCardProps) {
-  const { _id, text, images, date, likes, comments, createdBy } = data;
+  const { _id, text, images, date, comments, createdBy } = data;
+  const [likes, setLikes] = useState(data.likes);
+  const [isLiked, setIsLiked] = useState(data.isLiked);
+  const likeButtonClass = isLiked ? `${cl.like} ${cl.liked}` : `${cl.like}`;
+
+  const likeAction = isLiked ? "remove" : "set";
 
   const token = getItemFromLocalStorage("token") as string;
   const formattedDate =
@@ -28,8 +35,6 @@ export default function PostOrCommentCard({
   const { user } = jwtDecode(token) as IDecodedJwt;
 
   const [isDropDownVisible, setIsDropDownVisible] = useState(false);
-
-  const { userName } = useParams();
 
   const navigate = useNavigate();
 
@@ -45,8 +50,41 @@ export default function PostOrCommentCard({
       }
 
       isPost()
-        ? onSuccess.deletePost(variables, userName)
+        ? onSuccess.deletePost(variables)
         : onSuccess.deleteComment(variables);
+    },
+  });
+
+  const toggleLikeMutation = useMutation({
+    mutationFn: fetcher.put.toggleLike,
+    onSuccess: async (response, variables) => {
+      if (!response.ok) {
+        throw new Error(`Something went wrong during ${type} like`);
+      }
+      setLikes((prevLikes: number) => {
+        return variables.likeAction === "remove"
+          ? prevLikes - 1
+          : prevLikes + 1;
+      });
+      setIsLiked(!isLiked);
+
+      if (isPost()) {
+        Promise.all(
+          [postKeys.all, "post"].map((key) =>
+            queryClient.invalidateQueries({
+              queryKey: [key],
+              exact: false,
+              refetchType: "all",
+            })
+          )
+        );
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: commentKeys.all,
+          exact: false,
+          refetchType: "all",
+        });
+      }
     },
   });
 
@@ -63,6 +101,12 @@ export default function PostOrCommentCard({
   const handleNavLinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     navigate(`/${createdBy.userName}`);
+  };
+
+  const handleLikeToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    toggleLikeMutation.mutate({ _id, token, type, likeAction });
   };
 
   return (
@@ -106,7 +150,9 @@ export default function PostOrCommentCard({
           {!!images.length && images.map((img) => <img src={img}></img>)}
         </div>
         <div className={cl.actions}>
-          <button className={cl.like}>Likes {likes}</button>
+          <button className={likeButtonClass} onClick={handleLikeToggle}>
+            Likes {likes}
+          </button>
           {isPost() && (
             <button className={cl.comment}>Comments {comments}</button>
           )}

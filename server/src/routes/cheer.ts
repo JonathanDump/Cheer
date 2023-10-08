@@ -36,6 +36,12 @@ router.get("/get-user", userController.getUser);
 router.put("/follow", userController.follow);
 router.put("/unfollow", userController.unfollow);
 
+router.put("/post-set-like", postController.setLike);
+router.put("/post-remove-like", postController.removeLike);
+
+router.put("/comment-set-like", commentController.setLike);
+router.put("/comment-remove-like", commentController.removeLike);
+
 router.delete("/:postId/delete-post", postController.deletePost);
 router.delete("/:commentId/delete-comment", commentController.deleteComment);
 

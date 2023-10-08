@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import User from "../models/user";
 import setCount from "../helpers/setCount";
 import Comment from "../models/comment";
+import setIsLiked from "../helpers/setIsLiked";
 
 exports.createPost = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -42,7 +43,7 @@ exports.getPosts = asyncHandler(
     const cursor = parseInt(req.query.cursor as string) || 0;
     const pageSize = 10;
 
-    console.log("cursor", req.query.cursor);
+    const { _id } = req.user as IUser;
 
     const postsDb = await Post.find()
       .skip(cursor * pageSize)
@@ -59,7 +60,7 @@ exports.getPosts = asyncHandler(
     lastPage = lastPage < 0 ? 0 : lastPage;
 
     const posts = postsDb.map((post) =>
-      setCount(post.toObject(), ["comments", "likes"])
+      setCount(setIsLiked(post.toObject(), _id), ["comments", "likes"])
     );
     console.log("posts", posts);
 
@@ -70,10 +71,10 @@ exports.getPosts = asyncHandler(
 exports.getUserPosts = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const cursor = parseInt(req.query.cursor as string) || 0;
-    const { userId } = req.query;
-    console.log("userId", userId);
-
     const pageSize = 10;
+
+    const { userId } = req.query;
+    const { _id } = req.user as IUser;
 
     console.log("cursor", req.query.cursor);
 
@@ -98,7 +99,7 @@ exports.getUserPosts = asyncHandler(
     console.log("lastPage", lastPage);
 
     const posts = postsDb.map((post) =>
-      setCount(post.toObject(), ["comments", "likes"])
+      setCount(setIsLiked(post.toObject(), _id), ["comments", "likes"])
     );
     res.json({ posts, currentPage, lastPage });
   }
@@ -126,6 +127,7 @@ exports.deletePost = asyncHandler(
 exports.getPost = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId } = req.query;
+    const { _id } = req.user as IUser;
     const postDb = await Post.findById(postId).exec();
 
     if (!postDb) {
@@ -133,7 +135,40 @@ exports.getPost = asyncHandler(
       return next();
     }
 
-    const post = setCount(postDb.toObject(), ["comments", "likes"]);
+    const post = setCount(setIsLiked(postDb.toObject(), _id), [
+      "comments",
+      "likes",
+    ]);
     res.json(post);
+  }
+);
+
+exports.setLike = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.query;
+    const { _id } = req.user as IUser;
+
+    await Post.findByIdAndUpdate(postId, {
+      $addToSet: {
+        likes: _id,
+      },
+    });
+
+    res.json({ isSuccess: true });
+  }
+);
+
+exports.removeLike = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.query;
+    const { _id } = req.user as IUser;
+
+    await Post.findByIdAndUpdate(postId, {
+      $pull: {
+        likes: _id,
+      },
+    });
+
+    res.json({ isSuccess: true });
   }
 );

@@ -1,10 +1,10 @@
 import { queryClient } from "../../../config/config";
+import { commentKeys, postKeys } from "../../../config/queryKeys";
 import { IPost, IUser } from "../../../interfaces/interfaces";
 import getObjectCopy from "../getObjectCopy";
 
 const postCreate = async ({
   data,
-  userName,
   user,
 }: {
   data: Response;
@@ -15,8 +15,7 @@ const postCreate = async ({
   result.createdBy = user;
   console.log("result ", result);
 
-  const key = userName ? "user posts" : "home posts";
-  queryClient.setQueriesData([key], (oldData: unknown) => {
+  queryClient.setQueriesData(postKeys.all, (oldData: unknown) => {
     if (oldData) {
       const copyOldData = getObjectCopy(oldData);
       if (!copyOldData.pages[0]) {
@@ -40,7 +39,7 @@ const commentCreate = async ({
   result.createdBy = user;
   console.log("result ", result);
 
-  queryClient.setQueriesData(["comments"], (oldData: unknown) => {
+  queryClient.setQueriesData(commentKeys.all, (oldData: unknown) => {
     if (oldData) {
       const copyOldData = getObjectCopy(oldData);
       if (!copyOldData.pages[0]) {
@@ -61,14 +60,8 @@ const commentCreate = async ({
   });
 };
 
-const deletePost = (
-  variables: { _id: string; token: string },
-  userName: string | undefined
-) => {
-  const key = userName ? "user posts" : "home posts";
-  console.log("key", key);
-
-  queryClient.setQueriesData([key], (oldData: unknown) => {
+const deletePost = (variables: { _id: string; token: string }) => {
+  queryClient.setQueriesData(postKeys.all, (oldData: unknown) => {
     if (oldData) {
       const copyOldData = getObjectCopy(oldData);
       copyOldData.pages[0].posts = copyOldData.pages[0].posts.filter(
@@ -80,7 +73,7 @@ const deletePost = (
   });
 };
 const deleteComment = (variables: { _id: string; token: string }) => {
-  queryClient.setQueriesData(["comments"], (oldData: unknown) => {
+  queryClient.setQueriesData(commentKeys.all, (oldData: unknown) => {
     if (oldData) {
       const copyOldData = getObjectCopy(oldData);
       copyOldData.pages[0].comments = copyOldData.pages[0].comments.filter(

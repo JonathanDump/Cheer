@@ -244,6 +244,28 @@ const toggleFollow = ({
   );
 };
 
+const toggleLike = ({
+  _id,
+  token,
+  type,
+  likeAction,
+}: {
+  _id: string;
+  token: string;
+  type: string;
+  likeAction: string;
+}) => {
+  return fetch(
+    `${SERVER_URL}/cheer/${type}-${likeAction}-like?${type}Id=${_id}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+};
+
 export const fetcher = {
   get: {
     getPosts,
@@ -260,5 +282,5 @@ export const fetcher = {
     createComment,
   },
   delete: { deletePost, deleteComment },
-  put: { toggleFollow },
+  put: { toggleFollow, toggleLike },
 };

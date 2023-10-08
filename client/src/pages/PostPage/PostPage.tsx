@@ -9,6 +9,7 @@ import List from "../../components/List/List";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
 import loadDataOnScroll from "../../helpers/functions/loadPostsOnScroll";
 import { useRef } from "react";
+import { commentKeys, postKeys } from "../../config/queryKeys";
 
 export default function PostPage() {
   const postId = useParams().postId as string;
@@ -17,13 +18,13 @@ export default function PostPage() {
   const postPageRef = useRef<HTMLDivElement | null>(null);
 
   const postQuery = useQuery({
-    queryKey: ["post"],
+    queryKey: postKeys.single({ postId, token }),
     queryFn: async () => await fetcher.get.getPost({ postId, token }),
   });
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["comments"],
+      queryKey: commentKeys.all,
       queryFn: async ({ pageParam = 0 }) =>
         await fetcher.get.getComments({ postId, token, pageParam }),
       getNextPageParam: getNextPageParam,

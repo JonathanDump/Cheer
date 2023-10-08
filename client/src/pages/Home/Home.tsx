@@ -6,6 +6,7 @@ import { useRef } from "react";
 import loadPostsOnScroll from "../../helpers/functions/loadPostsOnScroll";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
 import List from "../../components/List/List";
+import { postKeys } from "../../config/queryKeys";
 
 export default function Home() {
   const token = localStorage.getItem("token")!;
@@ -13,7 +14,7 @@ export default function Home() {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["home posts"],
+      queryKey: postKeys.home(token),
       queryFn: async ({ pageParam = 0 }) =>
         await fetcher.get.getPosts({ pageParam, token }),
       getNextPageParam: getNextPageParam,

@@ -10,6 +10,7 @@ import loadPostsOnScroll from "../../helpers/functions/loadPostsOnScroll";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
 import List from "../../components/List/List";
 import UserInfo from "../../components/UserInfo/UserInfo";
+import { postKeys, userKeys } from "../../config/queryKeys";
 
 export default function UserProfile() {
   const outlet = useOutlet();
@@ -21,7 +22,7 @@ export default function UserProfile() {
   const userProfileRef = useRef<HTMLDivElement | null>(null);
 
   const userQuery = useQuery({
-    queryKey: ["user"],
+    queryKey: userKeys.user,
     queryFn: async () => await fetcher.get.getUser({ userName, token }),
   });
 
@@ -29,7 +30,7 @@ export default function UserProfile() {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["user posts", { token, userId }],
+      queryKey: postKeys.user({ token, userId }),
       queryFn: async ({ pageParam = 0 }) =>
         await fetcher.get.getUserPosts({ token, pageParam, userId }),
       getNextPageParam: getNextPageParam,
@@ -65,31 +66,6 @@ export default function UserProfile() {
         )
       }
     >
-      {/* {userQuery.data && (
-        <div className={cl.userInfo}>
-          <div className={cl.imageButton}>
-            <img src={userQuery.data.image} />
-            {isMyProfile() ? (
-              <button>Edit profile</button>
-            ) : (
-              <button>Follow</button>
-            )}
-          </div>
-          <div className={cl.nameContainer}>
-            <div className={cl.name}>{userQuery.data.name}</div>
-            <div className={cl.userName}>@{userQuery.data.userName}</div>
-            <div className={cl.bio}>{userQuery.data.bio}</div>
-          </div>
-          <div className={cl.followersContainer}>
-            <NavLink to={`/${userName}/following`}>
-              Following {userQuery.data.following}
-            </NavLink>
-            <NavLink to={`/${userName}/followers`}>
-              Followers {userQuery.data.followers}
-            </NavLink>
-          </div>
-        </div>
-      )} */}
       <UserInfo user={userQuery.data} isMyProfile={isMyProfile()} />
       <div className={cl.posts}>
         {isMyProfile() && <CreatePostOrCommentForm type={"post"} />}

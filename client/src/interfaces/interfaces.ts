@@ -124,6 +124,7 @@ export interface IPost {
   likes: number;
   comments?: number;
   createdBy: IUser;
+  isLiked?: boolean;
 }
 
 export interface IPostOrCommentCardProps {
@@ -177,4 +178,11 @@ export interface IPostsPage {
 export interface IUserInfoParams {
   user: IUser;
   isMyProfile: boolean;
+}
+
+export interface IToggleLikePostVariables {
+  _id: string;
+  token: string;
+  type: string;
+  likeAction: string;
 }

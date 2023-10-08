@@ -58,24 +58,7 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
     onError: (err) => {
       console.log(err);
     },
-    // onSuccess: async (data) => {
-    //   const result: IPost = await data.json();
-    //   result.createdBy = user;
-    //   console.log("result ", result);
 
-    //   const key = userName ? "user posts" : "home posts";
-    //   queryClient.setQueriesData([key], (oldData: unknown) => {
-    //     if (oldData) {
-    //       const copyOldData = getObjectCopy(oldData);
-    //       if (!copyOldData.pages[0]) {
-    //         copyOldData.pages[0] = { posts: [result] };
-    //       }
-    //       copyOldData.pages[0].posts.unshift(result);
-    //       return copyOldData;
-    //     }
-    //     return oldData;
-    //   });
-    // },
     onSuccess: async (data) =>
       isPost()
         ? await onSuccess.postCreate({ data, userName, user })
