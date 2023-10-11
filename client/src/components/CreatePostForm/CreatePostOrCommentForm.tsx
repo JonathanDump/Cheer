@@ -89,6 +89,7 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
   const handleAttachmentsIconClick = () => {
     inputFileRef.current?.click();
   };
+  
   return (
     <div className={cl.createPostForm}>
       <form onSubmit={handleCreatePostSubmit}>

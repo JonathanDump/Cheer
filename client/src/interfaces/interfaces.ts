@@ -6,7 +6,11 @@ import {
   RefetchOptions,
   RefetchPageFilters,
 } from "@tanstack/react-query";
-import { ControllerProps } from "react-hook-form";
+import {
+  ControllerProps,
+  UseFormGetValues,
+  UseFormRegister,
+} from "react-hook-form";
 
 export interface IDecodedJwtGoogle {
   aud: string;
@@ -47,9 +51,9 @@ export interface ISignUpFormData extends Omit<ISignUpFormValues, "avatar"> {
   avatar: Blob;
 }
 
-export interface IAvatarInputProps extends ControllerProps {
-  avatarImageRef: React.MutableRefObject<HTMLImageElement | null>;
-  onChange: (avatar: Blob) => void;
+export interface IAvatarInputProps {
+  onChange: (...event: any[]) => void;
+  image?: string | null | undefined;
 }
 
 export interface IOutletContext {
@@ -185,4 +189,18 @@ export interface IToggleLikePostVariables {
   token: string;
   type: string;
   likeAction: string;
+}
+
+export interface IEditProfileInputs {
+  name: string;
+  userName: string;
+  bio: string | undefined;
+  avatar: ControllerProps | null;
+}
+
+export interface IUserNameInputParams {
+  isDefaultUserName?: boolean;
+  inputClass: string;
+  register: UseFormRegister<any>;
+  getValues: UseFormGetValues<any>;
 }

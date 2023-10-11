@@ -4,16 +4,16 @@ import multer from "multer";
 import passport from "passport";
 import checkIfMagicLinkIsUsed from "../helpers/checkIfMagicLinkIsUsed";
 import createMulterStorage from "../helpers/createMulterStorage";
+import { storage } from "../config/config";
 
 const userController = require("../controllers/userController");
 
-const storage = createMulterStorage("public/avatars");
 export const upload = multer({ storage: storage });
 
 router.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
-router.post("/check-user-name", userController.checkUserName);
+router.get("/check-user-name", userController.checkUserName);
 
 router.post("/sign-up", upload.single("avatar"), userController.signUp);
 router.post(

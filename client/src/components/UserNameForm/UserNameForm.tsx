@@ -1,8 +1,6 @@
 import { useForm } from "react-hook-form";
 import cl from "./UserNameForm.module.scss";
-import { SERVER_URL } from "../../config/config";
 import { ErrorMessage } from "@hookform/error-message";
-import { useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import {
@@ -10,6 +8,7 @@ import {
   IUserNameFormValues,
 } from "../../interfaces/interfaces";
 import { fetcher } from "../../helpers/fetcher/fetcher";
+import UserNameInput from "../UserNameInput/UserNameInput";
 
 export default function UserNameForm({
   setIsUserNameFormVisible,
@@ -19,14 +18,13 @@ export default function UserNameForm({
   const {
     register,
     getValues,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors, isValid },
     handleSubmit,
   } = useForm<IUserNameFormValues>({
     defaultValues: { userName: defaultUserName },
     mode: "all",
     criteriaMode: "all",
   });
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const navigate = useNavigate();
 
@@ -53,10 +51,9 @@ export default function UserNameForm({
     },
   });
 
-  useEffect(() => {
-    buttonRef.current!.disabled =
-      !!errors.userName?.message || getValues("userName").length === 0;
-  }, [errors.userName?.message, isSubmitSuccessful, getValues]);
+  const isDefaultUserName = () => {
+    return defaultUserName === getValues("userName");
+  };
 
   const onSubmit = (data: IUserNameFormValues) => {
     if (isDefaultUserName()) {
@@ -66,14 +63,10 @@ export default function UserNameForm({
     setUserNameMutation.mutate(data.userName);
   };
 
-  const isDefaultUserName = () => {
-    return defaultUserName === getValues("userName");
-  };
-
   return (
     <div className={cl.userNameForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="userName">User name</label>
+        {/* <label htmlFor="userName">User name</label>
         <input
           className={inputClass}
           {...register("userName", {
@@ -94,24 +87,22 @@ export default function UserNameForm({
                 if (isDefaultUserName()) {
                   return;
                 }
-                const response = await fetch(`${SERVER_URL}/check-user-name`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    userName: getValues("userName"),
-                  }),
-                });
 
-                const result = await response.json();
+                const result = await fetcher.get.isUserNameExists(
+                  getValues("userName")
+                );
 
                 return !result.userNameExists || "User name is already exists";
               },
             },
           })}
+        /> */}
+        <UserNameInput
+          isDefaultUserName={isDefaultUserName()}
+          inputClass={inputClass}
+          register={register}
+          getValues={getValues}
         />
-
         <ErrorMessage
           errors={errors}
           name="userName"
@@ -122,7 +113,7 @@ export default function UserNameForm({
             ))
           }
         />
-        <button ref={buttonRef}>Submit</button>
+        <button disabled={!isValid}>Submit</button>
       </form>
     </div>
   );

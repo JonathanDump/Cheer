@@ -21,6 +21,7 @@ export default function PostOrCommentCard({
   const { _id, text, images, date, comments, createdBy } = data;
   const [likes, setLikes] = useState(data.likes);
   const [isLiked, setIsLiked] = useState(data.isLiked);
+
   const likeButtonClass = isLiked ? `${cl.like} ${cl.liked}` : `${cl.like}`;
 
   const likeAction = isLiked ? "remove" : "set";
@@ -39,6 +40,10 @@ export default function PostOrCommentCard({
   const navigate = useNavigate();
 
   const isPost = () => type === "post";
+
+  useState(() => {
+    setIsLiked(data.isLiked), [data];
+  });
 
   const deletePostMutation = useMutation({
     mutationFn: isPost()
@@ -69,7 +74,7 @@ export default function PostOrCommentCard({
       setIsLiked(!isLiked);
 
       if (isPost()) {
-        Promise.all(
+        await Promise.all(
           [postKeys.all, "post"].map((key) =>
             queryClient.invalidateQueries({
               queryKey: [key],

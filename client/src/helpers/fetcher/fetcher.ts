@@ -35,10 +35,6 @@ const getUserPosts = async ({
   token: string;
   userId: string;
 }): Promise<IPostsPage> => {
-  console.log("pageParam", pageParam);
-  console.log("token", token);
-  console.log("userId", userId);
-
   const response = await fetch(
     `${SERVER_URL}/cheer/get-user-posts?cursor=${pageParam}&userId=${userId}`,
     {
@@ -74,7 +70,6 @@ const getUsers = async ({
   if (!response.ok) {
     throw new Error("Couldn't get posts");
   }
-  console.log("fetch");
 
   return response.json();
 };
@@ -98,7 +93,6 @@ const getUser = async ({
   if (!response.ok) {
     throw new Error("Couldn't get posts");
   }
-  console.log("fetch");
 
   return response.json();
 };
@@ -147,6 +141,16 @@ const getComments = async ({
     throw new Error("Couldn't get comments");
   }
 
+  return response.json();
+};
+
+const isUserNameExists = async (userName: string) => {
+  const response = await fetch(
+    `${SERVER_URL}/check-user-name?userName=${userName}`
+  );
+  if (!response.ok) {
+    throw new Error("Couldn't validate user name");
+  }
   return response.json();
 };
 
@@ -231,8 +235,6 @@ const toggleFollow = ({
   token: string;
   followAction: string;
 }) => {
-  console.log("followAction", followAction);
-
   return fetch(
     `${SERVER_URL}/cheer/${followAction.toLocaleLowerCase()}?userId=${userId}`,
     {
@@ -266,6 +268,16 @@ const toggleLike = ({
   );
 };
 
+const editUser = (formData: FormData, token: string) => {
+  return fetch(`${SERVER_URL}/cheer/edit-user`, {
+    method: "PUT",
+    headers: {
+      Authorization: token,
+    },
+    body: formData,
+  });
+};
+
 export const fetcher = {
   get: {
     getPosts,
@@ -274,6 +286,7 @@ export const fetcher = {
     getUserPosts,
     getPost,
     getComments,
+    isUserNameExists,
   },
   post: {
     createPost,
@@ -282,5 +295,5 @@ export const fetcher = {
     createComment,
   },
   delete: { deletePost, deleteComment },
-  put: { toggleFollow, toggleLike },
+  put: { toggleFollow, toggleLike, editUser },
 };

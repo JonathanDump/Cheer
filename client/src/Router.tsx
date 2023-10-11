@@ -9,6 +9,7 @@ import PostPage from "./pages/PostPage/PostPage";
 import FollowersList from "./pages/FollowersList/FollowersList";
 import Cheer from "./pages/Cheer/Cheer";
 import Error from "./pages/Error/Error";
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 export const Router = () => {
   const router = createBrowserRouter([
@@ -25,6 +26,7 @@ export const Router = () => {
           children: [
             { path: "/home", element: <Home /> },
             { path: "/users", element: <Users /> },
+            { path: "/edit", element: <EditProfile /> },
             {
               path: "/:userName",
               element: <UserProfile />,

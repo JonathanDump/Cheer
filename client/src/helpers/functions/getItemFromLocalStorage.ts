@@ -1,9 +1,7 @@
-import { IUser } from "../../interfaces/interfaces";
-
-export default function getItemFromLocalStorage(itemName: string) {
-  const item = localStorage.getItem(itemName) as string;
+export default function getItemFromLocalStorage<T>(itemName: string): T {
+  const item = localStorage.getItem(itemName)!;
   if (itemName === "user") {
-    return JSON.parse(item) as IUser;
+    return JSON.parse(item);
   }
-  return item;
+  return item as T;
 }

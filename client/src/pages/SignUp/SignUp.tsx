@@ -1,7 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import cl from "./SignUp.module.scss";
 import { ISignUpFormValues } from "../../interfaces/interfaces";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import AvatarInput from "../../components/AvatarInput/AvatarInput.tsx";
 import useSetIsUserNameFormVisible from "../../hooks/useSetIsUserNameFormVisible";
 import { useMutation } from "@tanstack/react-query";
@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 export default function SignUp() {
   const {
     register,
-    formState: { errors, isSubmitted },
+    formState: { errors, isSubmitted, isValid },
     getValues,
     handleSubmit,
     reset,
@@ -29,10 +29,11 @@ export default function SignUp() {
     mode: "onChange",
   });
   const { setIsUserNameFormVisible } = useSetIsUserNameFormVisible();
-  const avatarImageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    reset();
+    if (isValid) {
+      reset();
+    }
   }, [isSubmitted, reset]);
 
   const signUpMutation = useMutation({
@@ -79,6 +80,9 @@ export default function SignUp() {
                 validate: (value) => !!value.trim() || "Incorrect name.",
               })}
             />
+            {isSubmitted && errors.name?.message && (
+              <div>{errors.name.message}</div>
+            )}
           </div>
           <div className={cl.inputContainer}>
             <label htmlFor="email">Email*</label>
@@ -133,14 +137,8 @@ export default function SignUp() {
           <Controller
             control={control}
             name="avatar"
-            render={({ field: { onChange, value } }) => {
-              return (
-                <AvatarInput
-                  avatarImageRef={avatarImageRef}
-                  onChange={onChange}
-                  value={value}
-                />
-              );
+            render={({ field: { onChange } }) => {
+              return <AvatarInput onChange={onChange} />;
             }}
           />
 

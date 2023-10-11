@@ -9,6 +9,7 @@ import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalSto
 export default function UserInfo({ user, isMyProfile }: IUserInfoParams) {
   const [isFollowed, setIsFollowed] = useState(user.isFollowed);
   const followAction = isFollowed ? "Unfollow" : "Follow";
+  console.log("user", user);
 
   const token = getItemFromLocalStorage("token") as string;
   const userName = useParams().userName as string;
@@ -36,7 +37,9 @@ export default function UserInfo({ user, isMyProfile }: IUserInfoParams) {
       <div className={cl.imageButton}>
         <img src={user.image} />
         {isMyProfile ? (
-          <button>Edit profile</button>
+          <NavLink to={"/edit"}>
+            <button>Edit profile</button>
+          </NavLink>
         ) : (
           <button type="button" onClick={handleFollowClick}>
             {followAction}

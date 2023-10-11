@@ -14,6 +14,9 @@ import generateJwtToken from "../helpers/generateJwtToken";
 import getUserPayload from "../helpers/getUserPayload";
 import setCount from "../helpers/setCount";
 import setIsFollowed from "../helpers/setIsFollowed";
+import { cloudinary } from "../config/config";
+import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
+import { log } from "console";
 
 export let isMagicLinkUsed = false;
 
@@ -34,14 +37,24 @@ exports.signUp = asyncHandler(
 
         const userName = await createRandomUserName(name);
 
+        let uploadResult: UploadApiResponse | undefined;
+        if (req.file) {
+          await cloudinary.uploader.upload(req.file.path, (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              uploadResult = result;
+              console.log("uploadResult", uploadResult);
+            }
+          });
+        }
+
         const user = new User({
           name: name,
           email: email,
           password: hashedPassword,
           userName,
-          img: req.file
-            ? `${envReader("SERVER_URL")}/avatars/${req.file.filename}`
-            : "",
+          image: uploadResult?.url || "",
         });
 
         await user.save();
@@ -73,7 +86,7 @@ exports.signUpGoogle = asyncHandler(
         name: name,
         email: email,
         userName,
-        img: img ? img : "",
+        image: img ? img : "",
       });
       await user.save();
       isNewUser = true;
@@ -201,7 +214,7 @@ exports.logInVerify = asyncHandler(
 
 exports.checkUserName = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findOne({ userName: req.body.userName }).exec();
+    const user = await User.findOne({ userName: req.query.userName }).exec();
     console.log("check user name");
 
     if (user) {
@@ -240,6 +253,7 @@ exports.getUsers = asyncHandler(
 exports.getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userName } = req.query;
+
     const { _id } = req.user as IUser;
 
     const userDb = await User.findOne({ userName: userName })
@@ -303,5 +317,51 @@ exports.follow = asyncHandler(
       },
     });
     res.json({ isSuccess: true });
+  }
+);
+
+exports.editUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.user as IUser;
+    const {
+      name,
+      userName,
+      bio,
+    }: { name: string; userName: string; bio: string } = req.body;
+
+    console.log("req file update", req.file);
+
+    let uploadResult: UploadApiResponse | undefined;
+    if (req.file) {
+      await cloudinary.uploader.upload(req.file.path, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          uploadResult = result;
+          console.log("uploadResult", uploadResult);
+        }
+      });
+    }
+
+    const userDb = await User.findById(_id);
+
+    if (!userDb) {
+      res
+        .status(500)
+        .json({ success: false, message: "Could not update user" });
+    } else {
+      userDb.name = name;
+      userDb.userName = userName;
+      userDb.bio = bio;
+      if (uploadResult) {
+        userDb.image = uploadResult.url;
+      }
+
+      await userDb.save();
+
+      const userPayload = getUserPayload(userDb.toObject());
+      const token = await generateJwtToken({ user: userPayload });
+      res.json({ user: userPayload, success: true, token: `Bearer ${token}` });
+    }
   }
 );

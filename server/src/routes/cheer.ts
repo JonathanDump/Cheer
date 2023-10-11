@@ -2,12 +2,11 @@ import express, { NextFunction, Request, Response } from "express";
 const router = express.Router();
 import multer from "multer";
 import passport from "passport";
-import createMulterStorage from "../helpers/createMulterStorage";
+import { storage } from "../config/config";
 
 const postController = require("../controllers/postController");
 const userController = require("../controllers/userController");
 const commentController = require("../controllers/commentsController");
-const storage = createMulterStorage("public/images");
 
 export const upload = multer({ storage: storage });
 
@@ -41,6 +40,8 @@ router.put("/post-remove-like", postController.removeLike);
 
 router.put("/comment-set-like", commentController.setLike);
 router.put("/comment-remove-like", commentController.removeLike);
+
+router.put("/edit-user", upload.single("avatar"), userController.editUser);
 
 router.delete("/:postId/delete-post", postController.deletePost);
 router.delete("/:commentId/delete-comment", commentController.deleteComment);
