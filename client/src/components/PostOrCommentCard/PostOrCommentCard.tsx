@@ -26,7 +26,7 @@ export default function PostOrCommentCard({
 
   const likeAction = isLiked ? "remove" : "set";
 
-  const token = getItemFromLocalStorage("token") as string;
+  const token = getItemFromLocalStorage<string>("token");
   const formattedDate =
     date &&
     format(

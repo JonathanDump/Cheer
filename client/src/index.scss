@@ -1,4 +1,5 @@
 @import "./scss/normalize.css";
+@import "./scss/variables";
 
 button:disabled {
   cursor: not-allowed;
@@ -6,11 +7,12 @@ button:disabled {
 
 html {
   overflow: hidden;
+  color: $text-color;
   body {
     overflow: hidden;
     width: 100vw;
     height: 100dvh;
-    background-color: rgb(189, 189, 189);
+    background-color: $bg-primary-color;
   }
   #root {
     overflow: hidden;
@@ -21,8 +23,8 @@ html {
 
 a {
   text-decoration: none;
-  color: black;
+  color: $text-color;
   &:visited {
-    color: black;
+    color: $text-color;
   }
 }

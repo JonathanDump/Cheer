@@ -1,4 +1,4 @@
-import { useOutlet, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import cl from "./UserProfile.module.scss";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { IUser } from "../../interfaces/interfaces";
@@ -6,18 +6,17 @@ import CreatePostOrCommentForm from "../../components/CreatePostForm/CreatePostO
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import { useRef } from "react";
-import loadPostsOnScroll from "../../helpers/functions/loadPostsOnScroll";
+import loadPostsOnScroll from "../../helpers/functions/loadDataOnScroll";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
 import List from "../../components/List/List";
 import UserInfo from "../../components/UserInfo/UserInfo";
 import { postKeys, userKeys } from "../../config/queryKeys";
 
 export default function UserProfile() {
-  const outlet = useOutlet();
   const userName = useParams().userName as string;
 
-  const userFromStorage = getItemFromLocalStorage("user") as IUser;
-  const token = getItemFromLocalStorage("token") as string;
+  const userFromStorage = getItemFromLocalStorage<IUser>("user");
+  const token = getItemFromLocalStorage<string>("token");
 
   const userProfileRef = useRef<HTMLDivElement | null>(null);
 
@@ -40,10 +39,6 @@ export default function UserProfile() {
   const isMyProfile = () => {
     return userName === userFromStorage.userName;
   };
-
-  if (outlet) {
-    return outlet;
-  }
 
   if (userQuery.isLoading) {
     return <div className={cl.userProfile}>Loading...</div>;

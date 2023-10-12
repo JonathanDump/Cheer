@@ -2,21 +2,18 @@ import asyncHandler from "express-async-handler";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import User from "../models/user";
-
-import envReader from "../helpers/envReader";
 import sendMagicLink from "../helpers/sendMagicLink";
 import { IUser } from "../interfaces/interfaces";
 import { io } from "../app";
 import findActiveUser from "../helpers/findActiveUser";
-
 import createRandomUserName from "../helpers/createRandomUserName";
 import generateJwtToken from "../helpers/generateJwtToken";
 import getUserPayload from "../helpers/getUserPayload";
 import setCount from "../helpers/setCount";
 import setIsFollowed from "../helpers/setIsFollowed";
 import { cloudinary } from "../config/config";
-import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
-import { log } from "console";
+import { UploadApiResponse } from "cloudinary";
+import { Document } from "mongoose";
 
 export let isMagicLinkUsed = false;
 
@@ -233,7 +230,6 @@ exports.getUsers = asyncHandler(
     const usersDb = await User.find({
       _id: { $ne: _id },
     })
-
       .skip(cursor * pageSize)
       .limit(pageSize)
       .select("name userName bio followers image")
@@ -272,6 +268,90 @@ exports.getUser = asyncHandler(
       console.log("user", user);
 
       res.json(user);
+    }
+  }
+);
+
+exports.getFollowing = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.user as IUser;
+    const userName = req.query.userName as string;
+    const cursor = parseInt(req.query.cursor as string) || 0;
+    const pageSize = 20;
+
+    const userDb = await User.findOne({ userName: userName })
+      .select("following")
+      .populate({
+        path: "following",
+        select: "name userName bio followers image",
+        options: {
+          skip: cursor * pageSize,
+          limit: pageSize,
+          populate: { path: "followers", match: { _id: _id }, select: "_id" },
+        },
+      })
+      .exec();
+
+    if (!userDb) {
+      res.status(400).json({ message: "User is not found" });
+      return next();
+    } else if (userDb.following.length === 0) {
+      res.json({ users: [], currentPage: 0, lastPage: 0 });
+      return next();
+    } else {
+      const users = userDb.following.map((user: any) =>
+        setCount(user.toObject(), ["followers"])
+      );
+
+      const currentPage = cursor;
+      const lastPage =
+        Math.ceil(
+          (await User.countDocuments({ followers: userDb._id })) / pageSize
+        ) - 1;
+
+      res.json({ users, currentPage, lastPage });
+    }
+  }
+);
+
+exports.getFollowers = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.user as IUser;
+    const userName = req.query.userName as string;
+    const cursor = parseInt(req.query.cursor as string) || 0;
+    const pageSize = 20;
+
+    const userDb = await User.findOne({ userName: userName })
+      .select("followers")
+      .populate({
+        path: "followers",
+        select: "name userName bio followers image",
+        options: {
+          skip: cursor * pageSize,
+          limit: pageSize,
+          populate: { path: "followers", match: { _id: _id }, select: "_id" },
+        },
+      })
+      .exec();
+
+    if (!userDb) {
+      res.status(400).json({ message: "User is not found" });
+      return next();
+    } else if (userDb.followers.length === 0) {
+      res.json({ users: [], currentPage: 0, lastPage: 0 });
+      return next();
+    } else {
+      const users = userDb.followers.map((user: any) =>
+        setCount(user.toObject(), ["followers"])
+      );
+
+      const currentPage = cursor;
+      const lastPage =
+        Math.ceil(
+          (await User.countDocuments({ following: userDb._id })) / pageSize
+        ) - 1;
+
+      res.json({ users, currentPage, lastPage });
     }
   }
 );

@@ -11,7 +11,6 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className={cl.app}>
-        <div>App</div>
         <Outlet context={{ setIsUserNameFormVisible }} />
         {isUserNameFormVisible && (
           <UserNameForm setIsUserNameFormVisible={setIsUserNameFormVisible} />

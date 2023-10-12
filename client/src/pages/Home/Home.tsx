@@ -3,7 +3,7 @@ import cl from "./Home.module.scss";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import { useRef } from "react";
-import loadPostsOnScroll from "../../helpers/functions/loadPostsOnScroll";
+import loadDataOnScroll from "../../helpers/functions/loadDataOnScroll";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
 import List from "../../components/List/List";
 import { postKeys } from "../../config/queryKeys";
@@ -33,7 +33,7 @@ export default function Home() {
     <div
       className={cl.home}
       onScroll={() =>
-        loadPostsOnScroll(
+        loadDataOnScroll(
           homeRef,
           isFetchingNextPage,
           hasNextPage,

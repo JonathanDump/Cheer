@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 
 export default function EditProfile() {
-  const user = getItemFromLocalStorage("user") as IUser;
-  const token = getItemFromLocalStorage("token") as string;
+  const user = getItemFromLocalStorage<IUser>("user");
+  const token = getItemFromLocalStorage<string>("token");
   console.log("token ", token);
   const {
     register,

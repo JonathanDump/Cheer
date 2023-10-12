@@ -7,6 +7,20 @@ export const postKeys = {
 
 export const userKeys = {
   user: ["user"],
+  allUsers: ["all users"],
+  allUsersToken: (token: string) => [...userKeys.allUsers, token],
+  followers: ["followers"],
+  followersFilter: (token: string, userName: string) => [
+    ...userKeys.followers,
+    token,
+    userName,
+  ],
+  following: ["following"],
+  followingFilter: (token: string, userName: string) => [
+    ...userKeys.following,
+    token,
+    userName,
+  ],
 };
 
 export const commentKeys = {

@@ -7,13 +7,13 @@ import CreatePostOrCommentForm from "../../components/CreatePostForm/CreatePostO
 import PostOrCommentCard from "../../components/PostOrCommentCard/PostOrCommentCard";
 import List from "../../components/List/List";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
-import loadDataOnScroll from "../../helpers/functions/loadPostsOnScroll";
+import loadDataOnScroll from "../../helpers/functions/loadDataOnScroll";
 import { useRef } from "react";
 import { commentKeys, postKeys } from "../../config/queryKeys";
 
 export default function PostPage() {
   const postId = useParams().postId as string;
-  const token = getItemFromLocalStorage("token") as string;
+  const token = getItemFromLocalStorage<string>("token");
 
   const postPageRef = useRef<HTMLDivElement | null>(null);
 

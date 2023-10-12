@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import cl from "./Sidebar.module.scss";
 import { IUser } from "../../interfaces/interfaces";
-import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 
 export default function Sidebar() {
   const user: IUser = JSON.parse(localStorage.getItem("user") as string);

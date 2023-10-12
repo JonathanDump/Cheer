@@ -154,6 +154,52 @@ const isUserNameExists = async (userName: string) => {
   return response.json();
 };
 
+const followers = async ({
+  token,
+  userName,
+  pageParam,
+}: {
+  token: string;
+  userName: string;
+  pageParam: string;
+}) => {
+  const response = await fetch(
+    `${SERVER_URL}/cheer/get-followers?userName=${userName}&cursor=${pageParam}`,
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Couldn't get followers");
+  }
+  return response.json();
+};
+
+const following = async ({
+  token,
+  userName,
+  pageParam,
+}: {
+  token: string;
+  userName: string;
+  pageParam: string;
+}) => {
+  const response = await fetch(
+    `${SERVER_URL}/cheer/get-following?userName=${userName}&cursor=${pageParam}`,
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Couldn't get following");
+  }
+  return response.json();
+};
+
 //POST
 const createPost = async ({
   formData,
@@ -179,7 +225,7 @@ const logIn = (data: FormData) => {
 };
 
 const setUserName = (userName: string) => {
-  const user = getItemFromLocalStorage("user") as IUser;
+  const user = getItemFromLocalStorage<IUser>("user");
   return fetch(`${SERVER_URL}/sign-up/set-user-name`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -287,6 +333,8 @@ export const fetcher = {
     getPost,
     getComments,
     isUserNameExists,
+    followers,
+    following,
   },
   post: {
     createPost,

@@ -1,26 +1,47 @@
 import { NavLink, useParams } from "react-router-dom";
 import { IUserInfoParams } from "../../interfaces/interfaces";
 import cl from "./UserInfo.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
+import { queryClient } from "../../config/config";
+import { userKeys } from "../../config/queryKeys";
 
 export default function UserInfo({ user, isMyProfile }: IUserInfoParams) {
   const [isFollowed, setIsFollowed] = useState(user.isFollowed);
+  const [followers, setFollowers] = useState(user.followers);
   const followAction = isFollowed ? "Unfollow" : "Follow";
-  console.log("user", user);
+  // console.log("user", user);
 
-  const token = getItemFromLocalStorage("token") as string;
+  const token = getItemFromLocalStorage<string>("token");
   const userName = useParams().userName as string;
+
+  useEffect(() => {
+    console.log("followers", followers);
+  }, [followers]);
 
   const followMutation = useMutation({
     mutationFn: fetcher.put.toggleFollow,
-    onSuccess(data) {
+    onSuccess: async (data) => {
       if (!data.ok) {
         throw new Error(`Something went wrong during ${followAction}`);
       }
+      console.log("success");
+
       setIsFollowed(!isFollowed);
+      setFollowers((prev) => {
+        if (typeof prev === "undefined") {
+          return prev;
+        }
+
+        return followAction === "Follow" ? prev + 1 : prev - 1;
+      });
+      await queryClient.invalidateQueries({
+        queryKey: userKeys.user,
+        exact: false,
+        refetchType: "all",
+      });
     },
     onError: (err) => {
       console.log(err);
@@ -55,9 +76,7 @@ export default function UserInfo({ user, isMyProfile }: IUserInfoParams) {
         <NavLink to={`/${userName}/following`}>
           Following {user.following}
         </NavLink>
-        <NavLink to={`/${userName}/followers`}>
-          Followers {user.followers}
-        </NavLink>
+        <NavLink to={`/${userName}/followers`}>Followers {followers}</NavLink>
       </div>
     </div>
   );

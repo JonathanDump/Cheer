@@ -32,6 +32,9 @@ router.get("/get-comments", commentController.getComments);
 router.get("/get-users", userController.getUsers);
 router.get("/get-user", userController.getUser);
 
+router.get("/get-followers", userController.getFollowers);
+router.get("/get-following", userController.getFollowing);
+
 router.put("/follow", userController.follow);
 router.put("/unfollow", userController.unfollow);
 

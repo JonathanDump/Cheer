@@ -7,16 +7,19 @@ import { NavLink } from "react-router-dom";
 import { IUser } from "../../interfaces/interfaces";
 import UserCard from "../../components/UserCard/UserCard";
 import List from "../../components/List/List";
+import { userKeys } from "../../config/queryKeys";
 
 export default function Users() {
-  const token = getItemFromLocalStorage("token") as string;
+  const token = getItemFromLocalStorage<string>("token");
   const usersRef = useRef<HTMLDivElement | null>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["all users"],
-      queryFn: ({ pageParam = 0 }) =>
-        fetcher.get.getUsers({ pageParam, token }),
+      queryKey: userKeys.allUsersToken(token),
+      queryFn: ({ pageParam = 0, queryKey }) => {
+        const token = queryKey[1];
+        return fetcher.get.getUsers({ pageParam, token });
+      },
       getNextPageParam: (page) => {
         return page.currentPage === page.lastPage
           ? undefined
