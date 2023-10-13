@@ -191,8 +191,10 @@ export default function PostOrCommentCard({
         <div className={cl.text}>{text}</div>
         {!!images.length && (
           <div className={cl.images}>
-            {images.map((img) => (
-              <img src={img}></img>
+            {images.map((img, i) => (
+              <div key={i} className={cl.imageContainer}>
+                <img src={img}></img>
+              </div>
             ))}
           </div>
         )}

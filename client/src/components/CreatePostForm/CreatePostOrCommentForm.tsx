@@ -15,14 +15,24 @@ import { ReactComponent as AttachmentsIcon } from "/src/Icons/attachmentsImg.svg
 import { onSuccess } from "../../helpers/functions/onSuccess/onSuccess";
 
 export default function CreatePostOrCommentForm({ type }: { type: string }) {
-  const isPost = () => type === "post";
-  const createType = isPost() ? "createPost" : "createComment";
+  const isPost = type === "post";
+  const createType = isPost ? "createPost" : "createComment";
 
   const [formValues, dispatch] = useImmerReducer(reducer, postInitialValue);
   const [images, setImages] = useImmer<IImage[]>([]);
 
   const postButtonRef = useRef<HTMLButtonElement | null>(null);
   const inputFileRef = useRef<HTMLInputElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const maxLength = 300;
+  const lengthClass =
+    formValues.text.length === 300 ? `${cl.length} ${cl.limit}` : cl.length;
+
+  const isAttachmentsDisabled = formValues.images.length >= 3;
+  const attachmentsClass = isAttachmentsDisabled
+    ? `${cl.attachments} ${cl.disabled}`
+    : `${cl.attachments}`;
 
   const token = localStorage.getItem("token")!;
   const user = JSON.parse(localStorage.getItem("user") as string) as IUser;
@@ -59,10 +69,12 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
       console.log(err);
     },
 
-    onSuccess: async (data) =>
-      isPost()
+    onSuccess: async (data) => {
+      textareaRef.current!.style.height = "50px";
+      isPost
         ? await onSuccess.postCreate({ data, userName, user })
-        : await onSuccess.commentCreate({ data, user }),
+        : await onSuccess.commentCreate({ data, user });
+    },
   });
 
   const handleCreatePostSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -70,7 +82,7 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
 
     const formData = getFormDataFromInputs(formValues);
 
-    !isPost() && postId && formData.append("postId", postId);
+    !isPost && postId && formData.append("postId", postId);
 
     createPostMutation.mutate({ formData, token });
 
@@ -89,39 +101,58 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
   const handleAttachmentsIconClick = () => {
     inputFileRef.current?.click();
   };
-  
+
+  const handleTextAreaInput = () => {
+    const newHeight = textareaRef.current!.scrollHeight + "px";
+    textareaRef.current!.style.height = newHeight;
+  };
   return (
     <div className={cl.createPostForm}>
       <form onSubmit={handleCreatePostSubmit}>
-        <textarea
-          className={cl.input}
-          name="post"
-          id="post"
-          cols={30}
-          value={formValues.text}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            dispatch({ type: "input text", text: e.target.value });
-          }}
-          onKeyDown={handleCtrlEnterKeyDown}
-        ></textarea>
-        <div className={cl.attachments} onClick={handleAttachmentsIconClick}>
-          <input
-            ref={inputFileRef}
-            style={{ display: "none" }}
-            type="file"
-            accept="image/png, image/gif, image/jpeg"
-            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-              dispatch({ type: "add image", imageBlob: e.target.files![0] });
+        <div className={cl.inputContainer}>
+          <textarea
+            ref={textareaRef}
+            maxLength={maxLength}
+            className={cl.input}
+            name="post"
+            id="post"
+            rows={1}
+            value={formValues.text}
+            placeholder="Say something"
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+              dispatch({ type: "input text", text: e.target.value });
             }}
-          />
-          <AttachmentsIcon />
+            onKeyDown={handleCtrlEnterKeyDown}
+            onInput={handleTextAreaInput}
+          ></textarea>
+          <div className={lengthClass}>
+            {formValues.text.length}/{maxLength}
+          </div>
         </div>
         <div className={cl.imageContainer}>
           {images.map((image, i) => {
             return <ImagePostForm key={i} image={image} dispatch={dispatch} />;
           })}
         </div>
-        <button ref={postButtonRef}>Post</button>
+        <div className={cl.buttons}>
+          <div
+            className={attachmentsClass}
+            onClick={handleAttachmentsIconClick}
+          >
+            <input
+              ref={inputFileRef}
+              style={{ display: "none" }}
+              type="file"
+              accept="image/png, image/gif, image/jpeg"
+              onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                dispatch({ type: "add image", imageBlob: e.target.files![0] });
+              }}
+              disabled={isAttachmentsDisabled}
+            />
+            <AttachmentsIcon />
+          </div>
+          <button ref={postButtonRef}>Post</button>
+        </div>
       </form>
     </div>
   );

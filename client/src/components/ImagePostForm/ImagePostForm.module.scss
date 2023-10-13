@@ -1,0 +1,23 @@
+@import "../../scss/variables";
+
+.imagePostForm {
+  position: relative;
+  .delete {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 8px;
+    background-color: $color-bg-secondary;
+    border: 0;
+
+    &:hover {
+      background-color: $color-text;
+
+      svg {
+        path {
+          fill: $color-bg-secondary;
+        }
+      }
+    }
+  }
+}

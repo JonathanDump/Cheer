@@ -62,3 +62,30 @@ button {
     color: $color-bg-primary;
   }
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-default;
+  svg {
+    path {
+      fill: $color-text;
+    }
+  }
+}
+textarea {
+  appearance: none;
+  background-color: $color-bg-secondary;
+  color: $color-text;
+  border-radius: $border-radius;
+  border: $border-button;
+  box-sizing: border-box;
+  width: 100%;
+  padding: $padding-input;
+  max-height: 400px;
+
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

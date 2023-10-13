@@ -1,35 +1,42 @@
 @import "../../scss//variables";
 
 .sidebar {
+  // width: 100%;
+  flex: 1;
   display: flex;
-  flex-direction: column;
-  padding: 16px;
-  gap: 16px;
-  max-width: 200px;
-  width: 100%;
+  justify-content: flex-end;
 
-  .logo {
-    font-size: 24px;
-    cursor: default;
-    text-align: center;
-  }
-  .mainNavigation {
+  .container {
+    width: 100%;
+    max-width: 300px;
+    min-width: 200px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    align-items: flex-start;
-    border-radius: $border-radius;
-    background-color: $color-bg-secondary;
-    padding: $pudding-card;
-
-    .navActive {
-      background-color: $color-text;
-      color: $color-bg-primary;
+    padding: 16px;
+    gap: 16px;
+    .logo {
+      font-size: 24px;
+      cursor: default;
+      text-align: center;
     }
-  }
+    .mainNavigation {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+      border-radius: $border-radius;
+      background-color: $color-bg-secondary;
+      padding: $pudding-card;
 
-  .secondaryNavigation {
-    margin-top: auto;
-    padding: 0 $pudding-card;
+      .navActive {
+        background-color: $color-text;
+        color: $color-bg-primary;
+      }
+    }
+
+    .secondaryNavigation {
+      margin-top: auto;
+      padding: 0 $pudding-card;
+    }
   }
 }

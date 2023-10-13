@@ -3,12 +3,11 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  .link {
-    all: unset;
-    cursor: pointer;
-    max-width: $max-width-card;
-    min-width: $min-width-card;
-    display: block;
-  }
+  gap: $gap-list;
+  // .link {
+  //   all: unset;
+  //   cursor: pointer;
+
+  //   display: block;
+  // }
 }

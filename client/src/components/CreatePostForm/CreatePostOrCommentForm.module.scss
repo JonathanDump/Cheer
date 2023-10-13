@@ -1,5 +1,76 @@
+@import "../../scss/variables";
 .createPostForm {
-  .input {
-    resize: none;
+  padding: $pudding-card;
+  max-width: $max-width-main;
+  background-color: $color-bg-secondary;
+  border-radius: $border-radius;
+  transition: $transition;
+
+  .inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    .input {
+      resize: none;
+    }
+    .length {
+      font-size: 14px;
+      align-self: flex-end;
+      color: $color-text-secondary;
+    }
+    .limit {
+      color: $color-text;
+    }
+  }
+
+  .imageContainer {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: $gap-default;
+
+    img {
+      max-width: 100%;
+      max-height: 400px;
+      border-radius: $border-radius;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: calc($gap-default * 2);
+
+    .attachments {
+      cursor: pointer;
+      padding: $pudding-button;
+      transition: $transition;
+      border-radius: $border-radius;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      svg {
+        path {
+          fill: $color-text;
+        }
+      }
+      &:hover {
+        background-color: $color-hover-button;
+      }
+    }
+    .disabled {
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: transparent;
+      }
+      svg {
+        path {
+          fill: $color-text-secondary;
+        }
+      }
+    }
   }
 }
