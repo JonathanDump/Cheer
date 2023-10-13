@@ -1,3 +1,4 @@
+@import "../../scss/variables";
 .users {
-  overflow: auto;
+  @extend %page-default-params;
 }

@@ -105,19 +105,25 @@
       word-break: break-all;
     }
 
-    .imageContainer {
-      max-width: 100%;
+    .images {
       display: flex;
-      justify-content: center;
       gap: $gap-default;
+      flex-wrap: wrap;
+      justify-content: center;
 
-      img {
+      .imageContainer {
         max-width: 100%;
-        max-height: 400px;
-        border-radius: $border-radius;
+        display: flex;
+        justify-content: center;
+        gap: $gap-default;
+
+        img {
+          max-width: 100%;
+          max-height: 400px;
+          border-radius: $border-radius;
+        }
       }
     }
-
     .actions {
       display: flex;
       justify-content: flex-end;

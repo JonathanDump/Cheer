@@ -1,12 +1,5 @@
 @import "../../scss/variables";
 
 .home {
-  display: flex;
-  flex-direction: column;
-  padding: $pudding-default;
-  overflow: auto;
-  overflow-x: hidden;
-  flex: 2;
-  gap: $gap-list;
-  // width: 100%;
+  @extend %page-default-params;
 }

@@ -8,6 +8,8 @@ import User from "../models/user";
 import setCount from "../helpers/setCount";
 import Comment from "../models/comment";
 import setIsLiked from "../helpers/setIsLiked";
+import { cloudinary } from "../config/config";
+import { log } from "console";
 
 exports.createPost = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -18,15 +20,35 @@ exports.createPost = asyncHandler(
     const user = req.user as IUser;
     const userDb = await User.findById(user._id);
 
-    const images = files?.map(
-      (file) => `${envReader("SERVER_URL")}/images/${file.filename}`
-    );
+    let images: string[] = [];
+    if (files) {
+      const uploadPromises = files.map((file) => {
+        return new Promise((resolve, reject) => {
+          cloudinary.uploader.upload(file.path, (err, result) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            } else if (result) {
+              console.log("result", result);
+              images.push(result.url);
+              resolve(result.url);
+            }
+          });
+        });
+      });
+
+      try {
+        await Promise.all(uploadPromises);
+      } catch (err) {
+        console.log(err);
+      }
+    }
 
     const post = new Post({
       _id: new mongoose.Types.ObjectId(),
       text,
       createdBy: user._id,
-      images: images || [],
+      images: images,
       date: new Date(),
     });
     console.log("post", post);

@@ -27,3 +27,14 @@ $height-avatar: 54px;
 
 $gap-default: 8px;
 $gap-list: 28px;
+
+%page-default-params {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  padding: $pudding-default;
+  overflow: auto;
+  overflow-x: hidden;
+  flex: 2;
+  gap: $gap-list;
+}
