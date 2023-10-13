@@ -5,9 +5,10 @@ import { useMutation } from "@tanstack/react-query";
 import { socket } from "../../config/config";
 import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
 import { ILogInData, ILogInFormValues } from "../../interfaces/interfaces";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetcher } from "../../helpers/fetcher/fetcher";
+import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 
 export default function LogIn() {
   const {
@@ -19,6 +20,13 @@ export default function LogIn() {
   } = useForm<ILogInFormValues>({ defaultValues: { email: "", password: "" } });
   const [isMagicLinkSent, setIsMagicLinkSet] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = getItemFromLocalStorage<string>("token");
+    if (token) {
+      navigate("/home");
+    }
+  }, []);
 
   const logInMutation = useMutation({
     mutationFn: fetcher.post.logIn,

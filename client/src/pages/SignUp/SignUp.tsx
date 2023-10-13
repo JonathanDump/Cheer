@@ -8,9 +8,18 @@ import { useMutation } from "@tanstack/react-query";
 import { SERVER_URL } from "../../config/config";
 import GoogleButton from "../../components/GoogleButton/GoogleButton";
 import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = getItemFromLocalStorage<string>("token");
+    if (token) {
+      navigate("/home");
+    }
+  }, []);
+
   const {
     register,
     formState: { errors, isSubmitted, isValid },

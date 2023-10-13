@@ -5,12 +5,15 @@ import { fetcher } from "../../helpers/fetcher/fetcher";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function UserCard({ user }: IUserCardProps) {
+export default function UserCard({ user, link }: IUserCardProps) {
   const { _id, image, name, userName, bio, followers } = user;
   const [isFollowed, setIsFollowed] = useState(!!followers);
   const token = getItemFromLocalStorage<string>("token");
   const userStorage = getItemFromLocalStorage<IUser>("user");
+
+  const navigate = useNavigate();
   const followAction = isFollowed ? "Unfollow" : "Follow";
 
   const isMyCard = _id === userStorage._id;
@@ -28,13 +31,17 @@ export default function UserCard({ user }: IUserCardProps) {
     },
   });
 
+  const handleUserCardClick = () => {
+    navigate(link);
+  };
+
   const handleFollowClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    e.stopPropagation();
     followMutation.mutate({ userId: _id, token, followAction });
   };
   return (
-    <div className={cl.userCard}>
-      <div className={cl.imageContainer}>
+    <div className={cl.userCard} onClick={handleUserCardClick}>
+      <div className={cl.avatarContainer}>
         <img src={image} alt="" />
       </div>
       <div className={cl.main}>

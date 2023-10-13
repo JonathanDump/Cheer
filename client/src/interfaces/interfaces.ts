@@ -151,6 +151,7 @@ export interface IDecodedJwt {
 
 export interface IUserCardProps {
   user: IUser;
+  link: string;
 }
 
 export interface IFollowToggle {

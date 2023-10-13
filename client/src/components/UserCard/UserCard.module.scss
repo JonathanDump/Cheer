@@ -1,0 +1,36 @@
+@import "../../scss/variables";
+
+.userCard {
+  @extend %card;
+
+  .avatarContainer {
+    @extend %avatar-container-small;
+
+    img {
+      @extend %avatar-image-small;
+    }
+  }
+
+  .main {
+    width: 100%;
+    .userMeta {
+      display: flex;
+      gap: $gap-default;
+      align-items: center;
+      justify-content: space-between;
+
+      .name {
+        font-size: 20px;
+        font-weight: 600;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+      .userName {
+        color: $color-text-secondary;
+        font-size: 14px;
+      }
+    }
+  }
+}

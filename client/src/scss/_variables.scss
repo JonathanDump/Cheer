@@ -38,3 +38,30 @@ $gap-list: 28px;
   flex: 2;
   gap: $gap-list;
 }
+
+%avatar-container-small {
+  width: $width-avatar;
+  height: $height-avatar;
+}
+
+%avatar-image-small {
+  width: $width-avatar;
+  height: $height-avatar;
+  object-fit: cover;
+  background-image: url("/images/babyBeaver.jpg");
+  background-position: center;
+  background-size: cover;
+  border-radius: 100%;
+}
+
+%card {
+  width: 100%;
+  max-width: $max-width-main;
+  min-width: 300px;
+  border-radius: $border-radius;
+  background-color: $color-bg-secondary;
+  padding: $pudding-card;
+  display: flex;
+  gap: 27px;
+  transition: $transition;
+}

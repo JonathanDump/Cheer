@@ -3,7 +3,6 @@ import PostOrCommentCard from "../PostOrCommentCard/PostOrCommentCard";
 import UserCard from "../UserCard/UserCard";
 import cl from "./List.module.scss";
 import { Fragment } from "react";
-import { NavLink } from "react-router-dom";
 
 export default function List({ data, isFetchingNextPage, type }: IListParams) {
   console.log("data", data);
@@ -32,24 +31,15 @@ export default function List({ data, isFetchingNextPage, type }: IListParams) {
                       type="post"
                       link={`/${obj.createdBy.userName}/${obj._id}`}
                     />
-                    // <NavLink
-                    //   to={`/${obj.createdBy.userName}/${obj._id}`}
-                    //   key={obj._id}
-                    //   className={cl.link}
-                    // >
-                    //   <PostOrCommentCard data={obj} type="post" />
-                    // </NavLink>
                   );
                 }
               } else if (isIUser(obj)) {
                 return (
-                  <NavLink
-                    to={`/${obj.userName}`}
+                  <UserCard
                     key={obj._id}
-                    className={cl.link}
-                  >
-                    <UserCard user={obj} />
-                  </NavLink>
+                    user={obj}
+                    link={`/${obj.userName}`}
+                  />
                 );
               }
             })}

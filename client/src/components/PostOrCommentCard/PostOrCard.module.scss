@@ -12,17 +12,10 @@
   transition: $transition;
 
   .avatarContainer {
-    width: $width-avatar;
-    height: $height-avatar;
+    @extend %avatar-container-small;
 
     img {
-      width: $width-avatar;
-      height: $height-avatar;
-      object-fit: cover;
-      background-image: url("/images/babyBeaver.jpg");
-      background-position: center;
-      background-size: cover;
-      border-radius: 100%;
+      @extend %avatar-image-small;
     }
   }
   .content {
