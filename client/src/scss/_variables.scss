@@ -3,21 +3,20 @@ $border-radius-button: 16px;
 
 $border-button: 1px solid rgba(255, 255, 255, 0.25);
 
-$bg-primary-color: #080e24;
-$bg-secondary-color: #111d35;
-
-$text-color: #eeeeee;
-$text-secondary-color: #888888;
-
-$hover-color-button: rgba(255, 255, 255, 0.2);
-
-$red-color: #df4343;
+$color-bg-primary: #080e24;
+$color-bg-secondary: #111d35;
+$color-text: #eeeeee;
+$color-text-secondary: #888888;
+$color-hover-button: rgba(255, 255, 255, 0.2);
+$color-hover-card: rgba(255, 255, 255, 0.1);
+$color-red: #df4343;
 
 $pudding-default: 16px;
 $pudding-button: 11px 16px;
 $pudding-card: 27px;
 
 $transition: 0.12s;
+$animation-duration: 0.15s ease;
 
 $max-width-card: 600px;
 $min-width-card: 300px;

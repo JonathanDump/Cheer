@@ -134,6 +134,7 @@ export interface IPost {
 export interface IPostOrCommentCardProps {
   data: IPost;
   type: "comment" | "post";
+  link?: string;
 }
 
 export interface ICreatePostFormParams {

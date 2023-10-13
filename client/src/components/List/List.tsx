@@ -26,13 +26,19 @@ export default function List({ data, isFetchingNextPage, type }: IListParams) {
                 }
                 if (type === "posts") {
                   return (
-                    <NavLink
-                      to={`/${obj.createdBy.userName}/${obj._id}`}
+                    <PostOrCommentCard
                       key={obj._id}
-                      className={cl.link}
-                    >
-                      <PostOrCommentCard data={obj} type="post" />
-                    </NavLink>
+                      data={obj}
+                      type="post"
+                      link={`/${obj.createdBy.userName}/${obj._id}`}
+                    />
+                    // <NavLink
+                    //   to={`/${obj.createdBy.userName}/${obj._id}`}
+                    //   key={obj._id}
+                    //   className={cl.link}
+                    // >
+                    //   <PostOrCommentCard data={obj} type="post" />
+                    // </NavLink>
                   );
                 }
               } else if (isIUser(obj)) {

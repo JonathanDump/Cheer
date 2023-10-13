@@ -3,9 +3,6 @@
 .home {
   padding: $pudding-default;
   overflow: auto;
+  overflow-x: hidden;
   width: 100%;
-  .postsList {
-    .link {
-    }
-  }
 }

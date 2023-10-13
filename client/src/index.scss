@@ -8,7 +8,7 @@ button:disabled {
 
 html {
   overflow: hidden;
-  color: $text-color;
+  color: $color-text;
   font-family: "Open Sans", sans-serif;
   div {
     box-sizing: border-box;
@@ -17,7 +17,7 @@ html {
     overflow: hidden;
     width: 100vw;
     height: 100dvh;
-    background-color: $bg-primary-color;
+    background-color: $color-bg-primary;
   }
   #root {
     overflow: hidden;
@@ -28,7 +28,7 @@ html {
 
 a {
   text-decoration: none;
-  color: $text-color;
+  color: $color-text;
   cursor: pointer;
   border-radius: $border-radius-button;
   padding: $pudding-button;
@@ -38,10 +38,10 @@ a {
   align-items: center;
 
   &:visited {
-    color: $text-color;
+    color: $color-text;
   }
   &:hover {
-    background-color: $hover-color-button;
+    background-color: $color-hover-button;
   }
 }
 
@@ -50,7 +50,7 @@ button {
   padding: $pudding-button;
   border: $border-button;
   background-color: transparent;
-  color: $text-color;
+  color: $color-text;
   cursor: pointer;
   transition: $transition;
   display: flex;
@@ -58,7 +58,7 @@ button {
   gap: 6px;
 
   &:hover {
-    background-color: $text-color;
-    color: $bg-primary-color;
+    background-color: $color-text;
+    color: $color-bg-primary;
   }
 }

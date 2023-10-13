@@ -4,7 +4,7 @@ import {
   IPostOrCommentCardProps,
 } from "../../interfaces/interfaces";
 import cl from "./PostOrCard.module.scss";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import jwtDecode from "jwt-decode";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { useMutation } from "@tanstack/react-query";
@@ -20,12 +20,17 @@ import { ReactComponent as DotsIcon } from "../../icons/dots.svg";
 export default function PostOrCommentCard({
   data,
   type,
+  link,
 }: IPostOrCommentCardProps) {
   const { _id, text, images, date, comments, createdBy } = data;
   const [likes, setLikes] = useState(data.likes);
   const [isLiked, setIsLiked] = useState(data.isLiked);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const dropDownContainerRef = useRef<HTMLDivElement | null>(null);
 
   const likeButtonClass = isLiked ? `${cl.like} ${cl.liked}` : `${cl.like}`;
+  const cardClass =
+    type === "post" ? `${cl.card} ${cl.post}` : `${cl.card} ${cl.comment}`;
 
   const likeAction = isLiked ? "remove" : "set";
 
@@ -96,36 +101,49 @@ export default function PostOrCommentCard({
     },
   });
 
-  const handleOutsideClick = (e: Event) => {
-    if (isDropDownVisible) {
-      // e.preventDefault();
-      setIsDropDownVisible(!isDropDownVisible);
+  const hideDropDown = () => {
+    dropDownContainerRef.current?.classList.add(`${cl.hideDropDown}`);
+  };
+
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    console.log("bg");
+    e.stopPropagation();
+    hideDropDown();
+    setTimeout(() => setIsDropDownVisible(!isDropDownVisible), 150);
+  };
+
+  const handleCardClick = () => {
+    if (!link) {
+      return;
     }
+
+    navigate(link);
   };
 
   const handleSettingsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    e.stopPropagation();
+
     setIsDropDownVisible(!isDropDownVisible);
   };
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    e.stopPropagation();
+    console.log("delete");
     deletePostMutation.mutate({ _id, token });
   };
 
   const handleNavLinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
+    e.stopPropagation();
     navigate(`/${createdBy.userName}`);
   };
 
   const handleLikeToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
+    e.stopPropagation();
     toggleLikeMutation.mutate({ _id, token, type, likeAction });
   };
 
   return (
-    <div className={cl.postCard}>
+    <div className={cardClass} ref={cardRef} onClick={handleCardClick}>
       <div className={cl.avatarContainer} onClick={handleNavLinkClick}>
         <img src={createdBy.image} />
       </div>
@@ -152,13 +170,19 @@ export default function PostOrCommentCard({
               </button>
               {isDropDownVisible && (
                 <div className={cl.dropDown}>
-                  <button
-                    type="button"
-                    className={cl.delete}
-                    onClick={handleDeleteClick}
-                  >
-                    Delete
-                  </button>
+                  <div
+                    className={cl.background}
+                    onClick={handleBackgroundClick}
+                  ></div>
+                  <div className={cl.container} ref={dropDownContainerRef}>
+                    <button
+                      type="button"
+                      className={cl.delete}
+                      onClick={handleDeleteClick}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

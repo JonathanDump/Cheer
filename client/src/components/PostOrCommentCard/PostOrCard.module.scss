@@ -1,12 +1,15 @@
 @import "../../scss/variables";
 
-.postCard {
+.card {
   width: 100%;
+  max-width: 550px;
+  min-width: 300px;
   border-radius: $border-radius;
-  background-color: $bg-secondary-color;
+  background-color: $color-bg-secondary;
   padding: $pudding-card;
   display: flex;
   gap: 27px;
+  transition: $transition;
 
   .avatarContainer {
     width: $width-avatar;
@@ -34,10 +37,14 @@
 
       .name {
         font-size: 20px;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
       .userName,
       .date {
-        color: $text-secondary-color;
+        color: $color-text-secondary;
         font-size: 14px;
       }
 
@@ -53,30 +60,42 @@
           &:hover {
             svg {
               path {
-                stroke: $text-color;
+                stroke: $color-text;
               }
             }
           }
         }
         .dropDown {
-          animation: dropDownAnimation 0.15s ease;
-          background-color: $bg-primary-color;
-          border-radius: $border-radius;
-          padding: 6px 8px;
-          gap: 6px;
           position: absolute;
           top: 25px;
           right: 0px;
-          pointer-events: none;
+          width: fit-content;
+          z-index: 10;
 
-          .delete {
-            border-color: $red-color;
-            color: $red-color;
+          .container {
+            animation: dropDownAnimation $animation-duration;
+            background-color: $color-bg-primary;
+            border-radius: $border-radius;
+            padding: 6px 8px;
+            gap: 6px;
+            position: relative;
 
-            &:hover {
-              background-color: $red-color;
-              color: $text-color;
+            .delete {
+              border-color: $color-red;
+              color: $color-red;
+
+              &:hover {
+                background-color: $color-red;
+                color: $color-text;
+              }
             }
+          }
+          .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
           }
         }
       }
@@ -92,7 +111,7 @@
       gap: $gap-default;
       svg {
         path {
-          fill: $text-color;
+          fill: $color-text;
         }
       }
       button {
@@ -101,7 +120,7 @@
         &:hover {
           svg {
             path {
-              fill: $bg-primary-color;
+              fill: $color-bg-primary;
             }
           }
         }
@@ -110,24 +129,37 @@
       }
 
       .liked {
-        border-color: $red-color;
-        color: $red-color;
+        border-color: $color-red;
+        color: $color-red;
         svg {
           path {
-            fill: $red-color;
+            fill: $color-red;
           }
         }
 
         &:hover {
           svg {
             path {
-              fill: $red-color;
+              fill: $color-red;
             }
           }
         }
       }
     }
   }
+}
+
+.post {
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-hover-card;
+  }
+}
+
+.hideDropDown {
+  opacity: 0;
+  transition: $animation-duration;
 }
 
 @keyframes dropDownAnimation {
@@ -137,5 +169,24 @@
 
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes dropDownAnimationHide {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 550px) {
+  $pudding-card: 14px;
+  $gap: 14px;
+  .card {
+    padding: $pudding-card;
+    gap: 14px;
   }
 }
