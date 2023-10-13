@@ -1,6 +1,9 @@
-.home {
-  overflow: auto;
+@import "../../scss/variables";
 
+.home {
+  padding: $pudding-default;
+  overflow: auto;
+  width: 100%;
   .postsList {
     .link {
     }

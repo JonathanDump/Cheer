@@ -1,11 +1,83 @@
+@import "../../scss/variables";
+
 .postCard {
-  max-width: 300px;
-  border: 1px solid darkcyan;
+  width: 100%;
+  border-radius: $border-radius;
+  background-color: $bg-secondary-color;
+  padding: $pudding-card;
+  display: flex;
+  gap: 27px;
+
+  .avatarContainer {
+    width: $width-avatar;
+    height: $height-avatar;
+
+    img {
+      width: $width-avatar;
+      height: $height-avatar;
+      object-fit: cover;
+      background-image: url("/images/babyBeaver.jpg");
+      background-position: center;
+      background-size: cover;
+      border-radius: 100%;
+    }
+  }
   .content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $gap-default;
     .meta {
+      display: flex;
+      gap: $gap-default;
+      align-items: center;
+
+      .name {
+        font-size: 20px;
+      }
+      .userName,
+      .date {
+        color: $text-secondary-color;
+        font-size: 14px;
+      }
+
       .settings {
+        margin-left: auto;
+        position: relative;
+
+        .dots {
+          all: unset;
+          transition: $transition;
+          padding: 6px;
+
+          &:hover {
+            svg {
+              path {
+                stroke: $text-color;
+              }
+            }
+          }
+        }
         .dropDown {
           animation: dropDownAnimation 0.15s ease;
+          background-color: $bg-primary-color;
+          border-radius: $border-radius;
+          padding: 6px 8px;
+          gap: 6px;
+          position: absolute;
+          top: 25px;
+          right: 0px;
+          pointer-events: none;
+
+          .delete {
+            border-color: $red-color;
+            color: $red-color;
+
+            &:hover {
+              background-color: $red-color;
+              color: $text-color;
+            }
+          }
         }
       }
     }
@@ -15,11 +87,44 @@
     }
 
     .actions {
-      .like {
-        color: black;
+      display: flex;
+      justify-content: flex-end;
+      gap: $gap-default;
+      svg {
+        path {
+          fill: $text-color;
+        }
       }
+      button {
+        font-size: 14px;
+
+        &:hover {
+          svg {
+            path {
+              fill: $bg-primary-color;
+            }
+          }
+        }
+      }
+      .like {
+      }
+
       .liked {
-        background-color: rgba(255, 0, 0, 0.404);
+        border-color: $red-color;
+        color: $red-color;
+        svg {
+          path {
+            fill: $red-color;
+          }
+        }
+
+        &:hover {
+          svg {
+            path {
+              fill: $red-color;
+            }
+          }
+        }
       }
     }
   }

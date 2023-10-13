@@ -13,14 +13,24 @@ export default function Sidebar() {
 
   return (
     <div className={cl.sidebar}>
+      <div className={cl.logo}>Cheer</div>
       <div className={cl.mainNavigation}>
-        <NavLink to={"/home"} className={cl.navigation}>
+        <NavLink
+          to={"/home"}
+          className={({ isActive }) => (isActive ? `${cl.navActive}` : "")}
+        >
           Home
         </NavLink>
-        <NavLink to={"/users"} className={cl.navigation}>
+        <NavLink
+          to={"/users"}
+          className={({ isActive }) => (isActive ? `${cl.navActive}` : "")}
+        >
           Users
         </NavLink>
-        <NavLink to={`/${user.userName}`} className={cl.navigation}>
+        <NavLink
+          to={`/${user.userName}`}
+          className={({ isActive }) => (isActive ? `${cl.navActive}` : "")}
+        >
           Profile
         </NavLink>
       </div>

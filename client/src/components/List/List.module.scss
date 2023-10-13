@@ -1,0 +1,14 @@
+@import "../../scss/variables";
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  .link {
+    all: unset;
+    cursor: pointer;
+    max-width: $max-width-card;
+    min-width: $min-width-card;
+    display: block;
+  }
+}

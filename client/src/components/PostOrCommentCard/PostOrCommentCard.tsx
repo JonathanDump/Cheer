@@ -4,7 +4,7 @@ import {
   IPostOrCommentCardProps,
 } from "../../interfaces/interfaces";
 import cl from "./PostOrCard.module.scss";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import jwtDecode from "jwt-decode";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { useMutation } from "@tanstack/react-query";
@@ -13,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 import { onSuccess } from "../../helpers/functions/onSuccess/onSuccess";
 import { queryClient } from "../../config/config";
 import { commentKeys, postKeys } from "../../config/queryKeys";
+import { ReactComponent as LikeIcon } from "../../icons/like.svg";
+import { ReactComponent as CommentsIcon } from "../../icons/comments.svg";
+import { ReactComponent as DotsIcon } from "../../icons/dots.svg";
 
 export default function PostOrCommentCard({
   data,
@@ -93,6 +96,13 @@ export default function PostOrCommentCard({
     },
   });
 
+  const handleOutsideClick = (e: Event) => {
+    if (isDropDownVisible) {
+      // e.preventDefault();
+      setIsDropDownVisible(!isDropDownVisible);
+    }
+  };
+
   const handleSettingsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsDropDownVisible(!isDropDownVisible);
@@ -133,14 +143,18 @@ export default function PostOrCommentCard({
 
           {(user.isAdmin || user._id === createdBy._id) && (
             <div className={cl.settings}>
-              <button type="button" onClick={handleSettingsClick}>
-                ...
+              <button
+                className={cl.dots}
+                type="button"
+                onClick={handleSettingsClick}
+              >
+                <DotsIcon />
               </button>
               {isDropDownVisible && (
                 <div className={cl.dropDown}>
                   <button
                     type="button"
-                    className={cl.setting}
+                    className={cl.delete}
                     onClick={handleDeleteClick}
                   >
                     Delete
@@ -151,16 +165,23 @@ export default function PostOrCommentCard({
           )}
         </div>
         <div className={cl.text}>{text}</div>
-        <div className={cl.images}>
-          {!!images.length && images.map((img) => <img src={img}></img>)}
-        </div>
+        {!!images.length && (
+          <div className={cl.images}>
+            {images.map((img) => (
+              <img src={img}></img>
+            ))}
+          </div>
+        )}
         <div className={cl.actions}>
-          <button className={likeButtonClass} onClick={handleLikeToggle}>
-            Likes {likes}
-          </button>
           {isPost() && (
-            <button className={cl.comment}>Comments {comments}</button>
+            <button className={cl.comment}>
+              <CommentsIcon /> {comments}
+            </button>
           )}
+          <button className={likeButtonClass} onClick={handleLikeToggle}>
+            <LikeIcon />
+            {likes}
+          </button>
         </div>
       </div>
     </div>

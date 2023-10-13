@@ -1,6 +1,35 @@
+@import "../../scss//variables";
+
 .sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 16px;
+  max-width: 200px;
+  width: 100%;
+
+  .logo {
+    font-size: 24px;
+    cursor: default;
+    text-align: center;
+  }
   .mainNavigation {
     display: flex;
     flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    border-radius: $border-radius;
+    background-color: $bg-secondary-color;
+    padding: $pudding-card;
+
+    .navActive {
+      background-color: $text-color;
+      color: $bg-primary-color;
+    }
+  }
+
+  .secondaryNavigation {
+    margin-top: auto;
+    padding: 0 $pudding-card;
   }
 }
