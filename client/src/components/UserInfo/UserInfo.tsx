@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { IUserInfoParams } from "../../interfaces/interfaces";
 import cl from "./UserInfo.module.scss";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ export default function UserInfo({ user, isMyProfile }: IUserInfoParams) {
   const [isFollowed, setIsFollowed] = useState(user.isFollowed);
   const [followers, setFollowers] = useState(user.followers);
   const followAction = isFollowed ? "Unfollow" : "Follow";
-  // console.log("user", user);
+  const navigate = useNavigate();
 
   const token = getItemFromLocalStorage<string>("token");
   const userName = useParams().userName as string;
@@ -53,14 +53,20 @@ export default function UserInfo({ user, isMyProfile }: IUserInfoParams) {
     followMutation.mutate({ userId: user._id, token, followAction });
   };
 
+  const handleEditProfileClick = () => {
+    navigate("/edit");
+  };
+
   return (
     <div className={cl.userInfo}>
       <div className={cl.imageButton}>
-        <img src={user.image} />
+        <div className={cl.avatarContainer}>
+          <img src={user.image} />
+        </div>
         {isMyProfile ? (
-          <NavLink to={"/edit"}>
-            <button>Edit profile</button>
-          </NavLink>
+          <button type="button" onClick={handleEditProfileClick}>
+            Edit profile
+          </button>
         ) : (
           <button type="button" onClick={handleFollowClick}>
             {followAction}

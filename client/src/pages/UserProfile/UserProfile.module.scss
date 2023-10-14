@@ -1,3 +1,11 @@
+@import "../../scss/variables";
+
 .userProfile {
-  overflow: auto;
+  @extend %page-default-params;
+
+  .posts {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-list;
+  }
 }

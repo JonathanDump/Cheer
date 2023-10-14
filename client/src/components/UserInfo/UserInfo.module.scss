@@ -1,0 +1,62 @@
+@import "../../scss/variables";
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-default;
+  max-width: $max-width-main;
+  min-width: $min-width-main;
+  .imageButton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button {
+      height: fit-content;
+    }
+    .avatarContainer {
+      display: flex;
+      img {
+        aspect-ratio: 1/1;
+        max-width: 164px;
+        max-height: 164px;
+        min-width: 64px;
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .nameContainer {
+    display: flex;
+    flex-direction: column;
+    gap: calc($gap-default/2);
+
+    .name {
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .userName {
+      color: $color-text-secondary;
+    }
+    .bio {
+      margin-top: 12px;
+    }
+  }
+  .followersContainer {
+    display: flex;
+    gap: $gap-default;
+
+    a {
+      all: unset;
+      font-size: 14px;
+      color: $color-text-secondary;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
