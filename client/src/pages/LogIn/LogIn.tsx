@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import cl from "./LogIn.module.scss";
+import form from "../../scss/form.module.scss";
 import GoogleButton from "../../components/GoogleButton/GoogleButton";
 import { useMutation } from "@tanstack/react-query";
 import { socket } from "../../config/config";
@@ -89,14 +90,14 @@ export default function LogIn() {
 
   if (isMagicLinkSent) {
     return (
-      <div className={cl.logIn}>
-        <div className={cl.formContainer}>
+      <div className={form.main}>
+        <div className={form.formContainer}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className={cl.message}>
+            <div className={form.messageMain}>
               Verification link is sent to {getValues("email")}. <br />
               In order to proceed open the link.
             </div>
-            <div>
+            <div className={form.message}>
               {logInMutation.isLoading ? (
                 "Loading..."
               ) : (
@@ -112,8 +113,11 @@ export default function LogIn() {
   }
 
   return (
-    <div className={cl.logIn}>
-      <div className={cl.formContainer}>
+    <div className={form.main}>
+      <div className={form.logo}>Cheer</div>
+
+      <div className={form.formContainer}>
+        <div className={form.action}>Log in</div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="inputContainer">
             <label htmlFor="email">Email</label>
@@ -125,20 +129,23 @@ export default function LogIn() {
             <input type="password" required {...register("password")} />
             {errors.password && <div>{errors.password.message}</div>}
           </div>
-          <button>Submit</button>
+          <button className={form.btn}>Submit</button>
         </form>
 
-        <div>Or</div>
-        <GoogleButton />
-        <button type="button" onClick={handleLogInWithTestAccount}>
-          Log In With Test Account
-        </button>
-      </div>
-      <div className={cl.text}>
-        Don't have an account?{" "}
-        <Link to={"/sign-up"} className={cl.link}>
-          Sign Up
-        </Link>
+        <div className={form.buttons}>
+          <div>or</div>
+          <GoogleButton />
+          <button type="button" onClick={handleLogInWithTestAccount}>
+            Log In With Test Account
+          </button>
+
+          <div className={form.text}>
+            Don't have an account?{" "}
+            <Link to={"/sign-up"} className={cl.link}>
+              Sign Up
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

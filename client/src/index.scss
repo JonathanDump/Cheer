@@ -69,6 +69,7 @@ form {
   gap: calc($gap-default * 2);
   max-width: $max-width-main;
   min-width: $min-width-main;
+  box-sizing: border-box;
   svg {
     path {
       fill: $color-text;

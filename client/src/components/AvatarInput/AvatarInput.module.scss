@@ -1,17 +1,22 @@
 @import "../../scss/variables";
 .avatarInput {
+  display: flex;
+  justify-content: center;
+
   .imageContainer {
     position: relative;
-    width: fit-content;
+    // width: fit-content;
     cursor: pointer;
     transition: $transition;
+    // flex: 1;
+    max-width: $max-size-avatar-big;
+    width: 100%;
 
     &::after {
       content: url("/src/icons/editImage.svg");
       position: absolute;
       top: 65%;
       left: 80%;
-      //   transform: translate(-65%, -80%);
       padding: 6px;
       background-color: rgba(0, 0, 0, 0.5);
       border-radius: 100%;
@@ -29,6 +34,7 @@
         background-color: rgba(0, 0, 0, 0.7);
       }
     }
+
     img {
       @extend %avatar-image-big;
     }

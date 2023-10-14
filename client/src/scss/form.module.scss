@@ -1,6 +1,6 @@
-@import "../../scss/variables";
+@import "./variables";
 
-.logIn {
+.main {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -24,6 +24,16 @@
 
     .btn {
       justify-content: center;
+    }
+
+    .messageMain {
+      font-size: 32px;
+      text-align: center;
+    }
+    .message {
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .buttons {

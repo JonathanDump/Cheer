@@ -23,6 +23,8 @@ $max-width-main: 600px;
 $min-width-main: 300px;
 $width-avatar: 54px;
 
+$max-size-avatar-big: 164px;
+
 $height-avatar: 54px;
 
 $gap-default: 8px;
@@ -56,8 +58,8 @@ $gap-list: 28px;
 
 %avatar-image-big {
   aspect-ratio: 1/1;
-  max-width: 164px;
-  max-height: 164px;
+  max-width: $max-size-avatar-big;
+  max-height: $max-size-avatar-big;
   min-width: 64px;
   width: 100%;
   height: 100%;

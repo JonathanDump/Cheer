@@ -1,5 +1,5 @@
 import { Controller, useForm } from "react-hook-form";
-import cl from "./SignUp.module.scss";
+import form from "../../scss/form.module.scss";
 import { ISignUpFormValues } from "../../interfaces/interfaces";
 import { useEffect } from "react";
 import AvatarInput from "../../components/AvatarInput/AvatarInput.tsx";
@@ -73,8 +73,10 @@ export default function SignUp() {
   };
 
   return (
-    <div className={cl.signUp}>
-      <div className={cl.formContainer}>
+    <div className={form.main}>
+      <div className={form.logo}>Cheer</div>
+      <div className={form.formContainer}>
+        <div className={form.action}>Sign up</div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="inputContainer">
             <label htmlFor="name">Name*</label>
@@ -151,16 +153,18 @@ export default function SignUp() {
             }}
           />
 
-          <button>Sign up</button>
+          <button className={form.btn}>Sign up</button>
         </form>
         <div>or</div>
         <GoogleButton />
-      </div>
-      <div className={cl.text}>
-        Already have an account?{" "}
-        <Link to={"/log-in"} className={cl.link}>
-          Log In
-        </Link>
+        <div className={form.buttons}>
+          <div className={form.text}>
+            Already have an account?{" "}
+            <Link to={"/log-in"} className={form.link}>
+              Log In
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

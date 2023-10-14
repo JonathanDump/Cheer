@@ -2,6 +2,7 @@
 .createPostForm {
   padding: $padding-card;
   max-width: $max-width-main;
+  min-width: fit-content;
   background-color: $color-bg-secondary;
   border-radius: $border-radius;
   transition: $transition;

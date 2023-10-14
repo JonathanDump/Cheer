@@ -3,7 +3,7 @@
 .card {
   width: 100%;
   max-width: $max-width-main;
-  min-width: 300px;
+  min-width: fit-content;
   border-radius: $border-radius;
   background-color: $color-bg-secondary;
   padding: $padding-card;
