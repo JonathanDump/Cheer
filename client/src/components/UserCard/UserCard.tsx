@@ -15,6 +15,7 @@ export default function UserCard({ user, link }: IUserCardProps) {
 
   const navigate = useNavigate();
   const followAction = isFollowed ? "Unfollow" : "Follow";
+  const followButtonClass = isFollowed ? `${cl.unfollow}` : "";
 
   const isMyCard = _id === userStorage._id;
 
@@ -51,7 +52,11 @@ export default function UserCard({ user, link }: IUserCardProps) {
             <div className={cl.userName}>@{userName}</div>
           </div>
           {!isMyCard && (
-            <button type="button" onClick={handleFollowClick}>
+            <button
+              className={followButtonClass}
+              type="button"
+              onClick={handleFollowClick}
+            >
               {followAction}
             </button>
           )}

@@ -1,26 +1,21 @@
 @import "../../scss/variables";
 .createPostForm {
-  padding: $pudding-card;
+  padding: $padding-card;
   max-width: $max-width-main;
   background-color: $color-bg-secondary;
   border-radius: $border-radius;
   transition: $transition;
 
-  .inputContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    .input {
-      resize: none;
-    }
-    .length {
-      font-size: 14px;
-      align-self: flex-end;
-      color: $color-text-secondary;
-    }
-    .limit {
-      color: $color-text;
-    }
+  .input {
+    resize: none;
+  }
+  .length {
+    font-size: 14px;
+    align-self: flex-end;
+    color: $color-text-secondary;
+  }
+  .limit {
+    color: $color-text;
   }
 
   .imageContainer {
@@ -44,7 +39,7 @@
 
     .attachments {
       cursor: pointer;
-      padding: $pudding-button;
+      padding: $padding-button;
       transition: $transition;
       border-radius: $border-radius;
       display: flex;

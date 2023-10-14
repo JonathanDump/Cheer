@@ -76,7 +76,7 @@ export default function SignUp() {
     <div className={cl.signUp}>
       <div className={cl.formContainer}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className={cl.inputContainer}>
+          <div className="inputContainer">
             <label htmlFor="name">Name*</label>
             <input
               id="name"
@@ -93,11 +93,11 @@ export default function SignUp() {
               <div>{errors.name.message}</div>
             )}
           </div>
-          <div className={cl.inputContainer}>
+          <div className="inputContainer">
             <label htmlFor="email">Email*</label>
             <input id="email" type="email" required {...register("email")} />
           </div>
-          <div className={cl.inputContainer}>
+          <div className="inputContainer">
             <label htmlFor="password">Password*</label>
             <input
               id="password"
@@ -121,7 +121,7 @@ export default function SignUp() {
             />
             {errors.password?.message && <div>{errors.password?.message}</div>}
           </div>
-          <div className={cl.inputContainer}>
+          <div className="inputContainer">
             <label htmlFor="confirmPassword">Confirm password*</label>
             <input
               id="confirmPassword"

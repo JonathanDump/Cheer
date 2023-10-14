@@ -58,24 +58,16 @@ export default function FollowersList() {
       <div className={cl.navigation}>
         <NavLink
           to={`/${userName}/following`}
-          className={({ isActive, isPending }) =>
-            isPending
-              ? `${cl.navLink} ${cl.pending}`
-              : isActive
-              ? `${cl.navLink} ${cl.active}`
-              : "cl.navLink"
+          className={({ isActive }) =>
+            isActive ? `${cl.navLink} navActive` : "cl.navLink"
           }
         >
           Following
         </NavLink>
         <NavLink
           to={`/${userName}/followers`}
-          className={({ isActive, isPending }) =>
-            isPending
-              ? `${cl.navLink} ${cl.pending}`
-              : isActive
-              ? `${cl.navLink} ${cl.active}`
-              : "cl.navLink"
+          className={({ isActive }) =>
+            isActive ? `${cl.navLink} navActive` : "cl.navLink"
           }
         >
           Followers

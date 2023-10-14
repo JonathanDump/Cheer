@@ -18,19 +18,19 @@ export default function Sidebar() {
         <div className={cl.mainNavigation}>
           <NavLink
             to={"/home"}
-            className={({ isActive }) => (isActive ? `${cl.navActive}` : "")}
+            className={({ isActive }) => (isActive ? `navActive` : "")}
           >
             Home
           </NavLink>
           <NavLink
             to={"/users"}
-            className={({ isActive }) => (isActive ? `${cl.navActive}` : "")}
+            className={({ isActive }) => (isActive ? `navActive` : "")}
           >
             Users
           </NavLink>
           <NavLink
             to={`/${user.userName}`}
-            className={({ isActive }) => (isActive ? `${cl.navActive}` : "")}
+            className={({ isActive }) => (isActive ? `navActive` : "")}
           >
             Profile
           </NavLink>

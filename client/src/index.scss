@@ -31,7 +31,7 @@ a {
   color: $color-text;
   cursor: pointer;
   border-radius: $border-radius-button;
-  padding: $pudding-button;
+  padding: $padding-button;
   transition: $transition;
   display: flex;
   justify-content: center;
@@ -47,7 +47,7 @@ a {
 
 button {
   border-radius: $border-radius-button;
-  padding: $pudding-button;
+  padding: $padding-button;
   border: $border-button;
   background-color: transparent;
   color: $color-text;
@@ -66,13 +66,16 @@ button {
 form {
   display: flex;
   flex-direction: column;
-  gap: $gap-default;
+  gap: calc($gap-default * 2);
+  max-width: $max-width-main;
+  min-width: $min-width-main;
   svg {
     path {
       fill: $color-text;
     }
   }
 }
+
 textarea {
   appearance: none;
   background-color: $color-bg-secondary;
@@ -88,4 +91,35 @@ textarea {
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.navActive {
+  background-color: $color-text !important;
+  color: $color-bg-primary !important;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+input {
+  appearance: none;
+  border-radius: $border-radius;
+  padding: $padding-input;
+  border: 0;
+  box-sizing: border-box;
+  background-color: $color-bg-secondary;
+  color: $color-text;
+  border: 1px solid transparent;
+
+  &:focus-visible {
+    outline: none;
+    border: $border-button;
+  }
+}
+
+.buttonAccent {
+  background-color: $color-hover-button;
 }

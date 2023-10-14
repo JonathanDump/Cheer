@@ -11,9 +11,9 @@ $color-hover-button: rgba(255, 255, 255, 0.2);
 $color-hover-card: rgba(255, 255, 255, 0.1);
 $color-red: #df4343;
 
-$pudding-default: 16px;
-$pudding-button: 11px 16px;
-$pudding-card: 27px;
+$padding-default: 16px;
+$padding-button: 11px 16px;
+$padding-card: 27px;
 $padding-input: 16px;
 
 $transition: 0.12s;
@@ -32,7 +32,7 @@ $gap-list: 28px;
   overflow: auto;
   display: flex;
   flex-direction: column;
-  padding: $pudding-default;
+  padding: $padding-default;
   overflow: auto;
   overflow-x: hidden;
   flex: 2;
@@ -54,13 +54,27 @@ $gap-list: 28px;
   border-radius: 100%;
 }
 
+%avatar-image-big {
+  aspect-ratio: 1/1;
+  max-width: 164px;
+  max-height: 164px;
+  min-width: 64px;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  object-fit: cover;
+  background-image: url("/images/babyBeaver.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
 %card {
   width: 100%;
   max-width: $max-width-main;
   min-width: 300px;
   border-radius: $border-radius;
   background-color: $color-bg-secondary;
-  padding: $pudding-card;
+  padding: $padding-card;
   display: flex;
   gap: 27px;
   transition: $transition;

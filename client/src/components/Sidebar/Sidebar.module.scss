@@ -26,17 +26,12 @@
       align-items: flex-start;
       border-radius: $border-radius;
       background-color: $color-bg-secondary;
-      padding: $pudding-card;
-
-      .navActive {
-        background-color: $color-text;
-        color: $color-bg-primary;
-      }
+      padding: $padding-card;
     }
 
     .secondaryNavigation {
       margin-top: auto;
-      padding: 0 $pudding-card;
+      padding: 0 $padding-card;
     }
   }
 }

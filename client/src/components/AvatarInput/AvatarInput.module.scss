@@ -1,0 +1,36 @@
+@import "../../scss/variables";
+.avatarInput {
+  .imageContainer {
+    position: relative;
+    width: fit-content;
+    cursor: pointer;
+    transition: $transition;
+
+    &::after {
+      content: url("/src/icons/editImage.svg");
+      position: absolute;
+      top: 65%;
+      left: 80%;
+      //   transform: translate(-65%, -80%);
+      padding: 6px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: $transition;
+      width: 30px;
+      height: 30px;
+    }
+
+    &:hover {
+      filter: grayscale(0.3);
+      &::after {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+    }
+    img {
+      @extend %avatar-image-big;
+    }
+  }
+}

@@ -1,3 +1,12 @@
+@import "../../scss/variables";
+
 .followersList {
-  overflow: auto;
+  @extend %page-default-params;
+
+  .navigation {
+    display: flex;
+    justify-content: space-evenly;
+    gap: $gap-default;
+    max-width: $max-width-main;
+  }
 }

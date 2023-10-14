@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import cl from "./UserProfile.module.scss";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { IUser } from "../../interfaces/interfaces";
 import CreatePostOrCommentForm from "../../components/CreatePostForm/CreatePostOrCommentForm";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import loadPostsOnScroll from "../../helpers/functions/loadDataOnScroll";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";
 import List from "../../components/List/List";
@@ -19,6 +19,9 @@ export default function UserProfile() {
   const token = getItemFromLocalStorage<string>("token");
 
   const userProfileRef = useRef<HTMLDivElement | null>(null);
+
+  const location = useLocation();
+  console.log("location", location);
 
   const userQuery = useQuery({
     queryKey: userKeys.user,
@@ -39,6 +42,10 @@ export default function UserProfile() {
   const isMyProfile = () => {
     return userName === userFromStorage.userName;
   };
+
+  useEffect(() => {
+    userQuery.refetch();
+  }, [location, userQuery]);
 
   if (userQuery.isLoading) {
     return <div className={cl.userProfile}>Loading...</div>;

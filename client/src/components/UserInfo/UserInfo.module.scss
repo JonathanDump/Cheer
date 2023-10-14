@@ -14,16 +14,10 @@
       height: fit-content;
     }
     .avatarContainer {
+      flex: 1;
       display: flex;
       img {
-        aspect-ratio: 1/1;
-        max-width: 164px;
-        max-height: 164px;
-        min-width: 64px;
-        width: 100%;
-        height: 100%;
-        border-radius: 100%;
-        object-fit: cover;
+        @extend %avatar-image-big;
       }
     }
   }

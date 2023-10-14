@@ -6,7 +6,7 @@
   min-width: 300px;
   border-radius: $border-radius;
   background-color: $color-bg-secondary;
-  padding: $pudding-card;
+  padding: $padding-card;
   display: flex;
   gap: 27px;
   transition: $transition;
@@ -195,10 +195,10 @@
 }
 
 @media (max-width: 550px) {
-  $pudding-card: 14px;
+  $padding-card: 14px;
   $gap: 14px;
   .card {
-    padding: $pudding-card;
+    padding: $padding-card;
     gap: 14px;
   }
 }

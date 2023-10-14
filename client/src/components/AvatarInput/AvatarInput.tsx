@@ -4,12 +4,9 @@ import { ChangeEvent, useRef } from "react";
 
 export default function AvatarInput({ onChange, image }: IAvatarInputProps) {
   const avatarImageRef = useRef<HTMLImageElement | null>(null);
-  console.log("image", image);
-  // if (avatarImageRef.current) {
-  //   avatarImageRef.current.src = image ?? "";
-  // }
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const handleAvatarInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // const target = e.target;
     onChange(e.target.files![0]);
     const reader = new FileReader();
     reader.readAsDataURL(e.target.files![0]);
@@ -19,10 +16,20 @@ export default function AvatarInput({ onChange, image }: IAvatarInputProps) {
     });
   };
 
+  const handleImageClick = () => {
+    inputRef.current?.click();
+  };
+
   return (
     <div className={cl.avatarInput}>
-      <input id="avatar" type="file" onChange={handleAvatarInputChange} />
-      <div className={cl.imageContainer}>
+      <input
+        id="avatar"
+        type="file"
+        onChange={handleAvatarInputChange}
+        style={{ display: "none" }}
+        ref={inputRef}
+      />
+      <div className={cl.imageContainer} onClick={handleImageClick}>
         <img src={image} alt="" ref={avatarImageRef} />
       </div>
     </div>

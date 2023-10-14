@@ -115,12 +115,12 @@ export default function LogIn() {
     <div className={cl.logIn}>
       <div className={cl.formContainer}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className={cl.inputContainer}>
+          <div className="inputContainer">
             <label htmlFor="email">Email</label>
             <input type="email" required {...register("email")} />
             {errors.email && <div>{errors.email.message}</div>}
           </div>
-          <div className={cl.inputContainer}>
+          <div className="inputContainer">
             <label htmlFor="password">Password</label>
             <input type="password" required {...register("password")} />
             {errors.password && <div>{errors.password.message}</div>}

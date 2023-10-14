@@ -75,7 +75,7 @@ export default function EditProfile() {
             return <AvatarInput onChange={onChange} image={user.image} />;
           }}
         />
-        <div className={cl.inputContainer}>
+        <div className="inputContainer">
           <label htmlFor="name">Name</label>
           <input
             id="name"
@@ -89,7 +89,7 @@ export default function EditProfile() {
           />
           {errors.name?.message && <div> {errors.name.message}</div>}
         </div>
-        <div className={cl.inputContainer}>
+        <div className="inputContainer">
           <UserNameInput
             inputClass={inputClass}
             register={register}
@@ -98,29 +98,34 @@ export default function EditProfile() {
           />
           {errors.userName?.message && <div> {errors.userName.message}</div>}
         </div>
-        <div className={cl.inputContainer}>
+        <div className="inputContainer">
           <label htmlFor="bio">Bio</label>
           <input
             type="text"
             id="bio"
             {...register("bio", {
               maxLength: {
-                value: 300,
+                value: 160,
                 message: "Max length is 300 characters.",
               },
             })}
           />
           {errors.bio?.message && <div>{errors.bio.message}</div>}
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            window.history.back();
-          }}
-        >
-          Go back
-        </button>
-        <button disabled={!isValid}>Save</button>
+        <div className={cl.buttons}>
+          <button
+            type="button"
+            onClick={() => {
+              window.history.back();
+            }}
+            className={cl.goBack}
+          >
+            Go back
+          </button>
+          <button disabled={!isValid} className={cl.save}>
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );

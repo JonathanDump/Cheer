@@ -4,6 +4,10 @@
   display: flex;
   flex-direction: column;
   gap: $gap-list;
+  justify-content: center;
+  align-items: center;
+  max-width: $max-width-main;
+  min-width: $min-width-main;
   .link {
     all: unset;
     cursor: pointer;

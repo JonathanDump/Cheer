@@ -109,7 +109,7 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
   return (
     <div className={cl.createPostForm}>
       <form onSubmit={handleCreatePostSubmit}>
-        <div className={cl.inputContainer}>
+        <div className="inputContainer">
           <textarea
             ref={textareaRef}
             maxLength={maxLength}
@@ -129,11 +129,15 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
             {formValues.text.length}/{maxLength}
           </div>
         </div>
-        <div className={cl.imageContainer}>
-          {images.map((image, i) => {
-            return <ImagePostForm key={i} image={image} dispatch={dispatch} />;
-          })}
-        </div>
+        {!!images.length && (
+          <div className={cl.imageContainer}>
+            {images.map((image, i) => {
+              return (
+                <ImagePostForm key={i} image={image} dispatch={dispatch} />
+              );
+            })}
+          </div>
+        )}
         <div className={cl.buttons}>
           <div
             className={attachmentsClass}

@@ -53,7 +53,7 @@ export interface ISignUpFormData extends Omit<ISignUpFormValues, "avatar"> {
 
 export interface IAvatarInputProps {
   onChange: (...event: any[]) => void;
-  image?: string | null | undefined;
+  image?: string | undefined;
 }
 
 export interface IOutletContext {
