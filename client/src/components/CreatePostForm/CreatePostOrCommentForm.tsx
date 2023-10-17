@@ -6,7 +6,7 @@ import { useImmerReducer, useImmer } from "use-immer";
 import { IImage, IUser } from "../../interfaces/interfaces";
 import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
 import reducer from "../../helpers/reducers/createPostFormReducer";
-import createImageInstance from "../../helpers/functions/createImageInstace";
+import createImageInstance from "../../helpers/functions/createImageInstance";
 import ImagePostForm from "../ImagePostForm/ImagePostForm";
 import { postInitialValue } from "../../config/config";
 import { useParams } from "react-router-dom";
