@@ -5,6 +5,7 @@
   flex: 1;
   display: flex;
   justify-content: flex-end;
+  background-color: $color-bg-primary;
 
   .container {
     width: 100%;
@@ -34,4 +35,11 @@
       padding: 0 $padding-card;
     }
   }
+}
+
+.narrow {
+  position: absolute;
+  width: 300px;
+  height: 100vh;
+  border-radius: $border-radius;
 }

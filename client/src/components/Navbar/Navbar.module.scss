@@ -1,0 +1,12 @@
+@import "../../scss//variables";
+
+.navbar {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 6px 0;
+  max-height: 48px;
+
+  a {
+    padding: 2px 16px !important;
+  }
+}
