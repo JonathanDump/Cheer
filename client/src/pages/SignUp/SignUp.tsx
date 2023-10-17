@@ -18,7 +18,7 @@ export default function SignUp() {
     if (token) {
       navigate("/home");
     }
-  }, []);
+  }, [navigate]);
 
   const {
     register,
@@ -43,7 +43,7 @@ export default function SignUp() {
     if (isValid) {
       reset();
     }
-  }, [isSubmitted, reset]);
+  }, [isSubmitted, reset, isValid]);
 
   const signUpMutation = useMutation({
     mutationFn: async (data: FormData) => {

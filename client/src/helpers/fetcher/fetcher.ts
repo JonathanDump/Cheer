@@ -7,7 +7,7 @@ const getPosts = async ({
   pageParam,
   token,
 }: {
-  pageParam: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
+  pageParam: any;
   token: string;
 }): Promise<IPostsPage> => {
   const response = await fetch(
@@ -31,7 +31,7 @@ const getUserPosts = async ({
   token,
   userId,
 }: {
-  pageParam: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
+  pageParam: any;
   token: string;
   userId: string;
 }): Promise<IPostsPage> => {
@@ -55,7 +55,7 @@ const getUsers = async ({
   pageParam,
   token,
 }: {
-  pageParam: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
+  pageParam: any;
   token: string;
 }) => {
   const response = await fetch(

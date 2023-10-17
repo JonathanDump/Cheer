@@ -30,6 +30,9 @@
       .nameContainer {
         overflow: hidden;
         width: 100%;
+        display: flex;
+        gap: 4px;
+        flex-direction: column;
         .name,
         .userName {
           text-overflow: ellipsis;

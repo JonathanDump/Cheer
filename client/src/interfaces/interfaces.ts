@@ -140,7 +140,7 @@ export interface IPostOrCommentCardProps {
 export interface ICreatePostFormParams {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchPageFilters<TPageData>) | undefined
-  ) => Promise<QueryObserverResult<InfiniteData<any>, unknown>>; // eslint-disable-line  @typescript-eslint/no-explicit-any
+  ) => Promise<QueryObserverResult<InfiniteData<any>, unknown>>;
 }
 
 export interface IDecodedJwt {
@@ -166,7 +166,7 @@ export interface ILoadPostOnScroll {
   hasNextPage: boolean | undefined;
   fetchNextPage: (
     options?: FetchNextPageOptions | undefined
-  ) => Promise<InfiniteQueryObserverResult<any, unknown>>; //eslint-disable-line
+  ) => Promise<InfiniteQueryObserverResult<any, unknown>>;
 }
 
 export interface IListParams {

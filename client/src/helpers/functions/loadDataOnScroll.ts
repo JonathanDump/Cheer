@@ -9,7 +9,7 @@ const loadDataOnScroll = (
   hasNextPage: boolean | undefined,
   fetchNextPage: (
     options?: FetchNextPageOptions | undefined
-  ) => Promise<InfiniteQueryObserverResult<any, unknown>> //eslint-disable-line
+  ) => Promise<InfiniteQueryObserverResult<any, unknown>>
 ) => {
   const { scrollHeight, scrollTop, clientHeight } = divRef.current!;
   const pxToEnd = scrollHeight - scrollTop - clientHeight;

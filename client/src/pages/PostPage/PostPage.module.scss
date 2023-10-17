@@ -1,0 +1,5 @@
+@import "../../scss/variables";
+
+.postPage {
+  @extend %page-default-params;
+}

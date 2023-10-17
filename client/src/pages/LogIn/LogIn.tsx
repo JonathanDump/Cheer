@@ -27,7 +27,7 @@ export default function LogIn() {
     if (token) {
       navigate("/home");
     }
-  }, []);
+  }, [navigate]);
 
   const logInMutation = useMutation({
     mutationFn: fetcher.post.logIn,
@@ -49,13 +49,9 @@ export default function LogIn() {
         localStorage.setItem("user", JSON.stringify(user));
         navigate("/home");
       } else {
-        
-
         socket.connect();
 
-        socket.on("connect", () => {
-          
-        });
+        socket.on("connect", () => {});
 
         socket.emit("user id", result.user._id);
         setIsMagicLinkSet(true);
@@ -63,8 +59,6 @@ export default function LogIn() {
         socket.on(
           "receive log in data",
           ({ token, userPayload }: ILogInData) => {
-            
-
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(userPayload));
             navigate("/home");
@@ -75,8 +69,6 @@ export default function LogIn() {
   });
 
   const onSubmit = (data: ILogInFormValues) => {
-    
-
     const formData = getFormDataFromInputs(data);
     logInMutation.mutate(formData);
   };
