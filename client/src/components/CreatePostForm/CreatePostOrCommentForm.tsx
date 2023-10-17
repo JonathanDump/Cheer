@@ -39,9 +39,7 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
 
   const { userName, postId } = useParams();
 
-  useEffect(() => {
-    console.log("formValues", formValues);
-  }, [formValues]);
+  useEffect(() => {}, [formValues]);
 
   useEffect(() => {
     const loadImageData = async () => {
@@ -49,7 +47,6 @@ export default function CreatePostOrCommentForm({ type }: { type: string }) {
 
       for (const image of formValues.images) {
         const imageObj = await createImageInstance(image);
-        console.log("imageObj", imageObj);
 
         newImages.push(imageObj);
       }

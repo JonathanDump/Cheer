@@ -5,17 +5,19 @@
   flex-direction: column;
   gap: $gap-default;
   max-width: $max-width-main;
-  min-width: $min-width-main;
+  // min-width: $min-width-main;
   .imageButton {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: $gap-default;
     button {
       height: fit-content;
     }
     .avatarContainer {
-      flex: 1;
-      display: flex;
+      // flex: 1;
+      // display: flex;
+      @extend %avatar-container-big;
       img {
         @extend %avatar-image-big;
       }
@@ -36,6 +38,7 @@
     }
     .bio {
       margin-top: 12px;
+      word-wrap: break-word;
     }
   }
   .followersContainer {

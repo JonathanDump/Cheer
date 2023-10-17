@@ -5,7 +5,7 @@ import cl from "./List.module.scss";
 import { Fragment } from "react";
 
 export default function List({ data, isFetchingNextPage, type }: IListParams) {
-  console.log("data", data);
+  
 
   if (!data?.pages[0][type].length) {
     return <div className={cl.list}>Nothing yet</div>;

@@ -17,9 +17,7 @@ export default function UserInfo({ user, isMyProfile }: IUserInfoParams) {
   const token = getItemFromLocalStorage<string>("token");
   const userName = useParams().userName as string;
 
-  useEffect(() => {
-    console.log("followers", followers);
-  }, [followers]);
+  useEffect(() => {}, [followers]);
 
   const followMutation = useMutation({
     mutationFn: fetcher.put.toggleFollow,
@@ -27,7 +25,6 @@ export default function UserInfo({ user, isMyProfile }: IUserInfoParams) {
       if (!data.ok) {
         throw new Error(`Something went wrong during ${followAction}`);
       }
-      console.log("success");
 
       setIsFollowed(!isFollowed);
       setFollowers((prev) => {

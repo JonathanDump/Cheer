@@ -19,7 +19,6 @@ export default function Home() {
         await fetcher.get.getPosts({ pageParam, token }),
       getNextPageParam: getNextPageParam,
     });
-  console.log("isLoading", isLoading);
 
   if (isLoading) {
     return (

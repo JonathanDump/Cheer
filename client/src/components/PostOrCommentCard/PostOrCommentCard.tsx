@@ -106,7 +106,7 @@ export default function PostOrCommentCard({
   };
 
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log("bg");
+    
     e.stopPropagation();
     hideDropDown();
     setTimeout(() => setIsDropDownVisible(!isDropDownVisible), 150);
@@ -128,7 +128,7 @@ export default function PostOrCommentCard({
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    console.log("delete");
+    
     deletePostMutation.mutate({ _id, token });
   };
 
@@ -153,12 +153,13 @@ export default function PostOrCommentCard({
           <div className={cl.name} onClick={handleNavLinkClick}>
             {createdBy.name}
           </div>
-          <div className={cl.userName} onClick={handleNavLinkClick}>
-            @{createdBy.userName}
+          <div className={cl.userNameDateWrapper}>
+            <div className={cl.userName} onClick={handleNavLinkClick}>
+              @{createdBy.userName}
+            </div>
+
+            <div className={cl.date}>{formattedDate}</div>
           </div>
-
-          <div className={cl.date}>{formattedDate}</div>
-
           {(user.isAdmin || user._id === createdBy._id) && (
             <div className={cl.settings}>
               <button

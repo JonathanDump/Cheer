@@ -12,12 +12,12 @@ export default function getFormDataFromInputs(
     | ICreatePostFormValues
     | IFollowToggle
 ) {
-  console.log("data", data);
+  
 
   const formData = new FormData();
 
   for (const [key, value] of Object.entries(data)) {
-    console.log("key value", key, value);
+    
     if (Array.isArray(value)) {
       value.forEach((item) => formData.append(key, item));
       formData.append;
@@ -25,7 +25,7 @@ export default function getFormDataFromInputs(
       formData.append(key, value);
     }
   }
-  console.log("form data", formData);
+  
 
   return formData;
 }

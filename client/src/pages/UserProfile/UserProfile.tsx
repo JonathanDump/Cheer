@@ -21,7 +21,6 @@ export default function UserProfile() {
   const userProfileRef = useRef<HTMLDivElement | null>(null);
 
   const location = useLocation();
-  console.log("location", location);
 
   const userQuery = useQuery({
     queryKey: userKeys.user,

@@ -12,7 +12,7 @@ import { fetcher } from "../../helpers/fetcher/fetcher";
 export default function EditProfile() {
   const user = getItemFromLocalStorage<IUser>("user");
   const token = getItemFromLocalStorage<string>("token");
-  console.log("token ", token);
+  
   const {
     register,
     formState: { errors, isValid },
@@ -45,10 +45,10 @@ export default function EditProfile() {
       }
 
       const result = await data.json();
-      console.log("suc result", result);
+      
 
-      console.log("token edit suc", result.token);
-      console.log("user edit suc", result.user);
+      
+      
 
       localStorage.setItem("user", JSON.stringify(result.user as IUser));
       localStorage.setItem("token", result.token as string);
@@ -63,8 +63,8 @@ export default function EditProfile() {
     editUserMutation.mutate(formData, token);
   };
 
-  console.log("user ", user);
-  console.log("user image", user.image);
+  
+  
   return (
     <div className={cl.editProfile}>
       <form onSubmit={handleSubmit(onSubmit)}>

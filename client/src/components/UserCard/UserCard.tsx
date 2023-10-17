@@ -50,6 +50,7 @@ export default function UserCard({ user, link }: IUserCardProps) {
           <div className={cl.nameContainer}>
             <div className={cl.name}>{name}</div>
             <div className={cl.userName}>@{userName}</div>
+            {bio && <div className={cl.bio}>{bio}</div>}
           </div>
           {!isMyCard && (
             <button
@@ -61,7 +62,6 @@ export default function UserCard({ user, link }: IUserCardProps) {
             </button>
           )}
         </div>
-        {bio && <div className={cl.bio}>{bio}</div>}
       </div>
     </div>
   );

@@ -20,12 +20,12 @@ $transition: 0.12s;
 $animation-duration: 0.15s ease;
 
 $max-width-main: 600px;
-$min-width-main: 300px;
+$min-width-main: 0;
+
 $width-avatar: 54px;
+$height-avatar: 54px;
 
 $max-size-avatar-big: 164px;
-
-$height-avatar: 54px;
 
 $gap-default: 8px;
 $gap-list: 28px;
@@ -46,9 +46,15 @@ $gap-list: 28px;
   height: $height-avatar;
 }
 
+%avatar-container-big {
+  max-width: $max-size-avatar-big;
+  max-height: $max-size-avatar-big;
+}
+
 %avatar-image-small {
   width: $width-avatar;
   height: $height-avatar;
+  aspect-ratio: 1/1;
   object-fit: cover;
   background-image: url("/images/babyBeaver.jpg");
   background-position: center;
@@ -58,8 +64,8 @@ $gap-list: 28px;
 
 %avatar-image-big {
   aspect-ratio: 1/1;
-  max-width: $max-size-avatar-big;
-  max-height: $max-size-avatar-big;
+  // max-width: $max-size-avatar-big;
+  // max-height: $max-size-avatar-big;
   min-width: 64px;
   width: 100%;
   height: 100%;
@@ -73,7 +79,7 @@ $gap-list: 28px;
 %card {
   width: 100%;
   max-width: $max-width-main;
-  min-width: 300px;
+
   border-radius: $border-radius;
   background-color: $color-bg-secondary;
   padding: $padding-card;

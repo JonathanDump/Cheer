@@ -1,0 +1,13 @@
+.inputWrapper {
+  position: relative;
+  &::before {
+    content: "@";
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translate(0, -50%);
+  }
+  input {
+    padding-left: 34px;
+  }
+}

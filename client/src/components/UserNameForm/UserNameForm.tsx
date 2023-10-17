@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import cl from "./UserNameForm.module.scss";
+import formCl from "../../scss/form.module.scss";
 import { ErrorMessage } from "@hookform/error-message";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +43,7 @@ export default function UserNameForm({
     },
     onSuccess: async (data) => {
       const result = await data.json();
-      console.log("result", result);
+
       localStorage.setItem("token", result.token);
       localStorage.setItem("user", JSON.stringify(result.user));
 
@@ -65,56 +66,29 @@ export default function UserNameForm({
 
   return (
     <div className={cl.userNameForm}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* <label htmlFor="userName">User name</label>
-        <input
-          className={inputClass}
-          {...register("userName", {
-            required: true,
-
-            minLength: { value: 4, message: "Minimum length is 4 characters" },
-            maxLength: {
-              value: 15,
-              message: "Maximum length is 15 characters",
-            },
-            pattern: {
-              value: /^[a-zA-Z0-9_]+$/,
-              message:
-                "User name should contain only letters, numbers and underscores",
-            },
-            validate: {
-              isExist: async () => {
-                if (isDefaultUserName()) {
-                  return;
-                }
-
-                const result = await fetcher.get.isUserNameExists(
-                  getValues("userName")
-                );
-
-                return !result.userNameExists || "User name is already exists";
-              },
-            },
-          })}
-        /> */}
-        <UserNameInput
-          isDefaultUserName={isDefaultUserName()}
-          inputClass={inputClass}
-          register={register}
-          getValues={getValues}
-        />
-        <ErrorMessage
-          errors={errors}
-          name="userName"
-          render={({ messages }) =>
-            messages &&
-            Object.entries(messages).map(([type, message]) => (
-              <p key={type}>{message}</p>
-            ))
-          }
-        />
-        <button disabled={!isValid}>Submit</button>
-      </form>
+      <div className={formCl.main}>
+        <div className={formCl.formContainer}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <UserNameInput
+              isDefaultUserName={isDefaultUserName()}
+              inputClass={inputClass}
+              register={register}
+              getValues={getValues}
+            />
+            <ErrorMessage
+              errors={errors}
+              name="userName"
+              render={({ messages }) =>
+                messages &&
+                Object.entries(messages).map(([type, message]) => (
+                  <p key={type}>{message}</p>
+                ))
+              }
+            />
+            <button disabled={!isValid}>Submit</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

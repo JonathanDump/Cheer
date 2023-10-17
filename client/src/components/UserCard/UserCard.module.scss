@@ -18,13 +18,25 @@
 
   .main {
     width: 100%;
+    overflow: hidden;
+
     .userMeta {
       display: flex;
       gap: $gap-default;
       align-items: center;
       justify-content: space-between;
+      overflow: hidden;
 
       .nameContainer {
+        overflow: hidden;
+        width: 100%;
+        .name,
+        .userName {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          width: 100%;
+        }
         .name {
           font-size: 20px;
           font-weight: 600;
@@ -37,12 +49,37 @@
           color: $color-text-secondary;
           font-size: 14px;
         }
+        .bio {
+          word-wrap: break-word;
+        }
       }
       .unfollow {
         &:hover {
           color: $color-red;
           border-color: $color-red;
           background-color: transparent;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 420px) {
+  .userCard {
+    padding: 14px;
+    gap: 14px;
+
+    .main {
+      .userMeta {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+
+        .nameContainer {
+          line-height: 1.5rem;
+          .name {
+            font-size: 18px;
+          }
         }
       }
     }

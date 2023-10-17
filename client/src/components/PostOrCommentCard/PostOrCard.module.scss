@@ -3,7 +3,7 @@
 .card {
   width: 100%;
   max-width: $max-width-main;
-  min-width: fit-content;
+  // min-width: fit-content;
   border-radius: $border-radius;
   background-color: $color-bg-secondary;
   padding: $padding-card;
@@ -27,6 +27,8 @@
       display: flex;
       gap: $gap-default;
       align-items: center;
+      position: relative;
+      flex-wrap: wrap;
 
       .name {
         font-size: 20px;
@@ -35,15 +37,24 @@
           text-decoration: underline;
         }
       }
-      .userName,
-      .date {
-        color: $color-text-secondary;
-        font-size: 14px;
-      }
 
+      .userNameDateWrapper {
+        display: flex;
+        gap: $gap-default;
+        flex-direction: row;
+        margin-right: 40px;
+
+        .userName,
+        .date {
+          color: $color-text-secondary;
+          font-size: 14px;
+        }
+      }
       .settings {
         margin-left: auto;
-        position: relative;
+        position: absolute;
+        top: -2px;
+        right: 0;
 
         .dots {
           all: unset;

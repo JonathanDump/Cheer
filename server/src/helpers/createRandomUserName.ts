@@ -4,7 +4,6 @@ export default async function createRandomUserName(
   name: string
 ): Promise<string> {
   let userName = name.replaceAll(/[^A-Za-z0-9_]+/g, "");
-  console.log("userName", userName);
 
   if (userName.length > 10) {
     userName = userName.slice(0, 10);

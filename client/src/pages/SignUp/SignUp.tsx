@@ -57,7 +57,7 @@ export default function SignUp() {
     },
     onSuccess: async (data: Response) => {
       const result = await data.json();
-      console.log("mutation result", result);
+
       localStorage.setItem("user", JSON.stringify(result.user));
       localStorage.setItem("token", result.token);
       setIsUserNameFormVisible(true);
@@ -65,8 +65,6 @@ export default function SignUp() {
   });
 
   const onSubmit = (data: ISignUpFormValues) => {
-    console.log(data);
-
     const formData = getFormDataFromInputs(data);
 
     signUpMutation.mutate(formData);
@@ -88,7 +86,8 @@ export default function SignUp() {
                   value: 50,
                   message: "Max length is 50 characters.",
                 },
-                validate: (value) => !!value.trim() || "Incorrect name.",
+                validate: (value: string) =>
+                  !!value.trim() || "Incorrect name.",
               })}
             />
             {isSubmitted && errors.name?.message && (
@@ -132,10 +131,7 @@ export default function SignUp() {
               {...register("confirmPassword", {
                 validate: {
                   checkPassword: (value) => {
-                    console.log("value", value);
                     const pass = getValues("password");
-                    console.log("pass", pass);
-                    console.log("value", value);
 
                     return value == pass || "Password doesn't match";
                   },

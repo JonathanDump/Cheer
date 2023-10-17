@@ -14,13 +14,12 @@ const opts = {
 passport.use(
   new JwtStrategy(opts, async (jwt_payload, done) => {
     try {
-      console.log("jwt_payload", jwt_payload.user);
       const user = await User.findById(jwt_payload.user._id);
-      console.log("jwt user", user);
+
       if (user) {
         return done(null, jwt_payload.user);
       }
-      console.log("jwt no user");
+
       return done(null, false);
     } catch (err) {
       console.log(err);

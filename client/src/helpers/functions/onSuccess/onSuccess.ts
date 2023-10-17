@@ -13,7 +13,7 @@ const postCreate = async ({
 }) => {
   const result: IPost = await data.json();
   result.createdBy = user;
-  console.log("result ", result);
+  
 
   queryClient.setQueriesData(postKeys.all, (oldData: unknown) => {
     if (oldData) {
@@ -37,7 +37,7 @@ const commentCreate = async ({
 }) => {
   const result: IPost = await data.json();
   result.createdBy = user;
-  console.log("result ", result);
+  
 
   queryClient.setQueriesData(commentKeys.all, (oldData: unknown) => {
     if (oldData) {

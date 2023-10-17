@@ -19,8 +19,6 @@ export let isMagicLinkUsed = false;
 
 exports.signUp = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("req.body", req.body);
-    console.log("req.file", req.file);
     const { name, email, password } = req.body;
 
     const user = await User.findOne({ email }).exec();
@@ -41,7 +39,6 @@ exports.signUp = asyncHandler(
               console.log(err);
             } else {
               uploadResult = result;
-              console.log("uploadResult", uploadResult);
             }
           });
         }
@@ -74,7 +71,6 @@ exports.signUpGoogle = asyncHandler(
 
     let user = await User.findOne({ email }).exec();
 
-    console.log("ust type", typeof user);
     let isNewUser = false;
 
     if (!user) {
@@ -90,7 +86,6 @@ exports.signUpGoogle = asyncHandler(
     }
 
     const userPayload = getUserPayload(user.toObject());
-    console.log("payload", userPayload);
 
     const jwtToken = await generateJwtToken({ user: userPayload });
 
@@ -115,7 +110,6 @@ exports.setUserName = asyncHandler(
 
       const userPayload = getUserPayload(user.toObject());
       const token = await generateJwtToken({ user: userPayload });
-      console.log("set user name token", token);
 
       res.status(200).json({
         token: `Bearer ${token}`,
@@ -130,7 +124,7 @@ exports.logIn = asyncHandler(
     const { email, password } = req.body;
 
     const user = await User.findOne({ email }).exec();
-    console.log("user", user);
+
     if (!user) {
       res.json({ invalid: { email: true, password: false } });
       return next();
@@ -167,8 +161,6 @@ exports.logIn = asyncHandler(
       token,
     });
 
-    console.log("isMagicLinkSent", isMagicLinkSent);
-
     isMagicLinkUsed = false;
 
     if (!isMagicLinkSent) {
@@ -181,11 +173,9 @@ exports.logIn = asyncHandler(
 
 exports.logInVerify = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("logInVerify params token", req.query.token);
     isMagicLinkUsed = true;
 
     const user = req.user as IUser;
-    console.log("verify user", user);
 
     if (!user) {
       res.send(
@@ -198,7 +188,6 @@ exports.logInVerify = asyncHandler(
     const token = await generateJwtToken({ user });
 
     const activeUser = findActiveUser(user._id);
-    console.log("log in verify active user", activeUser);
 
     io.to(activeUser.socketId).emit("receive log in data", {
       token,
@@ -212,7 +201,6 @@ exports.logInVerify = asyncHandler(
 exports.checkUserName = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findOne({ userName: req.query.userName }).exec();
-    console.log("check user name");
 
     if (user) {
       res.json({ userNameExists: true });
@@ -255,7 +243,6 @@ exports.getUser = asyncHandler(
     const userDb = await User.findOne({ userName: userName })
       .select("-posts -password")
       .exec();
-    console.log("userDb", userDb);
 
     if (!userDb) {
       res.status(400);
@@ -264,8 +251,6 @@ exports.getUser = asyncHandler(
         "following",
         "followers",
       ]);
-
-      console.log("user", user);
 
       res.json(user);
     }
@@ -380,10 +365,8 @@ exports.unfollow = asyncHandler(
 exports.follow = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.query;
-    console.log("userID", userId);
 
     const { _id } = req.user as IUser;
-    console.log("follow");
 
     await User.findByIdAndUpdate(_id, {
       $addToSet: {
@@ -409,8 +392,6 @@ exports.editUser = asyncHandler(
       bio,
     }: { name: string; userName: string; bio: string } = req.body;
 
-    console.log("req file update", req.file);
-
     let uploadResult: UploadApiResponse | undefined;
     if (req.file) {
       await cloudinary.uploader.upload(req.file.path, (err, result) => {
@@ -418,7 +399,6 @@ exports.editUser = asyncHandler(
           console.log(err);
         } else {
           uploadResult = result;
-          console.log("uploadResult", uploadResult);
         }
       });
     }

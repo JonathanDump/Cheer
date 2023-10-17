@@ -49,12 +49,12 @@ export default function LogIn() {
         localStorage.setItem("user", JSON.stringify(user));
         navigate("/home");
       } else {
-        console.log("log in result", result);
+        
 
         socket.connect();
 
         socket.on("connect", () => {
-          console.log("connected to the server");
+          
         });
 
         socket.emit("user id", result.user._id);
@@ -63,7 +63,7 @@ export default function LogIn() {
         socket.on(
           "receive log in data",
           ({ token, userPayload }: ILogInData) => {
-            console.log("received log in data", token, userPayload);
+            
 
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(userPayload));
@@ -75,7 +75,7 @@ export default function LogIn() {
   });
 
   const onSubmit = (data: ILogInFormValues) => {
-    console.log("input values", data);
+    
 
     const formData = getFormDataFromInputs(data);
     logInMutation.mutate(formData);

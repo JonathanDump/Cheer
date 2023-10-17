@@ -15,7 +15,6 @@ exports.createPost = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { text }: { text: string } = req.body;
     const files = req.files as Express.Multer.File[];
-    console.log("files", files);
 
     const user = req.user as IUser;
     const userDb = await User.findById(user._id);
@@ -29,7 +28,6 @@ exports.createPost = asyncHandler(
               console.log(err);
               reject(err);
             } else if (result) {
-              console.log("result", result);
               images.push(result.url);
               resolve(result.url);
             }
@@ -51,7 +49,6 @@ exports.createPost = asyncHandler(
       images: images,
       date: new Date(),
     });
-    console.log("post", post);
 
     await post.save();
     userDb!.posts.push(post._id);
@@ -84,7 +81,6 @@ exports.getPosts = asyncHandler(
     const posts = postsDb.map((post) =>
       setCount(setIsLiked(post.toObject(), _id), ["comments", "likes"])
     );
-    console.log("posts", posts);
 
     res.json({ posts, currentPage, lastPage });
   }
@@ -98,8 +94,6 @@ exports.getUserPosts = asyncHandler(
     const { userId } = req.query;
     const { _id } = req.user as IUser;
 
-    console.log("cursor", req.query.cursor);
-
     const postsDb = await Post.find({ createdBy: userId })
       .skip(cursor * pageSize)
       .limit(pageSize)
@@ -111,14 +105,12 @@ exports.getUserPosts = asyncHandler(
       .exec();
 
     const currentPage = cursor;
-    console.log("count", await Post.countDocuments({ createdBy: userId }));
 
     let lastPage = Math.ceil(
       (await Post.countDocuments({ createdBy: userId })) / pageSize - 1
     );
 
     lastPage = lastPage < 0 ? 0 : lastPage;
-    console.log("lastPage", lastPage);
 
     const posts = postsDb.map((post) =>
       setCount(setIsLiked(post.toObject(), _id), ["comments", "likes"])

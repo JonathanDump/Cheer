@@ -1,15 +1,21 @@
-.invalid {
-  border: 1px solid red;
+@import "../../scss/variables";
 
-  &:focus-visible {
-    outline-color: red;
-  }
+.userNameForm {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: $color-bg-primary;
+  padding: $padding-default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.invalid {
+  border: 1px solid red !important;
 }
 
 .valid {
-  border: 1px solid green;
-
-  &:focus-visible {
-    outline-color: green;
-  }
+  border: 1px solid green !important;
 }

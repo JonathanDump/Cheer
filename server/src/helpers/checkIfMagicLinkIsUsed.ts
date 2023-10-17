@@ -6,8 +6,6 @@ export default function checkIfMagicLinkIsUsed() {
     if (isMagicLinkUsed) {
       res.send("Sorry, link is not working anymore");
     } else {
-      console.log("req query", req.query);
-
       next();
     }
   };
