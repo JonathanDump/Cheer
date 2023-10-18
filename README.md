@@ -2,7 +2,7 @@
 
 Welcome to the Full Stack Social networl!
 
-## [Live Demo]([https://frabjous-cucurucho-ceeec1.netlify.app/])
+# [Live Demo](https://main--stellular-youtiao-99653c.netlify.app)
 
 # Technologies Used
 
