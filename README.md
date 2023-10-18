@@ -47,6 +47,6 @@ Here is a list of technologies and libraries used to build this messenger applic
 
 - **Likes and Comments:** Interact with tweets by liking and retweeting them.
 
-- **People:** Explore poeple to follow.
+- **People:** Explore people to follow.
 
 - **Responsive Design:** The application is responsive and works seamlessly on both desktop and mobile devices.
