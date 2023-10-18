@@ -1,20 +1,19 @@
 import { Controller, useForm } from "react-hook-form";
 import form from "../../scss/form.module.scss";
-import { ISignUpFormValues } from "../../interfaces/interfaces";
 import { useEffect } from "react";
 import AvatarInput from "../../components/AvatarInput/AvatarInput.tsx";
-import useSetIsUserNameFormVisible from "../../hooks/useSetIsUserNameFormVisible";
+import useSetIsUserNameFormVisible from "../../hooks/useSetIsUserNameFormVisible.ts";
 import { useMutation } from "@tanstack/react-query";
-import { SERVER_URL } from "../../config/config";
-import GoogleButton from "../../components/GoogleButton/GoogleButton";
-import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
+import { SERVER_URL } from "../../config/config.ts";
+import GoogleButton from "../../components/GoogleButton/GoogleButton.tsx";
+import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs.ts";
 import { Link, useNavigate } from "react-router-dom";
-import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
+import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage.ts";
 
 export default function SignUp() {
   const navigate = useNavigate();
   useEffect(() => {
-    const token = getItemFromLocalStorage<string>("token");
+    const token = getItemFromLocalStorage("token");
     if (token) {
       navigate("/home");
     }
@@ -27,7 +26,7 @@ export default function SignUp() {
     handleSubmit,
     reset,
     control,
-  } = useForm<ISignUpFormValues>({
+  } = useForm({
     defaultValues: {
       name: "",
       email: "",
@@ -46,7 +45,7 @@ export default function SignUp() {
   }, [isSubmitted, reset, isValid]);
 
   const signUpMutation = useMutation({
-    mutationFn: async (data: FormData) => {
+    mutationFn: async (data) => {
       return fetch(`${SERVER_URL}/sign-up`, {
         method: "POST",
         body: data,
@@ -55,7 +54,7 @@ export default function SignUp() {
     onError: (err) => {
       console.log(err);
     },
-    onSuccess: async (data: Response) => {
+    onSuccess: async (data) => {
       const result = await data.json();
 
       localStorage.setItem("user", JSON.stringify(result.user));
@@ -64,7 +63,7 @@ export default function SignUp() {
     },
   });
 
-  const onSubmit = (data: ISignUpFormValues) => {
+  const onSubmit = (data) => {
     const formData = getFormDataFromInputs(data);
 
     signUpMutation.mutate(formData);
@@ -86,8 +85,7 @@ export default function SignUp() {
                   value: 50,
                   message: "Max length is 50 characters.",
                 },
-                validate: (value: string) =>
-                  !!value.trim() || "Incorrect name.",
+                validate: (value) => !!value.trim() || "Incorrect name.",
               })}
             />
             {isSubmitted && errors.name?.message && (

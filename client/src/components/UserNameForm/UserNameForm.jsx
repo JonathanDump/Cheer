@@ -4,24 +4,18 @@ import formCl from "../../scss/form.module.scss";
 import { ErrorMessage } from "@hookform/error-message";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import {
-  IUserNameFormParams,
-  IUserNameFormValues,
-} from "../../interfaces/interfaces";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import UserNameInput from "../UserNameInput/UserNameInput";
 
-export default function UserNameForm({
-  setIsUserNameFormVisible,
-}: IUserNameFormParams) {
-  const defaultUserName = JSON.parse(localStorage.getItem("user")!).userName;
+export default function UserNameForm({ setIsUserNameFormVisible }) {
+  const defaultUserName = JSON.parse(localStorage.getItem("user")).userName;
 
   const {
     register,
     getValues,
     formState: { errors, isValid },
     handleSubmit,
-  } = useForm<IUserNameFormValues>({
+  } = useForm({
     defaultValues: { userName: defaultUserName },
     mode: "all",
     criteriaMode: "all",
@@ -56,7 +50,7 @@ export default function UserNameForm({
     return defaultUserName === getValues("userName");
   };
 
-  const onSubmit = (data: IUserNameFormValues) => {
+  const onSubmit = (data) => {
     if (isDefaultUserName()) {
       setIsUserNameFormVisible(false);
       return navigate("/home");

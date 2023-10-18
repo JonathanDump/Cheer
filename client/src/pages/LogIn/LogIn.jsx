@@ -5,7 +5,6 @@ import GoogleButton from "../../components/GoogleButton/GoogleButton";
 import { useMutation } from "@tanstack/react-query";
 import { socket } from "../../config/config";
 import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
-import { ILogInData, ILogInFormValues } from "../../interfaces/interfaces";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetcher } from "../../helpers/fetcher/fetcher";
@@ -18,12 +17,12 @@ export default function LogIn() {
     setError,
     getValues,
     formState: { errors },
-  } = useForm<ILogInFormValues>({ defaultValues: { email: "", password: "" } });
+  } = useForm({ defaultValues: { email: "", password: "" } });
   const [isMagicLinkSent, setIsMagicLinkSet] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = getItemFromLocalStorage<string>("token");
+    const token = getItemFromLocalStorage("token");
     if (token) {
       navigate("/home");
     }
@@ -33,12 +32,12 @@ export default function LogIn() {
     mutationFn: fetcher.post.logIn,
     onSuccess: async (data) => {
       const result = await data.json();
-      const invalid = result.invalid as Record<"email" | "password", boolean>;
+      const invalid = result.invalid;
       const { isTestUser, token, user } = result;
       if (invalid) {
         for (const [key, value] of Object.entries(invalid)) {
           if (value) {
-            setError(key as "email" | "password", {
+            setError(key, {
               type: "manual",
               message: `Invalid ${key}`,
             });
@@ -56,19 +55,16 @@ export default function LogIn() {
         socket.emit("user id", result.user._id);
         setIsMagicLinkSet(true);
 
-        socket.on(
-          "receive log in data",
-          ({ token, userPayload }: ILogInData) => {
-            localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(userPayload));
-            navigate("/home");
-          }
-        );
+        socket.on("receive log in data", ({ token, userPayload }) => {
+          localStorage.setItem("token", token);
+          localStorage.setItem("user", JSON.stringify(userPayload));
+          navigate("/home");
+        });
       }
     },
   });
 
-  const onSubmit = (data: ILogInFormValues) => {
+  const onSubmit = (data) => {
     const formData = getFormDataFromInputs(data);
     logInMutation.mutate(formData);
   };

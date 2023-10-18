@@ -2,7 +2,6 @@ import { Controller, useForm } from "react-hook-form";
 import AvatarInput from "../../components/AvatarInput/AvatarInput";
 import cl from "./EditProfile.module.scss";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
-import { IEditProfileInputs, IUser } from "../../interfaces/interfaces";
 import UserNameInput from "../../components/UserNameInput/UserNameInput";
 import getFormDataFromInputs from "../../helpers/functions/getFormDataFromInputs";
 import { useMutation } from "@tanstack/react-query";
@@ -10,16 +9,16 @@ import { useNavigate } from "react-router-dom";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 
 export default function EditProfile() {
-  const user = getItemFromLocalStorage<IUser>("user");
-  const token = getItemFromLocalStorage<string>("token");
-  
+  const user = getItemFromLocalStorage("user");
+  const token = getItemFromLocalStorage("token");
+
   const {
     register,
     formState: { errors, isValid },
     getValues,
     handleSubmit,
     control,
-  } = useForm<IEditProfileInputs>({
+  } = useForm({
     defaultValues: {
       name: user.name,
       userName: user.userName,
@@ -36,35 +35,29 @@ export default function EditProfile() {
   const navigate = useNavigate();
 
   const editUserMutation = useMutation({
-    mutationFn: (data: formData) => {
+    mutationFn: (data) => {
       return fetcher.put.editUser(data, token);
     },
-    onSuccess: async (data: Response) => {
+    onSuccess: async (data) => {
       if (!data.ok) {
         throw new Error("Could not edit user");
       }
 
       const result = await data.json();
-      
 
-      
-      
-
-      localStorage.setItem("user", JSON.stringify(result.user as IUser));
-      localStorage.setItem("token", result.token as string);
+      localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("token", result.token);
 
       navigate(`/${result.user.userName}`);
     },
   });
 
-  const onSubmit = (data: IEditProfileInputs) => {
+  const onSubmit = (data) => {
     const formData = getFormDataFromInputs(data);
 
     editUserMutation.mutate(formData, token);
   };
 
-  
-  
   return (
     <div className={cl.editProfile}>
       <form onSubmit={handleSubmit(onSubmit)}>
