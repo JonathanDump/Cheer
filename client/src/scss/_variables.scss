@@ -49,6 +49,11 @@ $gap-list: 28px;
 %avatar-container-big {
   max-width: $max-size-avatar-big;
   max-height: $max-size-avatar-big;
+  border-radius: 100%;
+  background-image: url("/images/babyBeaver.jpg");
+  background-position: center;
+  background-size: cover;
+  width: 100%;
 }
 
 %avatar-image-small {
@@ -64,16 +69,14 @@ $gap-list: 28px;
 
 %avatar-image-big {
   aspect-ratio: 1/1;
-  // max-width: $max-size-avatar-big;
-  // max-height: $max-size-avatar-big;
+
+  max-width: $max-size-avatar-big;
+  max-height: $max-size-avatar-big;
   min-width: 64px;
   width: 100%;
   height: 100%;
   border-radius: 100%;
   object-fit: cover;
-  background-image: url("/images/babyBeaver.jpg");
-  background-position: center;
-  background-size: cover;
 }
 
 %card {
