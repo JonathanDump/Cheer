@@ -11,7 +11,7 @@ import ImagePostForm from "../ImagePostForm/ImagePostForm";
 import { postInitialValue } from "../../config/config";
 import { useParams } from "react-router-dom";
 
-import { ReactComponent as AttachmentsIcon } from "/src/Icons/attachmentsImg.svg";
+import { ReactComponent as AttachmentsIcon } from "/src/icons/attachmentsImg.svg";
 import { onSuccess } from "../../helpers/functions/onSuccess/onSuccess";
 
 export default function CreatePostOrCommentForm({ type }: { type: string }) {

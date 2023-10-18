@@ -3,7 +3,7 @@ import cl from "./PostPage.module.scss";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import { useParams } from "react-router-dom";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
-import CreatePostOrCommentForm from "../../components/CreatePostForm/CreatePostOrCommentForm";
+import CreatePostOrCommentForm from "../../components/CreatePostOrCommentForm/CreatePostOrCommentForm";
 import PostOrCommentCard from "../../components/PostOrCommentCard/PostOrCommentCard";
 import List from "../../components/List/List";
 import getNextPageParam from "../../helpers/functions/getNextPageParam";

@@ -2,7 +2,7 @@ import { useLocation, useParams } from "react-router-dom";
 import cl from "./UserProfile.module.scss";
 import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 import { IUser } from "../../interfaces/interfaces";
-import CreatePostOrCommentForm from "../../components/CreatePostForm/CreatePostOrCommentForm";
+import CreatePostOrCommentForm from "../../components/CreatePostOrCommentForm/CreatePostOrCommentForm";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
 import { useEffect, useRef } from "react";

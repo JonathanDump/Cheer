@@ -1,4 +1,4 @@
-import CreatePostOrCommentForm from "../../components/CreatePostForm/CreatePostOrCommentForm";
+import CreatePostOrCommentForm from "../../components/CreatePostOrCommentForm/CreatePostOrCommentForm";
 import cl from "./Home.module.scss";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetcher } from "../../helpers/fetcher/fetcher";
