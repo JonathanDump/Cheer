@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import cl from "./Cheer.module.scss";
 import AuthProvider from "../../components/AuthProvider/AuthProvider";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -8,6 +8,8 @@ import Navbar from "../../components/Navbar/Navbar";
 export default function Cheer() {
   const [isWindowNarrow, setIsWindowNarrow] = useState(false);
   const screenWidth = window.matchMedia("(max-width: 650px)");
+  const navigate = useNavigate();
+  const path = useLocation().pathname;
 
   const cheerClass = isWindowNarrow
     ? `${cl.cheer} ${cl.narrow}`
@@ -23,6 +25,12 @@ export default function Cheer() {
       }
     };
   }, [screenWidth]);
+
+  useEffect(() => {
+    if (path === "/") {
+      navigate("/home");
+    }
+  }, [navigate, path]);
 
   return (
     <AuthProvider>
