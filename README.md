@@ -39,7 +39,7 @@ Here is a list of technologies and libraries used to build this messenger applic
     
 - **User Profiles:** Create and customize your user profile with a profile picture and bio.
 
-- **Cheering:** Share your thoughts and updates with your followers in 300 characters or less.
+- **Cheering:** Share your thoughts and updates with your followers in 300 characters or less with up to 3 images.
 
 - **Follow/Unfollow:** Follow users you're interested in, and unfollow them at any time.
 
