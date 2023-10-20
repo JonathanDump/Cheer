@@ -4,6 +4,7 @@ import AuthProvider from "../../components/AuthProvider/AuthProvider";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
+import getItemFromLocalStorage from "../../helpers/functions/getItemFromLocalStorage";
 
 export default function Cheer() {
   const [isWindowNarrow, setIsWindowNarrow] = useState(false);
@@ -27,7 +28,9 @@ export default function Cheer() {
   }, [screenWidth]);
 
   useEffect(() => {
-    if (path === "/") {
+    if (path === "/" && !getItemFromLocalStorage<string>("token")) {
+      navigate("/log-in");
+    } else if (path === "/") {
       navigate("/home");
     }
   }, [navigate, path]);
